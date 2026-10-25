@@ -1,5 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import { list } from '../../lib.js';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import { list } from '../../lib.js';
 const items = list('lessons');
 ---
-<Base title="Lessons"><h1>Lessons</h1>{items.length ? <ul class="items">{items.map(i => <li><a href={`/lessons/${i.slug}`}>{i.title}</a> <small>{i.date}</small></li>)}</ul> : <p>Nothing here yet. Check back soon.</p>}</Base>
+<Base title="Lessons"><h1>Lessons</h1>{items.length ? <div class="grid">{items.map(i => <Card item={i} section="lessons" />)}</div> : <p>Nothing here yet. Check back soon.</p>}</Base>
