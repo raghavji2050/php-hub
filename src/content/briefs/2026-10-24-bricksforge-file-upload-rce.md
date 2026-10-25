@@ -1,4 +1,5 @@
 ---
+tags: [wordpress, plugins, file-upload, rce]
 severity: Critical
 status: Actively exploited
 ---

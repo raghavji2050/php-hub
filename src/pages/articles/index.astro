@@ -2,4 +2,4 @@
 import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import { list } from '../../lib.js';
 const items = list('articles');
 ---
-<Base title="Articles"><h1>Articles</h1>{items.length ? <div class="grid">{items.map(i => <Card item={i} section="articles" />)}</div> : <p>Nothing here yet. Check back soon.</p>}</Base>
+<Base title="Articles" description="In-depth PHP and WordPress security articles."><h1>Articles</h1>{items.length ? <div class="grid">{items.map(i => <Card item={i} section="articles" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}</Base>

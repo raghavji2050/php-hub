@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Search" description="Search PHP Hub briefs, articles and lessons." newsletter={false}>
+<h1>Search</h1>
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet"/>
+<div id="search"><noscript>Search needs JavaScript. You can browse <a href="/briefs">briefs</a> or <a href="/tags">topics</a> instead.</noscript></div>
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script is:inline src="/search-init.js"></script>
+</Base>
+<style is:global>
+#search{--pagefind-ui-primary:var(--brand);--pagefind-ui-text:var(--text);--pagefind-ui-background:var(--surface);--pagefind-ui-border:var(--border);--pagefind-ui-tag:var(--code);--pagefind-ui-font:inherit;min-height:200px}
+</style>
