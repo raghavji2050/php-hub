@@ -1,0 +1,14 @@
+---
+const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT || '';
+---
+<section class="newsletter" aria-labelledby="nl-title">
+  <h2 id="nl-title">Get new briefs by email</h2>
+  <p>Short alerts when a PHP or WordPress vulnerability needs action. Unsubscribe any time.</p>
+  {!endpoint && <p class="notice" role="status"><strong>Newsletter signup is not yet active.</strong> No email provider is connected yet, so nothing will be sent or stored.</p>}
+  <form method="POST" action={endpoint || undefined} class="nl-form">
+    <label class="sr-only" for="nl-email">Email address</label>
+    <input id="nl-email" type="email" name="email" required placeholder="you@example.com" autocomplete="email" disabled={!endpoint}/>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabindex="-1" autocomplete="off"/></label></div>
+    <button type="submit" disabled={!endpoint}>{endpoint ? 'Subscribe' : 'Not yet active'}</button>
+  </form>
+</section>

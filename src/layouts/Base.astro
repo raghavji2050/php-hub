@@ -1,13 +1,29 @@
 ---
-const { title = 'PHP Hub', description = 'Practical PHP and WordPress security briefs, articles and lessons.' } = Astro.props;
+import { SITE } from '../lib.js';
+import Newsletter from '../components/Newsletter.astro';
+const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = true, newsletter = true } = Astro.props;
 const path = Astro.url.pathname;
-const nav = [['/briefs','Briefs'],['/articles','Articles'],['/lessons','Lessons'],['/tools','Tools']];
+const canonical = new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
+const fullTitle = title === 'PHP Hub' ? 'PHP Hub · PHP & WordPress security' : `${title} · PHP Hub`;
+const imageUrl = new URL(image, SITE.url).href;
+const org = { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href };
+const nav = [['/briefs','Briefs'],['/articles','Articles'],['/lessons','Lessons'],['/services','Services'],['/search','Search']];
 ---
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="color-scheme" content="light dark"/><meta name="description" content={description}/>
-<title>{title === 'PHP Hub' ? 'PHP Hub · PHP & WordPress security' : `${title} · PHP Hub`}</title>
+<title>{fullTitle}</title>
+<link rel="canonical" href={canonical}/>{noindex && <meta name="robots" content="noindex"/>}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="manifest" href="/site.webmanifest"/>
+<meta name="theme-color" content="#4338ca"/>
+<link rel="alternate" type="application/rss+xml" title="PHP Hub" href="/rss.xml"/>
+<meta property="og:type" content={type}/><meta property="og:site_name" content="PHP Hub"/><meta property="og:title" content={fullTitle}/>
+<meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={imageUrl}/>
+<meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={fullTitle}/><meta name="twitter:description" content={description}/><meta name="twitter:image" content={imageUrl}/>
+<script type="application/ld+json" set:html={JSON.stringify(org)}/>
+{jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)}/>}
 <style is:global>
-:root{--bg:#fafaf9;--surface:#fff;--text:#1c1917;--muted:#57534e;--border:#e7e5e4;--brand:#4f46e5;--brand-ink:#fff;--brand-soft:#eef2ff;--code:#f5f5f4;--crit:#b91c1c;--crit-bg:#fee2e2;--warn:#9a3412;--warn-bg:#ffedd5}
+:root{--bg:#fafaf9;--surface:#fff;--text:#1c1917;--muted:#44403c;--border:#e7e5e4;--brand:#4338ca;--brand-ink:#fff;--brand-soft:#eef2ff;--code:#f5f5f4;--crit:#b91c1c;--crit-bg:#fee2e2;--warn:#9a3412;--warn-bg:#ffedd5}
 @media (prefers-color-scheme:dark){:root{--bg:#0c0a09;--surface:#1c1917;--text:#f5f5f4;--muted:#a8a29e;--border:#292524;--brand:#818cf8;--brand-ink:#0c0a09;--brand-soft:#1e1b4b;--code:#292524;--crit:#fca5a5;--crit-bg:#450a0a;--warn:#fdba74;--warn-bg:#431407}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -23,7 +39,7 @@ a{color:var(--brand)}
 .btn{display:inline-block;padding:10px 18px;border-radius:8px;font-weight:600;text-decoration:none;border:1px solid var(--brand);font-size:15px}
 .btn.primary{background:var(--brand);color:var(--brand-ink)}.btn.secondary{color:var(--brand)}
 .nav .btn{padding:6px 14px;color:var(--brand-ink)}
-main{padding:32px 0 16px}
+main{padding:32px 0 16px;display:block}
 h1{font-size:clamp(28px,5vw,40px);line-height:1.2;letter-spacing:-.02em;margin:.2em 0 .5em}
 h2{font-size:24px;letter-spacing:-.01em}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));padding:0}
@@ -45,27 +61,45 @@ h2{font-size:24px;letter-spacing:-.01em}
 .cta h2{margin:0 0 6px;font-size:20px}.cta p{margin:0 0 16px;color:var(--muted)}
 .actions{display:flex;gap:12px;flex-wrap:wrap}
 .site-footer{border-top:1px solid var(--border);margin-top:48px;padding:32px 0;color:var(--muted);font-size:14px}
-.site-footer .wrap{display:grid;gap:24px;grid-template-columns:2fr 1fr 1fr}
-.site-footer h4{margin:0 0 8px;color:var(--text);font-size:14px}.site-footer ul{list-style:none;margin:0;padding:0}.site-footer li{margin:4px 0}
+.site-footer .wrap{display:grid;gap:24px;grid-template-columns:2fr 1fr 1fr 1fr}
+.site-footer .fh{margin:0 0 8px;color:var(--text);font-size:14px}.site-footer ul{list-style:none;margin:0;padding:0}.site-footer li{margin:4px 0}
 .site-footer a{color:var(--muted);text-decoration:none}.site-footer a:hover{color:var(--text)}
 .copy{grid-column:1/-1;border-top:1px solid var(--border);padding-top:16px}
 input,textarea{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
 button{font:inherit;padding:10px 18px;border-radius:8px;border:0;background:var(--brand);color:var(--brand-ink);font-weight:600}button:disabled{opacity:.55}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-9999px}.skip:focus{left:12px;top:12px;background:var(--surface);padding:8px 12px;z-index:10}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hp{position:absolute;left:-9999px}
+.notice{border:1px solid #d97706;background:#fffbeb;color:#713f12;padding:12px;border-radius:8px}
+@media (prefers-color-scheme:dark){.notice{background:#422006;color:#fde68a}}
+.newsletter{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:24px;margin:24px 0}
+.newsletter h2{margin:0 0 6px;font-size:20px}.newsletter p{color:var(--muted);margin:0 0 12px}
+.nl-form{display:flex;gap:8px;flex-wrap:wrap}.nl-form input{flex:1;min-width:220px}
+.meta{color:var(--muted);font-size:13px;margin-top:auto}
+.card-title{margin:0;font-size:18px;line-height:1.35}
+.tags{display:flex;gap:6px;flex-wrap:wrap;list-style:none;padding:0;margin:12px 0}
+.tag{font-size:13px;padding:2px 10px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--muted)}
+.tag:hover{color:var(--text);border-color:var(--brand)}
+.page-prose{max-width:70ch}.page-prose h2{margin-top:1.8em}
 @media (max-width:640px){body{font-size:16px}.prose{font-size:17px}.site-footer .wrap{grid-template-columns:1fr 1fr}.site-footer .about{grid-column:1/-1}.nav{width:100%}.grid{grid-template-columns:1fr}}
 </style></head><body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
 <a class="logo" href="/">PHP<span>Hub</span></a>
 <nav class="nav">{nav.map(([h,l]) => <a href={h} aria-current={path.startsWith(h) ? 'page' : undefined}>{l}</a>)}<a class="btn primary" href="/contact">Contact</a></nav>
 </div></header>
-<main class="wrap"><slot/>
-<section class="cta"><h2>Worried your PHP or WordPress site is affected?</h2>
+<main class="wrap" id="main"><slot/>
+{cta && <section class="cta"><h2>Worried your PHP or WordPress site is affected?</h2>
 <p>Start with the free checker. If you'd like a hand with a security audit or cleanup, get in touch and we'll take a look.</p>
-<div class="actions"><a class="btn primary" href="/contact">Request an audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Free PHP Security Checker</a></div></section>
+<div class="actions"><a class="btn primary" href="/contact">Request an audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Free PHP Security Checker</a></div></section>}
+{newsletter && <Newsletter/>}
 </main>
 <footer class="site-footer"><div class="wrap">
 <div class="about"><a class="logo" href="/">PHP<span>Hub</span></a><p>Practical PHP and WordPress security news, guides and tools.</p></div>
-<div><h4>Read</h4><ul><li><a href="/briefs">Briefs</a></li><li><a href="/articles">Articles</a></li><li><a href="/lessons">Lessons</a></li></ul></div>
-<div><h4>Help</h4><ul><li><a href="/tools">Tools</a></li><li><a href="https://php-security-checker.vercel.app">Security Checker</a></li><li><a href="/contact">Contact</a></li></ul></div>
+<div><h2 class="fh">Read</h2><ul><li><a href="/briefs">Briefs</a></li><li><a href="/articles">Articles</a></li><li><a href="/lessons">Lessons</a></li></ul></div>
+<div><h2 class="fh">Help</h2><ul><li><a href="/services">Services</a></li><li><a href="/tools">Tools</a></li><li><a href="/contact">Contact</a></li><li><a href="/tags">Topics</a></li><li><a href="/rss.xml">RSS feed</a></li></ul></div>
+<div><h2 class="fh">About</h2><ul><li><a href="/about">About</a></li><li><a href="/responsible-disclosure">Responsible disclosure</a></li><li><a href="/authorized-work">Authorized work only</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
 <div class="copy">© {new Date().getFullYear()} PHP Hub</div>
 </div></footer>
 </body></html>
