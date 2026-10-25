@@ -18,6 +18,7 @@ const csp = [
   "upgrade-insecure-requests",
 ].join('; ');
 const config = {
+  redirects: [{ source: '/sitemap.xml', destination: '/sitemap-index.xml', permanent: true }],
   headers: [{ source: '/(.*)', headers: [
     { key: 'Content-Security-Policy', value: csp },
     { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
