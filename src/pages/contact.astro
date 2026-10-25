@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT || '';
+---
+<Base title="Contact"><h1>Request a security audit or cleanup</h1>
+<p>Tell us about your PHP or WordPress site and the issue you're seeing.</p>
+{!endpoint && <p style="border:1px solid #fcd34d;background:#fffbeb;padding:12px;border-radius:8px"><strong>This form is not yet active.</strong> Submissions can't be sent yet. Please check back soon.</p>}
+<form method="POST" action={endpoint || undefined} style="display:grid;gap:12px;max-width:520px">
+<label>Name<br/><input name="name" required style="width:100%"/></label>
+<label>Email<br/><input type="email" name="email" required style="width:100%"/></label>
+<label>Site URL<br/><input type="url" name="site_url" required placeholder="https://" style="width:100%"/></label>
+<label>Short message about the issue<br/><textarea name="message" required maxlength="2000" rows="5" style="width:100%"></textarea></label>
+<div style="position:absolute;left:-9999px" aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabindex="-1" autocomplete="off"/></label></div>
+<label><input type="checkbox" name="consent" value="yes" required/> I confirm this request is only for sites I own or am authorized to manage.</label>
+<button type="submit" disabled={!endpoint}>{endpoint ? 'Send request' : 'Form not yet active'}</button>
+</form></Base>

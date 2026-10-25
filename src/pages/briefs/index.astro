@@ -1,0 +1,5 @@
+---
+import Base from '../../layouts/Base.astro'; import { list } from '../../lib.js';
+const items = list('briefs');
+---
+<Base title="Briefs"><h1>Briefs</h1>{items.length ? <ul class="items">{items.map(i => <li><a href={`/briefs/${i.slug}`}>{i.title}</a> <small>{i.date}</small></li>)}</ul> : <p>Nothing here yet. Check back soon.</p>}</Base>
