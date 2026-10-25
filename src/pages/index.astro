@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro'; import { list } from '../lib.js';
+const briefs = list('briefs').slice(0, 5);
+---
+<Base><h1>PHP Hub</h1><p>Clear, practical security briefs, articles and lessons for people who run PHP and WordPress sites.</p>
+<h2>Latest briefs</h2><ul class="items">{briefs.map(b => <li><a href={`/briefs/${b.slug}`}>{b.title}</a> <small>{b.date}</small></li>)}</ul>
+<p><a href="/tools">Free tools →</a></p></Base>
