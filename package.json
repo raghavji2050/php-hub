@@ -1,1 +1,18 @@
-{"name":"php-hub","private":true,"type":"module","scripts":{"dev":"astro dev","build":"astro build"},"dependencies":{"astro":"^5.0.0"}}
+{
+  "name": "php-hub",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/gen-vercel-json.mjs && astro build && pagefind --site dist",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
+  }
+}
