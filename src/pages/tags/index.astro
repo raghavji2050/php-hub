@@ -1,0 +1,6 @@
+---
+import Base from '../../layouts/Base.astro'; import { allTags } from '../../lib.js';
+const tags = allTags();
+---
+<Base title="Topics" description="Browse PHP Hub briefs, articles and lessons by topic."><h1>Topics</h1>
+<ul class="tags">{tags.map(t => <li><a class="tag" href={`/tags/${t.slug}`}>#{t.name} ({t.posts.length})</a></li>)}</ul></Base>

@@ -1,8 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro'; import { list } from '../../lib.js';
+import Post from '../../components/Post.astro'; import { list } from '../../lib.js';
 export function getStaticPaths() { return list('briefs').map(i => ({ params: { slug: i.slug }, props: { item: i } })); }
-const { item } = Astro.props; const { Content } = item;
 ---
-<Base title={item.title} description={item.summary}><article class="prose"><a class="back" href="/briefs">← Briefs</a>
-{(item.severity || item.status) && <div class="badges" style="margin-top:16px">{item.severity && <span class={`badge sev-${item.severity.toLowerCase()}`}>{item.severity}</span>}{item.status && <span class="badge status">{item.status}</span>}</div>}
-<Content /></article></Base>
+<Post item={Astro.props.item} label="Briefs" />

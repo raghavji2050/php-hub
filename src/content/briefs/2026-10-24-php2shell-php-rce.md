@@ -1,4 +1,5 @@
 ---
+tags: [php, php-core, rce]
 severity: Critical
 ---
 # PHP2Shell: two critical PHP core RCE flaws fixed in 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35
