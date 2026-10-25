@@ -1,3 +1,7 @@
+---
+severity: Critical
+status: Actively exploited
+---
 # Bricksforge (WordPress) unauthenticated file upload → RCE, actively exploited: CVE-2026-85097
 
 *PHP Hub security brief · 24 Oct 2026 · Severity: Critical*

@@ -1,7 +1,19 @@
 ---
-import Base from '../layouts/Base.astro'; import { list } from '../lib.js';
-const briefs = list('briefs').slice(0, 5);
+import Base from '../layouts/Base.astro'; import Card from '../components/Card.astro'; import { list } from '../lib.js';
+const briefs = list('briefs').slice(0, 6);
 ---
-<Base><h1>PHP Hub</h1><p>Clear, practical security briefs, articles and lessons for people who run PHP and WordPress sites.</p>
-<h2>Latest briefs</h2><ul class="items">{briefs.map(b => <li><a href={`/briefs/${b.slug}`}>{b.title}</a> <small>{b.date}</small></li>)}</ul>
-<p><a href="/tools">Free tools →</a></p></Base>
+<Base>
+<section class="hero"><p class="eyebrow">PHP &amp; WordPress security</p>
+<h1>Is your PHP or WordPress site safe?</h1>
+<p class="lead">Clear, practical briefs on the vulnerabilities that matter, what to patch, and how to check your site.</p>
+<div class="actions"><a class="btn primary" href="/contact">Request a security audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Try the free checker</a></div></section>
+<h2>Latest briefs</h2>
+<div class="grid">{briefs.map(b => <Card item={b} section="briefs" />)}</div>
+<p><a href="/briefs">All briefs →</a></p>
+</Base>
+<style>
+.hero{padding:32px 0 40px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.eyebrow{color:var(--brand);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.06em;margin:0}
+.hero h1{font-size:clamp(32px,6vw,52px);max-width:16ch;margin:.2em 0 .3em}
+.lead{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:56ch;margin:0 0 24px}
+</style>

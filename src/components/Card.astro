@@ -1,0 +1,13 @@
+---
+const { item, section } = Astro.props;
+const sev = (item.severity || '').toLowerCase();
+---
+<a class="card" href={`/${section}/${item.slug}`}>
+  {(item.severity || item.status) && <div class="badges">
+    {item.severity && <span class={`badge sev-${sev}`}>{item.severity}</span>}
+    {item.status && <span class="badge status">{item.status}</span>}
+  </div>}
+  <h3>{item.title}</h3>
+  {item.summary && <p>{item.summary}</p>}
+  {item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}
+</a>
