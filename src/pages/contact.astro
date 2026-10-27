@@ -1,16 +1,71 @@
 ---
 import Base from '../layouts/Base.astro';
-const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT || '';
+const DEFAULT_CONTACT_ENDPOINT = 'https://formspree.io/f/mzeeeojy';
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT || DEFAULT_CONTACT_ENDPOINT;
+const sent = Astro.url.searchParams.get('sent') === '1';
+const siteOrigin = (Astro.site?.origin || 'https://php-hub-rj.vercel.app').replace(/\/$/, '');
+const nextUrl = `${siteOrigin}/contact?sent=1`;
 ---
-<Base title="Contact" description="Request a security audit, malware cleanup or upgrade for a PHP or WordPress site you own or manage." cta={false}><h1>Request a security audit or cleanup</h1>
+<Base title="Contact" description="Request a security audit, malware cleanup or upgrade for a PHP or WordPress site you own or manage." cta={false}>
+<h1>Request a security audit or cleanup</h1>
 <p>Tell us about your PHP or WordPress site and the issue you're seeing.</p>
-{!endpoint && <p class="notice" role="status"><strong>This form is not yet active.</strong> Submissions can't be sent yet. Please check back soon.</p>}
-<form method="POST" action={endpoint || undefined} style="display:grid;gap:12px;max-width:520px">
+{sent && <p class="notice notice-ok" role="status" id="form-status"><strong>Request sent.</strong> Thanks — we'll reply by email soon.</p>}
+<p class="notice notice-err" role="alert" id="form-error" hidden></p>
+<form id="contact-form" method="POST" action={endpoint} style="display:grid;gap:12px;max-width:520px">
+<input type="hidden" name="_next" value={nextUrl} />
 <label>Name<br/><input name="name" required style="width:100%;max-width:100%"/></label>
 <label>Email<br/><input type="email" name="email" required style="width:100%;max-width:100%"/></label>
 <label>Site URL<br/><input type="url" name="site_url" required placeholder="https://" style="width:100%;max-width:100%"/></label>
 <label>Short message about the issue<br/><textarea name="message" required maxlength="2000" rows="5" style="width:100%;max-width:100%"></textarea></label>
 <div class="hp" aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabindex="-1" autocomplete="off"/></label></div>
 <label><input type="checkbox" name="consent" value="yes" required/> I confirm this request is only for sites I own or am authorized to manage.</label>
-<button type="submit" disabled={!endpoint}>{endpoint ? 'Send request' : 'Form not yet active'}</button>
-</form></Base>
+<button type="submit" id="contact-submit">Send request</button>
+</form>
+</Base>
+<style is:global>
+.notice-ok{border-color:#16a34a;background:#f0fdf4;color:#14532d}
+@media (prefers-color-scheme:dark){.notice-ok{background:#052e16;color:#bbf7d0;border-color:#16a34a}}
+.notice-err{border-color:#dc2626;background:#fef2f2;color:#7f1d1d}
+@media (prefers-color-scheme:dark){.notice-err{background:#450a0a;color:#fecaca;border-color:#dc2626}}
+</style>
+<script>
+  const form = document.getElementById('contact-form');
+  const err = document.getElementById('form-error');
+  const btn = document.getElementById('contact-submit');
+  if (form && err && btn) {
+    form.addEventListener('submit', async (e) => {
+      // Progressive enhancement: JSON submit for in-page errors; native POST still works without JS.
+      if (!window.fetch) return;
+      e.preventDefault();
+      err.hidden = true;
+      err.textContent = '';
+      btn.disabled = true;
+      const prev = btn.textContent;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          window.location.assign('/contact?sent=1');
+          return;
+        }
+        let msg = 'Something went wrong. Please try again in a moment.';
+        try {
+          const data = await res.json();
+          if (data && data.errors && data.errors[0] && data.errors[0].message) msg = data.errors[0].message;
+        } catch (_) {}
+        err.textContent = msg;
+        err.hidden = false;
+      } catch (_) {
+        err.textContent = 'Network error. Check your connection and try again.';
+        err.hidden = false;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prev;
+      }
+    });
+  }
+</script>
