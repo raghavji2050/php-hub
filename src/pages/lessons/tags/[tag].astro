@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro'; import Card from '../../../components/Card.astro'; import { list, slugify } from '../../../lib.js';
+export function getStaticPaths() {
+  const m = new Map();
+  for (const p of list('lessons')) for (const t of p.tags) { const k = slugify(t); if (!m.has(k)) m.set(k, { slug: k, name: t, posts: [] }); m.get(k).posts.push(p); }
+  return [...m.values()].map(t => ({ params: { tag: t.slug }, props: { t } }));
+}
+const { t } = Astro.props;
+---
+<Base title={`Lessons tagged #${t.name}`} description={`PHP Hub lessons tagged ${t.name}.`}><p><a class="back" href="/lessons">← All lessons</a></p><h1>Lessons: #{t.name}</h1>
+<div class="grid">{t.posts.map(p => <Card item={p} section="lessons" level="h2" />)}</div></Base>
