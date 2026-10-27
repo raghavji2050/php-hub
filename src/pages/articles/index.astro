@@ -1,5 +1,6 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import { list } from '../../lib.js';
+import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import { list, slugify } from '../../lib.js';
+const tags = [...new Set(list('articles').flatMap(i => i.tags))].sort();
 const items = list('articles');
 ---
-<Base title="Articles" description="In-depth PHP and WordPress security articles."><h1>Articles</h1>{items.length ? <div class="grid">{items.map(i => <Card item={i} section="articles" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}</Base>
+<Base title="Articles" description="In-depth PHP and WordPress security articles."><h1>Articles</h1>{tags.length > 0 && <ul class="tags" aria-label="Filter by tag" data-pagefind-ignore>{tags.map(t => <li><a class="tag" href={`/articles/tags/${slugify(t)}`}>#{t}</a></li>)}</ul>}{items.length ? <div class="grid">{items.map(i => <Card item={i} section="articles" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}</Base>
