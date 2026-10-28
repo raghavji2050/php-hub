@@ -11,11 +11,11 @@ const rel = related(item);
 const toc = item.headings.filter(h => h.depth === 2);
 const showToc = toc.length >= 4;
 const jsonld = { '@context': 'https://schema.org', '@type': 'Article', headline: item.title.slice(0, 110), description: item.summary,
-  datePublished: item.date || undefined, mainEntityOfPage: new URL(item.url, SITE.url).href, image: new URL('/og.png', SITE.url).href,
+  datePublished: item.date || undefined, mainEntityOfPage: item.canonical || new URL(item.url, SITE.url).href, image: new URL('/og.png', SITE.url).href,
   author: { '@type': 'Organization', name: SITE.name, url: SITE.url }, publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', SITE.url).href } },
   keywords: item.tags.join(', ') || undefined };
 ---
-<Base title={item.title} description={item.summary} type="article" jsonld={jsonld}>
+<Base title={item.title} description={item.summary} type="article" jsonld={jsonld} canonical={item.canonical || undefined}>
 <article class="prose" data-pagefind-body>
   <a class="back" href={`/${item.section}`} data-pagefind-ignore>← {label}</a>
   <div class="post-meta" data-pagefind-ignore>

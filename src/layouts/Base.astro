@@ -1,9 +1,9 @@
 ---
 import { SITE } from '../lib.js';
 import Newsletter from '../components/Newsletter.astro';
-const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = true, newsletter = true } = Astro.props;
+const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = true, newsletter = true, canonical: canonicalOverride = '' } = Astro.props;
 const path = Astro.url.pathname;
-const canonical = new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
+const canonical = canonicalOverride || new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
 const fullTitle = title === 'PHP Hub' ? 'PHP Hub · PHP & WordPress security' : `${title} · PHP Hub`;
 const imageUrl = new URL(image, SITE.url).href;
 const org = { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href };
