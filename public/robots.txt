@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://php-hub-rj.vercel.app/sitemap.xml
+Sitemap: https://php-hub-rj.vercel.app/sitemap-index.xml

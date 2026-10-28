@@ -3,9 +3,9 @@ import Base from '../layouts/Base.astro'; import Card from '../components/Card.a
 const briefs = list('briefs').slice(0, 6);
 ---
 <Base>
-<section class="hero"><p class="eyebrow">PHP &amp; WordPress security</p>
-<h1>Is your PHP or WordPress site safe?</h1>
-<p class="lead">Clear, practical briefs on the vulnerabilities that matter, what to patch, and how to check your site.</p>
+<section class="hero"><p class="eyebrow">PHP, Laravel, Symfony &amp; WordPress</p>
+<h1>PHP Hub: PHP security and tutorials</h1>
+<p class="lead">PHP Hub publishes clear, practical security briefs and tutorials for PHP, Laravel, Symfony and WordPress: the vulnerabilities that matter, what to patch, and how to check your site.</p>
 <div class="actions"><a class="btn primary" href="/contact">Request a security audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Try the free checker</a></div></section>
 <h2>Latest briefs</h2>
 <div class="grid">{briefs.map(b => <Card item={b} section="briefs" />)}</div>
