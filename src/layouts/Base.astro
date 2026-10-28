@@ -4,14 +4,17 @@ import Newsletter from '../components/Newsletter.astro';
 const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = true, newsletter = true, canonical: canonicalOverride = '' } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = canonicalOverride || new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
-const fullTitle = title === 'PHP Hub' ? 'PHP Hub · PHP & WordPress security' : `${title} · PHP Hub`;
+const fullTitle = title === 'PHP Hub' ? SITE.homeTitle : `${title} | PHP Hub`;
+const gsc = (import.meta.env.PUBLIC_GSC_VERIFICATION || SITE.gscVerification || '').trim();
 const imageUrl = new URL(image, SITE.url).href;
-const org = { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href };
+const org = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'Organization', '@id': SITE.url + '/#organization', name: SITE.name, url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href, sameAs: SITE.sameAs },
+  { '@type': 'WebSite', '@id': SITE.url + '/#website', name: SITE.name, url: SITE.url, publisher: { '@id': SITE.url + '/#organization' }, inLanguage: 'en' } ] };
 const nav = [['/briefs','Briefs'],['/articles','Articles'],['/lessons','Lessons'],['/services','Services'],['/search','Search']];
 ---
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="color-scheme" content="light dark"/><meta name="description" content={description}/>
-<title>{fullTitle}</title>
+<title>{fullTitle}</title>{gsc && <meta name="google-site-verification" content={gsc}/>}
 <link rel="canonical" href={canonical}/>{noindex && <meta name="robots" content="noindex"/>}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="manifest" href="/site.webmanifest"/>
 <meta name="theme-color" content="#4338ca"/>

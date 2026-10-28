@@ -4,7 +4,11 @@ const all = {
   lessons: import.meta.glob('./content/lessons/*.md', { eager: true }),
 };
 const raw = import.meta.glob('./content/*/*.md', { eager: true, query: '?raw', import: 'default' });
-export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', description: 'Practical PHP and WordPress security briefs, articles, lessons and tools.' };
+export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', description: 'PHP Hub: practical PHP, Laravel, Symfony and WordPress security briefs, tutorials, lessons and tools.',
+  homeTitle: 'PHP Hub – PHP, Laravel, Symfony & WordPress Security and Tutorials',
+  sameAs: ['https://medium.com/@raghavji2050', 'https://github.com/raghavji2050'],
+  // Google Search Console verification code; set here or via PUBLIC_GSC_VERIFICATION. Empty = no meta tag.
+  gscVerification: '' };
 export const SECTIONS = ['briefs', 'articles', 'lessons'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmtDate(d) { const [y, m, day] = d.split('-'); return m ? `${+day} ${MONTHS[+m - 1]} ${y}` : d; }
