@@ -8,7 +8,7 @@ export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', des
   homeTitle: 'PHP Hub – PHP, Laravel, Symfony & WordPress Security and Tutorials',
   sameAs: ['https://medium.com/@raghavji2050', 'https://github.com/raghavji2050'],
   // Google Search Console verification code; set here or via PUBLIC_GSC_VERIFICATION. Empty = no meta tag.
-  gscVerification: '' };
+  gscVerification: 'rE5wA0YQEuBOKMiP8jOhXePlFCnfh85Fya2Sy-1Gn3E' };
 export const SECTIONS = ['briefs', 'articles', 'lessons'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmtDate(d) { const [y, m, day] = d.split('-'); return m ? `${+day} ${MONTHS[+m - 1]} ${y}` : d; }
