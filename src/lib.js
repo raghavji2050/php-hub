@@ -28,7 +28,7 @@ export function list(section) {
     const words = stripFm(raw[p]).split(/\s+/).filter(Boolean).length;
     const tags = [...(Array.isArray(fm.tags) ? fm.tags : fm.tags ? [fm.tags] : []), ...(fm.category ? [fm.category] : [])].map(String);
     return { section, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, date, dateLabel: date ? fmtDate(date) : '',
-      summary: fm.summary || summarize(raw[p]), severity: fm.severity || '', status: fm.status || '', tags,
+      summary: fm.summary || fm.description || summarize(raw[p]), canonical: fm.canonical || '', severity: fm.severity || '', status: fm.status || '', tags,
       readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content };
   }).sort((a, b) => b.slug.localeCompare(a.slug));
 }
