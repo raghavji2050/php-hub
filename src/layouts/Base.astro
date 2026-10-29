@@ -73,6 +73,7 @@ button{font:inherit;padding:10px 18px;border-radius:8px;border:0;background:var(
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:4px}
 .skip{position:absolute;left:-9999px}.skip:focus{left:12px;top:12px;background:var(--surface);padding:8px 12px;z-index:10}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.astro-code span[style*="#6A737D" i]{color:#959DA5!important}
 .hp{position:absolute;left:-9999px}
 .notice{border:1px solid #d97706;background:#fffbeb;color:#713f12;padding:12px;border-radius:8px}
 @media (prefers-color-scheme:dark){.notice{background:#422006;color:#fde68a}}
@@ -90,7 +91,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
 <a class="logo" href="/">PHP<span>Hub</span></a>
-<nav class="nav">{nav.map(([h,l]) => <a href={h} aria-current={path.startsWith(h) ? 'page' : undefined}>{l}</a>)}<a class="btn primary" href="/contact">Contact</a></nav>
+<nav class="nav" aria-label="Main">{nav.map(([h,l]) => <a href={h} aria-current={path.startsWith(h) ? 'page' : undefined}>{l}</a>)}<a class="btn primary" href="/contact">Contact</a></nav>
 </div></header>
 <main class="wrap" id="main"><slot/>
 {cta && <section class="cta"><h2>Worried your PHP or WordPress site is affected?</h2>
@@ -98,7 +99,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <div class="actions"><a class="btn primary" href="/contact">Request an audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Free PHP Security Checker</a></div></section>}
 {newsletter && <Newsletter/>}
 </main>
-<footer class="site-footer"><div class="wrap">
+<footer class="site-footer" aria-label="Site footer"><div class="wrap">
 <div class="about"><a class="logo" href="/">PHP<span>Hub</span></a><p>Practical PHP and WordPress security news, guides and tools.</p></div>
 <div><h2 class="fh">Read</h2><ul><li><a href="/briefs">Briefs</a></li><li><a href="/articles">Articles</a></li><li><a href="/lessons">Lessons</a></li></ul></div>
 <div><h2 class="fh">Help</h2><ul><li><a href="/services">Services</a></li><li><a href="/tools">Tools</a></li><li><a href="/contact">Contact</a></li><li><a href="/tags">Topics</a></li><li><a href="/rss.xml">RSS feed</a></li></ul></div>
