@@ -17,12 +17,13 @@ const nextUrl = `${siteOrigin}/contact?sent=1`;
 <label>Email<br/><input type="email" name="email" required style="width:100%;max-width:100%"/></label>
 <label>Site URL<br/><input type="url" name="site_url" required placeholder="https://" style="width:100%;max-width:100%"/></label>
 <label>Short message about the issue<br/><textarea name="message" required maxlength="2000" rows="5" style="width:100%;max-width:100%"></textarea></label>
-<div class="hp" aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabindex="-1" autocomplete="off"/></label></div>
+<div class="hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="_gotcha" id="hp-field" tabindex="-1" autocomplete="off" value=""/></label></div>
 <label><input type="checkbox" name="consent" value="yes" required/> I confirm this request is only for sites I own or am authorized to manage.</label>
 <button type="submit" id="contact-submit">Send request</button>
 </form>
 </Base>
 <style is:global>
+.hp{position:absolute!important;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
 .notice-ok{border-color:#16a34a;background:#f0fdf4;color:#14532d}
 @media (prefers-color-scheme:dark){.notice-ok{background:#052e16;color:#bbf7d0;border-color:#16a34a}}
 .notice-err{border-color:#dc2626;background:#fef2f2;color:#7f1d1d}
@@ -37,6 +38,12 @@ const nextUrl = `${siteOrigin}/contact?sent=1`;
       // Progressive enhancement: JSON submit for in-page errors; native POST still works without JS.
       if (!window.fetch) return;
       e.preventDefault();
+      // Honeypot: real users never fill this hidden field; silently drop bot submissions.
+      const hp = form.querySelector('input[name="_gotcha"]');
+      if (hp && hp.value.trim() !== '') {
+        window.location.assign('/contact?sent=1');
+        return;
+      }
       err.hidden = true;
       err.textContent = '';
       btn.disabled = true;
