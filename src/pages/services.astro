@@ -3,13 +3,13 @@ import Base from '../layouts/Base.astro';
 const services = [
   { id: 'audit', title: 'Security audit', intro: 'A structured review of a PHP, Laravel or WordPress site to find vulnerabilities and risky configuration before attackers do.',
     included: ['Inventory of PHP version, framework/CMS, plugins, themes and Composer packages', 'Check against known vulnerabilities (CVE and vendor advisories)', 'Review of server and application configuration: file permissions, debug settings, exposed files, admin access', 'Targeted code review of custom code paths such as uploads, authentication and input handling', 'A written report with findings ranked by severity and clear fix steps'],
-    process: ['You share the site and confirm you own it or are authorized to manage it', 'We agree the scope and access method in writing', 'Review and testing within the agreed scope', 'Report delivered and walked through with you', 'Optional help applying the fixes'] },
+    price: 'Contact for quote', process: ['You share the site and confirm you own it or are authorized to manage it', 'We agree the scope and access method in writing', 'Review and testing within the agreed scope', 'Report delivered and walked through with you', 'Optional help applying the fixes'] },
   { id: 'cleanup', title: 'Malware cleanup', intro: 'Help for a site that has been hacked: removing malicious code, closing the hole that let attackers in, and getting back to a clean state.',
     included: ['Find and remove injected code, backdoors, web shells and malicious users', 'Identify the likely entry point, such as a vulnerable plugin or a leaked credential', 'Patch or replace the vulnerable components', 'Credential rotation checklist (admin, database, hosting, API keys)', 'Hardening steps and guidance on blocklist or search-warning removal requests'],
-    process: ['Authorization confirmed and a backup taken before changes', 'Investigation and cleanup', 'Root-cause fix and hardening', 'Verification scan and a summary of what was found and changed'] },
+    price: 'Contact for quote', process: ['Authorization confirmed and a backup taken before changes', 'Investigation and cleanup', 'Root-cause fix and hardening', 'Verification scan and a summary of what was found and changed'] },
   { id: 'upgrades', title: 'PHP, Laravel and WordPress upgrades', intro: 'Moving off unsupported versions so the site keeps receiving security fixes.',
     included: ['Compatibility check for the target PHP, Laravel or WordPress version', 'Dependency and plugin updates, with replacements for abandoned packages', 'Code changes for deprecated or removed features', 'Testing on a staging copy before going live', 'A rollback plan'],
-    process: ['Assessment of current versions and upgrade path', 'Upgrade on staging and test together', 'Scheduled production rollout', 'Post-upgrade monitoring and handover notes'] },
+    price: 'Contact for quote', process: ['Assessment of current versions and upgrade path', 'Upgrade on staging and test together', 'Scheduled production rollout', 'Post-upgrade monitoring and handover notes'] },
 ];
 ---
 <Base title="Services" description="Security audits, malware cleanup and PHP/Laravel/WordPress upgrades for sites you own or are authorized to manage.">
@@ -17,12 +17,14 @@ const services = [
 <h1>Services</h1>
 <p>Hands-on help for PHP, Laravel and WordPress sites. All work is done only for sites you own or are authorized to manage (see our <a href="/authorized-work">authorized-work policy</a>).</p>
 <!-- TODO(Raghav): add pricing or "starting from" details for each service. Intentionally left blank. -->
-<p class="notice"><strong>Pricing:</strong> to be confirmed. Please <a href="/contact">get in touch</a> for a quote.</p>
+<p class="notice"><strong>Pricing:</strong> Contact for quote. Every site is different, so the price is agreed in writing after a short scoping chat. <a href="/contact">Request a quote</a>.</p>
 <nav aria-label="Services"><ul>{services.map(s => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ul></nav>
 {services.map(s => <section id={s.id}>
   <h2>{s.title}</h2><p>{s.intro}</p>
   <h3>What's included</h3><ul>{s.included.map(x => <li>{x}</li>)}</ul>
   <h3>Process</h3><ol>{s.process.map(x => <li>{x}</li>)}</ol>
+  <p><strong>Price:</strong> {s.price}</p>
   <p><a class="btn primary" href="/contact">Ask about {s.title.toLowerCase()}</a></p>
 </section>)}
+<section aria-labelledby="next-step"><h2 id="next-step">Next step</h2><p>Tell us about your site and the issue on the <a href="/contact">contact page</a>. We reply by email to agree scope, access and a quote before any work starts.</p><p><a class="btn primary" href="/contact">Request an audit or cleanup</a></p></section>
 </div></Base>
