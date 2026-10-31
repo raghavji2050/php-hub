@@ -1,14 +1,13 @@
 ---
-const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT || '';
+// Newsletter signup is intentionally disabled until a provider is chosen. No endpoint, no keys.
 ---
-<section class="newsletter" aria-labelledby="nl-title">
-  <h2 id="nl-title">Get new briefs by email</h2>
-  <p>Short alerts when a PHP or WordPress vulnerability needs action. Unsubscribe any time.</p>
-  {!endpoint && <p class="notice" role="status"><strong>Newsletter signup is not yet active.</strong> No email provider is connected yet, so nothing will be sent or stored.</p>}
-  <form method="POST" action={endpoint || undefined} class="nl-form">
+<section class="newsletter" aria-labelledby="nl-title" data-pagefind-ignore>
+  <h2 id="nl-title">Get new briefs by email <span class="badge status">Coming soon</span></h2>
+  <p>Short alerts when a PHP or WordPress vulnerability needs action.</p>
+  <p class="notice" role="status"><strong>Coming soon.</strong> Newsletter signup is not active yet. Nothing is sent or stored.</p>
+  <form class="nl-form" onsubmit="return false" aria-disabled="true">
     <label class="sr-only" for="nl-email">Email address</label>
-    <input id="nl-email" type="email" name="email" required placeholder="you@example.com" autocomplete="email" disabled={!endpoint}/>
-    <div class="hp" aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabindex="-1" autocomplete="off"/></label></div>
-    <button type="submit" disabled={!endpoint}>{endpoint ? 'Subscribe' : 'Not yet active'}</button>
+    <input id="nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" disabled/>
+    <button type="button" disabled>Coming soon</button>
   </form>
 </section>

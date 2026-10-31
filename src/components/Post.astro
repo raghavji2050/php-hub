@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Card from './Card.astro';
+import PostCta from './PostCta.astro';
 import { list, related, slugify, SITE } from '../lib.js';
 const { item, label } = Astro.props;
 const { Content } = item;
@@ -26,11 +27,12 @@ const jsonld = { '@context': 'https://schema.org', '@type': 'Article', headline:
   <Content />
   {item.tags.length > 0 && <ul class="tags" aria-label="Tags" data-pagefind-ignore>{item.tags.map(t => <li><a class="tag" href={`/tags/${slugify(t)}`}>#{t}</a></li>)}</ul>}
 </article>
+{(item.section === 'lessons' || item.section === 'articles') && <PostCta />}
 <nav class="prevnext" aria-label="More in this section" data-pagefind-ignore>
   {newer ? <a href={newer.url}><span>← Newer</span>{newer.title}</a> : <span/>}
   {older ? <a href={older.url} class="older"><span>Older →</span>{older.title}</a> : <span/>}
 </nav>
-{rel.length > 0 && <section class="related" data-pagefind-ignore><h2>Related</h2><div class="grid">{rel.map(r => <Card item={r} />)}</div></section>}
+{rel.length > 0 && <section class="related" aria-labelledby="related-title" data-pagefind-ignore><h2 id="related-title">Related posts</h2><div class="grid">{rel.map(r => <Card item={r} />)}</div></section>}
 </Base>
 <style>
 .post-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 0}
