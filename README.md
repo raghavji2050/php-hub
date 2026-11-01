@@ -28,3 +28,13 @@ Drop Markdown files into `src/content/briefs`, `src/content/articles` or `src/co
 
 ## License
 [MIT](LICENSE)
+
+## Auto-deploys (Vercel)
+
+To get automatic deploys on every push to `main` (and preview deploys for PRs), link this repo to the Vercel project **rj-ef48/php-hub**:
+
+1. Vercel dashboard → project `php-hub` (team `rj-ef48`) → Settings → Git.
+2. Connect Git Repository → GitHub → `raghavji2050/php-hub`; production branch `main`.
+3. Or from CLI: `npx vercel link --project php-hub --scope rj-ef48` then `npx vercel git connect`.
+
+CI (`.github/workflows/ci.yml`) builds and link-checks every PR; `uptime.yml` pings key pages every 6h.
