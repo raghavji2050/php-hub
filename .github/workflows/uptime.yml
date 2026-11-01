@@ -1,0 +1,17 @@
+name: Uptime
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check pages return 200
+        run: |
+          fail=0
+          for p in / /lessons /articles /contact; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 30 "https://php-hub-rj.vercel.app$p")
+            echo "$p -> $code"; [ "$code" = "200" ] || fail=1
+          done
+          exit $fail

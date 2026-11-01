@@ -10,6 +10,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^5.0.0"
   },
   "devDependencies": {

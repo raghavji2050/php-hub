@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../lib.js';
 import Newsletter from '../components/Newsletter.astro';
+import Analytics from '@vercel/analytics/astro';
 const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = true, newsletter = true, canonical: canonicalOverride = '' } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = canonicalOverride || new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
@@ -106,4 +107,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <div><h2 class="fh">About</h2><ul><li><a href="/about">About</a></li><li><a href="/responsible-disclosure">Responsible disclosure</a></li><li><a href="/authorized-work">Authorized work only</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></div>
 <div class="copy">© {new Date().getFullYear()} PHP Hub</div>
 </div></footer>
+<Analytics />
 </body></html>
