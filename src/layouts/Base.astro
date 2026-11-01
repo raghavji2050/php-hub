@@ -8,8 +8,8 @@ const fullTitle = title === 'PHP Hub' ? SITE.homeTitle : `${title} | PHP Hub`;
 const gsc = (import.meta.env.PUBLIC_GSC_VERIFICATION || SITE.gscVerification || '').trim();
 const imageUrl = new URL(image, SITE.url).href;
 const org = { '@context': 'https://schema.org', '@graph': [
-  { '@type': 'Organization', '@id': SITE.url + '/#organization', name: SITE.name, url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href, sameAs: SITE.sameAs },
-  { '@type': 'WebSite', '@id': SITE.url + '/#website', name: SITE.name, url: SITE.url, publisher: { '@id': SITE.url + '/#organization' }, inLanguage: 'en' } ] };
+  { '@type': 'Organization', '@id': SITE.url + '/#organization', name: SITE.name, alternateName: ['PHPHub', 'PHP Hub'], url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href, sameAs: SITE.sameAs },
+  { '@type': 'WebSite', '@id': SITE.url + '/#website', name: SITE.name, alternateName: ['PHPHub', 'PHP Hub'], url: SITE.url, publisher: { '@id': SITE.url + '/#organization' }, inLanguage: 'en' } ] };
 const nav = [['/briefs','Briefs'],['/articles','Articles'],['/lessons','Lessons'],['/services','Services'],['/search','Search']];
 ---
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
