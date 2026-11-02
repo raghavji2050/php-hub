@@ -42,6 +42,8 @@ const csp = [
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "object-src 'none'",
+  "manifest-src 'self'",
+  "worker-src 'self'",
   "upgrade-insecure-requests",
 ].join('; ');
 const config = {
@@ -52,7 +54,9 @@ const config = {
     { key: 'X-Frame-Options', value: 'DENY' },
     { key: 'X-Content-Type-Options', value: 'nosniff' },
     { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-    { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
+    { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+    { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
+    { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()' },
   ] }],
 };
 writeFileSync(new URL('../vercel.json', import.meta.url), JSON.stringify(config, null, 2) + '\n');
