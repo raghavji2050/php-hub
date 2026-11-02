@@ -1,0 +1,20 @@
+---
+import HeroImage from './HeroImage.astro';
+const { item } = Astro.props;
+const LABEL = { briefs: 'Brief', articles: 'Article', lessons: 'Lesson' };
+---
+<a class="post-card" href={item.url}>
+  <HeroImage hero={item.hero} alt={item.heroAlt} width={600} height={315} class="post-card-img" />
+  <div class="post-card-body">
+    <span class="post-card-cat">{LABEL[item.section] || item.section}</span>
+    <h3 class="card-title">{item.title}</h3>
+    {item.dateLabel && <time class="meta" datetime={item.date}>{item.dateLabel}</time>}
+  </div>
+</a>
+<style>
+.post-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--text);transition:border-color .15s}
+.post-card:hover{border-color:var(--brand)}
+.post-card :global(.post-card-img){width:100%;height:auto;aspect-ratio:600/315;object-fit:cover;display:block;background:var(--code)}
+.post-card-body{display:flex;flex-direction:column;gap:6px;padding:16px 18px 18px;flex:1}
+.post-card-cat{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--brand)}
+</style>

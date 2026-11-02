@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="PHP Hub">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset=".55" stop-color="#4338ca"/><stop offset="1" stop-color="#0f766e"/></linearGradient>
+<pattern id="p" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0v40" fill="none" stroke="#fff" stroke-opacity=".06"/></pattern></defs>
+<rect width="1200" height="630" fill="url(#g)"/><rect width="1200" height="630" fill="url(#p)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="10" stroke-linejoin="round"><path d="M600 170l120 45v90c0 80-55 130-120 155-65-25-120-75-120-155v-90z"/></g>
+<path d="M555 320l35 35 65-70" fill="none" stroke="#5eead4" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="600" y="540" text-anchor="middle" font-family="system-ui,sans-serif" font-size="56" font-weight="800" fill="#fff">PHP<tspan fill="#a5b4fc">Hub</tspan></text>
+</svg>

@@ -1,5 +1,6 @@
 ---
-import Base from '../layouts/Base.astro'; import Card from '../components/Card.astro'; import { list } from '../lib.js';
+import Base from '../layouts/Base.astro'; import Card from '../components/Card.astro'; import PostCard from '../components/PostCard.astro'; import { list, allPosts } from '../lib.js';
+const latest = allPosts().slice(0, 6);
 const briefs = list('briefs').slice(0, 6);
 ---
 <Base>
@@ -7,6 +8,8 @@ const briefs = list('briefs').slice(0, 6);
 <h1>PHP Hub: PHP security and tutorials</h1>
 <p class="lead">PHP Hub publishes clear, practical security briefs and tutorials for PHP, Laravel, Symfony and WordPress: the vulnerabilities that matter, what to patch, and how to check your site.</p>
 <div class="actions"><a class="btn primary" href="/contact">Request a security audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Try the free checker</a></div></section>
+<section aria-labelledby="latest-title"><h2 id="latest-title">Latest posts</h2>
+<div class="grid">{latest.map(p => <PostCard item={p} />)}</div></section>
 <h2>Latest briefs</h2>
 <div class="grid">{briefs.map(b => <Card item={b} section="briefs" />)}</div>
 <p><a href="/briefs">All briefs →</a></p>
