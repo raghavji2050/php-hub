@@ -18,7 +18,7 @@ const nav = [['/briefs','Briefs'],['/articles','Articles'],['/lessons','Lessons'
 <title>{fullTitle}</title>{gsc && <meta name="google-site-verification" content={gsc}/>}
 <link rel="canonical" href={canonical}/>{noindex && <meta name="robots" content="noindex"/>}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="manifest" href="/site.webmanifest"/>
-<meta name="theme-color" content="#4338ca"/>
+<meta name="theme-color" content="#047857"/>
 <link rel="alternate" type="application/rss+xml" title="PHP Hub" href="/rss.xml"/>
 <meta property="og:type" content={type}/><meta property="og:site_name" content="PHP Hub"/><meta property="og:title" content={fullTitle}/>
 <meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={imageUrl}/>
@@ -27,14 +27,15 @@ const nav = [['/briefs','Briefs'],['/articles','Articles'],['/lessons','Lessons'
 <script type="application/ld+json" set:html={JSON.stringify(org)}/>
 {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)}/>}
 <style is:global>
-:root{--bg:#fafaf9;--surface:#fff;--text:#1c1917;--muted:#44403c;--border:#e7e5e4;--brand:#4338ca;--brand-ink:#fff;--brand-soft:#eef2ff;--code:#f5f5f4;--crit:#b91c1c;--crit-bg:#fee2e2;--warn:#9a3412;--warn-bg:#ffedd5}
-@media (prefers-color-scheme:dark){:root{--bg:#0c0a09;--surface:#1c1917;--text:#f5f5f4;--muted:#a8a29e;--border:#292524;--brand:#818cf8;--brand-ink:#0c0a09;--brand-soft:#1e1b4b;--code:#292524;--crit:#fca5a5;--crit-bg:#450a0a;--warn:#fdba74;--warn-bg:#431407}}
+:root{--bg:#f8fafc;--surface:#fff;--text:#0f172a;--muted:#475569;--border:#e2e8f0;--brand:#047857;--brand-strong:#065f46;--brand-ink:#fff;--brand-soft:#ecfdf5;--code:#f1f5f9;--pre:#0f172a;--pre-text:#e2e8f0;--crit:#b91c1c;--crit-bg:#fee2e2;--warn:#9a3412;--warn-bg:#ffedd5;--radius:14px;--shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px -12px rgba(15,23,42,.18)}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1120;--surface:#111827;--text:#f1f5f9;--muted:#94a3b8;--border:#1f2a3c;--brand:#34d399;--brand-strong:#6ee7b7;--brand-ink:#052e22;--brand-soft:#062a22;--code:#1e293b;--pre:#020617;--pre-text:#e2e8f0;--crit:#fca5a5;--crit-bg:#450a0a;--warn:#fdba74;--warn-bg:#431407;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6)}}
+
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:var(--brand)}
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
 .site-header{border-bottom:1px solid var(--border);background:var(--surface)}
-.site-header .wrap{display:flex;align-items:center;gap:8px 20px;min-height:64px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.site-header .wrap{position:relative;display:flex;align-items:center;gap:8px 20px;min-height:64px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
 .logo{font-weight:800;font-size:20px;letter-spacing:-.02em;color:var(--text);text-decoration:none;margin-right:auto}
 .logo span{color:var(--brand)}
 .nav{display:flex;gap:4px 16px;flex-wrap:wrap;align-items:center}
@@ -88,11 +89,47 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .tag:hover{color:var(--text);border-color:var(--brand)}
 .page-prose{max-width:70ch}.page-prose h2{margin-top:1.8em}
 @media (max-width:640px){body{font-size:16px}.prose{font-size:17px}.site-footer .wrap{grid-template-columns:1fr 1fr}.site-footer .about{grid-column:1/-1}.nav{width:100%}.grid{grid-template-columns:1fr}}
+
+body{font:17px/1.7 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{color:var(--text);text-wrap:balance}
+.wrap{max-width:1120px}
+.site-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px)}
+.site-header .wrap{flex-wrap:nowrap;min-height:64px}
+.logo{display:inline-flex;align-items:center}
+.logo::before{content:"";width:22px;height:24px;background:var(--brand);clip-path:polygon(50% 0,100% 18%,100% 55%,50% 100%,0 55%,0 18%);margin-right:8px}
+.nav{gap:4px}.nav a{padding:8px 12px;border-radius:8px;font-weight:500}
+.nav a:hover,.nav a[aria-current]{background:var(--code);color:var(--text)}
+.nav .btn{margin-left:6px;padding:8px 16px}
+.btn{border-radius:10px;padding:11px 20px;transition:background .15s,transform .15s,border-color .15s}
+.btn.primary:hover{background:var(--brand-strong);border-color:var(--brand-strong)}.btn.secondary:hover{background:var(--brand-soft)}
+.btn:active{transform:translateY(1px)}
+.menu{display:none;margin-left:auto}
+.menu summary{list-style:none;cursor:pointer;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:15px}
+.menu summary::-webkit-details-marker{display:none}
+.menu[open] summary{background:var(--code)}
+.menu .menu-panel{position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--border);box-shadow:var(--shadow);padding:8px 20px 16px;display:grid;gap:2px}
+.menu .menu-panel a{padding:12px 8px;border-radius:8px;color:var(--text);text-decoration:none;font-weight:500}
+.menu .menu-panel a:hover{background:var(--code)}.menu .menu-panel .btn{margin-top:8px;text-align:center;color:var(--brand-ink)}
+.card,.post-card{border-radius:var(--radius);box-shadow:var(--shadow)}
+.card{transition:border-color .15s,transform .15s}.card:hover{transform:translateY(-2px)}
+.prose{max-width:72ch}
+.prose h2{font-size:clamp(22px,3vw,28px);padding-top:.2em;scroll-margin-top:80px}.prose h3{scroll-margin-top:80px}
+.prose code{background:var(--code);border:1px solid var(--border)}
+.prose pre,.prose pre.astro-code{background:var(--pre)!important;color:var(--pre-text);border:1px solid var(--border);border-radius:12px;padding:18px 20px;font-size:14.5px;box-shadow:var(--shadow)}
+.prose pre code{border:0}
+.prose img{max-width:100%;height:auto;border-radius:12px}
+.prose blockquote{background:var(--brand-soft);border-left:4px solid var(--brand);border-radius:0 10px 10px 0;padding:10px 18px}
+.prose th{background:var(--code);text-align:left}
+.cta{border-radius:var(--radius);background:linear-gradient(135deg,var(--brand-soft),var(--surface));border-color:color-mix(in srgb,var(--brand) 30%,var(--border))}
+.site-footer{background:var(--surface);margin-top:64px;padding:48px 0 32px}
+.site-footer .about p{max-width:32ch}
+@media (max-width:760px){.site-header .nav{display:none}.menu{display:block}}
 </style></head><body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
 <a class="logo" href="/">PHP<span>Hub</span></a>
 <nav class="nav" aria-label="Main">{nav.map(([h,l]) => <a href={h} aria-current={path.startsWith(h) ? 'page' : undefined}>{l}</a>)}<a class="btn primary" href="/contact">Contact</a></nav>
+<details class="menu"><summary aria-label="Open menu">Menu</summary><nav class="menu-panel" aria-label="Mobile">{nav.map(([h,l]) => <a href={h} aria-current={path.startsWith(h) ? 'page' : undefined}>{l}</a>)}<a class="btn primary" href="/contact">Contact</a></nav></details>
 </div></header>
 <main class="wrap" id="main"><slot/>
 {cta && <section class="cta"><h2>Worried your PHP or WordPress site is affected?</h2>

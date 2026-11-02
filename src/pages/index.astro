@@ -4,18 +4,25 @@ const latest = allPosts().slice(0, 6);
 const briefs = list('briefs').slice(0, 6);
 ---
 <Base>
-<section class="hero"><p class="eyebrow">PHP, Laravel, Symfony &amp; WordPress</p>
+<section class="hero"><div class="hero-copy"><p class="eyebrow">PHP, Laravel, Symfony &amp; WordPress</p>
 <h1>PHP Hub: PHP security and tutorials</h1>
 <p class="lead">PHP Hub publishes clear, practical security briefs and tutorials for PHP, Laravel, Symfony and WordPress: the vulnerabilities that matter, what to patch, and how to check your site.</p>
-<div class="actions"><a class="btn primary" href="/contact">Request a security audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Try the free checker</a></div></section>
-<section aria-labelledby="latest-title"><h2 id="latest-title">Latest posts</h2>
+<div class="actions"><a class="btn primary" href="/contact">Request a security audit</a><a class="btn secondary" href="https://php-security-checker.vercel.app">Try the free checker</a></div></div>
+<nav class="hero-panel" aria-label="Explore PHP Hub"><a href="/briefs"><strong>Briefs</strong><span>Security news and what to patch</span></a><a href="/articles"><strong>Articles</strong><span>In-depth guides</span></a><a href="/lessons"><strong>Lessons</strong><span>Step-by-step tutorials</span></a><a href="/services"><strong>Services</strong><span>Security audits and cleanup</span></a></nav></section>
+<section aria-labelledby="latest-title"><div class="sec-head"><h2 id="latest-title">Latest posts</h2><a href="/search">Search all →</a></div>
 <div class="grid">{latest.map(p => <PostCard item={p} />)}</div></section>
 <h2>Latest briefs</h2>
 <div class="grid">{briefs.map(b => <Card item={b} section="briefs" />)}</div>
 <p><a href="/briefs">All briefs →</a></p>
 </Base>
 <style>
-.hero{padding:32px 0 40px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.hero{display:grid;gap:32px;align-items:center;padding:24px 0 48px;border-bottom:1px solid var(--border);margin-bottom:40px;position:relative}
+.hero::before{content:"";position:absolute;inset:-40px -20px auto;height:360px;z-index:-1;background:radial-gradient(60% 70% at 15% 20%,color-mix(in srgb,var(--brand) 16%,transparent),transparent 70%)}
+@media (min-width:900px){.hero{grid-template-columns:1.35fr 1fr;padding:48px 0 64px}}
+.hero-panel{display:grid;gap:10px}
+.hero-panel a{display:block;padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);text-decoration:none;color:var(--text);transition:border-color .15s}
+.hero-panel a:hover{border-color:var(--brand)}.hero-panel strong{display:block}.hero-panel span{color:var(--muted);font-size:15px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.sec-head a{font-weight:600;text-decoration:none}
 .eyebrow{color:var(--brand);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.06em;margin:0}
 .hero h1{font-size:clamp(32px,6vw,52px);max-width:16ch;margin:.2em 0 .3em}
 .lead{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:56ch;margin:0 0 24px}
