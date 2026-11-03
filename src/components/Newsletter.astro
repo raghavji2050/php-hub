@@ -1,13 +1,29 @@
 ---
-// Newsletter signup is intentionally disabled until a provider is chosen. No endpoint, no keys.
+// Buttondown embed-subscribe for the "phphub" newsletter. Plain HTML form POST, no inline JS (CSP-safe).
+// Flag: set NEWSLETTER_ENABLED to false to fall back to the disabled "Coming soon" state.
+// Buttondown account approved 31 Oct 2026 ("Your Buttondown account is ready to go!").
+const NEWSLETTER_ENABLED = true;
+const ACTION = 'https://buttondown.com/api/emails/embed-subscribe/phphub';
 ---
 <section class="newsletter" aria-labelledby="nl-title" data-pagefind-ignore>
-  <h2 id="nl-title">Get new briefs by email <span class="badge status">Coming soon</span></h2>
+  <h2 id="nl-title">Get new briefs by email {!NEWSLETTER_ENABLED && <span class="badge status">Coming soon</span>}</h2>
   <p>Short alerts when a PHP or WordPress vulnerability needs action.</p>
-  <p class="notice" role="status"><strong>Coming soon.</strong> Newsletter signup is not active yet. Nothing is sent or stored.</p>
-  <form class="nl-form" onsubmit="return false" aria-disabled="true">
-    <label class="sr-only" for="nl-email">Email address</label>
-    <input id="nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" disabled/>
-    <button type="button" disabled>Coming soon</button>
-  </form>
+  {NEWSLETTER_ENABLED ? (
+    <form class="nl-form" action={ACTION} method="post">
+      <label class="sr-only" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required/>
+      <input type="hidden" name="embed" value="1"/>
+      <button type="submit">Subscribe</button>
+    </form>
+  ) : (
+    <>
+    <p class="notice" role="status"><strong>Coming soon.</strong> Newsletter signup is not active yet. Nothing is sent or stored.</p>
+    <form class="nl-form" aria-disabled="true">
+      <label class="sr-only" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" disabled/>
+      <button type="button" disabled>Coming soon</button>
+    </form>
+    </>
+  )}
+  {NEWSLETTER_ENABLED && <p class="nl-note"><small>Double opt-in via Buttondown; unsubscribe any time. See our <a href="/privacy">privacy policy</a>.</small></p>}
 </section>
