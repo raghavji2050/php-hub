@@ -2,14 +2,12 @@
 import Base from '../layouts/Base.astro';
 const DEFAULT_CONTACT_ENDPOINT = 'https://formspree.io/f/mzeeeojy';
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT || DEFAULT_CONTACT_ENDPOINT;
-const sent = Astro.url.searchParams.get('sent') === '1';
 const siteOrigin = (Astro.site?.origin || 'https://php-hub-rj.vercel.app').replace(/\/$/, '');
-const nextUrl = `${siteOrigin}/contact?sent=1`;
+const nextUrl = `${siteOrigin}/thanks/`;
 ---
 <Base title="Contact" description="Request a security audit, malware cleanup or upgrade for a PHP or WordPress site you own or manage." cta={false}>
 <h1>Request a security audit or cleanup</h1>
 <p>Tell us about your PHP or WordPress site and the issue you're seeing.</p>
-{sent && <p class="notice notice-ok" role="status" id="form-status"><strong>Request sent.</strong> Thanks — we'll reply by email soon.</p>}
 <p class="notice notice-err" role="alert" id="form-error" hidden></p>
 <form id="contact-form" method="POST" action={endpoint} style="display:grid;gap:12px;max-width:520px">
 <input type="hidden" name="_next" value={nextUrl} />
@@ -41,7 +39,7 @@ const nextUrl = `${siteOrigin}/contact?sent=1`;
       // Honeypot: real users never fill this hidden field; silently drop bot submissions.
       const hp = form.querySelector('input[name="_gotcha"]');
       if (hp && hp.value.trim() !== '') {
-        window.location.assign('/contact?sent=1');
+        window.location.assign('/thanks/');
         return;
       }
       err.hidden = true;
@@ -56,7 +54,7 @@ const nextUrl = `${siteOrigin}/contact?sent=1`;
           headers: { Accept: 'application/json' },
         });
         if (res.ok) {
-          window.location.assign('/contact?sent=1');
+          window.location.assign('/thanks/');
           return;
         }
         let msg = 'Something went wrong. Please try again in a moment.';
