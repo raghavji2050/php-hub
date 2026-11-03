@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_CONTACT_ENDPOINT = 'https://formspree.io/f/mzeeeojy';
+const DEFAULT_NEWSLETTER_ENDPOINT = 'https://buttondown.com/api/emails/embed-subscribe/phphub';
 
 function loadEnvFile(name) {
   const path = join(root, name);
@@ -29,7 +30,7 @@ loadEnvFile('.env.production');
 
 const origin = (u) => { try { return u ? new URL(u).origin : ''; } catch { return ''; } };
 const contact = process.env.PUBLIC_CONTACT_ENDPOINT || DEFAULT_CONTACT_ENDPOINT;
-const extra = [contact, process.env.PUBLIC_NEWSLETTER_ENDPOINT].map(origin).filter(Boolean);
+const extra = [contact, process.env.PUBLIC_NEWSLETTER_ENDPOINT || DEFAULT_NEWSLETTER_ENDPOINT].map(origin).filter(Boolean);
 const ext = [...new Set(extra)].join(' ');
 const csp = [
   "default-src 'self'",
