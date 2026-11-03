@@ -1,16 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-const packages = [
-  { name: 'Quick Check', for: 'One site, external view only. Good for a fast health check.',
-    deliverables: ['Version and component inventory (PHP, CMS/framework, plugins, themes) visible from outside', 'Match against public advisories (NVD, GitHub Advisory Database, WPScan/Patchstack listings)', 'HTTPS, security headers and exposed-file checks (.env, .git, backups, debug pages)', '2-4 page summary with prioritised fixes'],
-    turnaround: '3 business days' },
-  { name: 'Standard Audit', for: 'One PHP, Laravel or WordPress site with read access to code and config.',
-    deliverables: ['Everything in Quick Check', 'composer.lock / plugin audit against known advisories', 'Config review: debug mode, file permissions, session/cookie flags, admin access, backups', 'Targeted code review of auth, uploads, input handling and SQL queries (OWASP Top 10 lens)', 'Written report ranked by severity with fix steps, plus a 30-minute walkthrough call'],
-    turnaround: '7 business days' },
-  { name: 'Audit + Fix Support', for: 'Standard Audit plus help shipping the fixes.',
-    deliverables: ['Everything in Standard Audit', 'Fixes for agreed high and critical findings, applied on staging first', 'One re-test of fixed findings', 'Short hardening checklist for your team'],
-    turnaround: '10-14 business days, depending on findings' },
-];
 const services = [
   { id: 'audit', title: 'Security audit', intro: 'A structured review of a PHP, Laravel or WordPress site to find vulnerabilities and risky configuration before attackers do.',
     included: ['Inventory of PHP version, framework/CMS, plugins, themes and Composer packages', 'Check against known vulnerabilities (CVE and vendor advisories)', 'Review of server and application configuration: file permissions, debug settings, exposed files, admin access', 'Targeted code review of custom code paths such as uploads, authentication and input handling', 'A written report with findings ranked by severity and clear fix steps'],
@@ -29,17 +18,6 @@ const services = [
 <p>Hands-on help for PHP, Laravel and WordPress sites. All work is done only for sites you own or are authorized to manage (see our <a href="/authorized-work">authorized-work policy</a>).</p>
 <!-- TODO(Raghav): add pricing or "starting from" details for each service. Intentionally left blank. -->
 <p class="notice"><strong>Pricing:</strong> Contact for quote. Every site is different, so the price is agreed in writing after a short scoping chat. <a href="/contact">Request a quote</a>.</p>
-<section id="packages" aria-labelledby="pk-title">
-<h2 id="pk-title">Fixed-scope audit packages</h2>
-<p>Clear scope, clear deliverables, agreed in writing before work starts. Turnaround counts business days from when access is confirmed.</p>
-{packages.map(p => <article class="card">
-  <h3>{p.name}</h3><p>{p.for}</p>
-  <h4>Deliverables</h4><ul>{p.deliverables.map(d => <li>{d}</li>)}</ul>
-  <p><strong>Turnaround:</strong> {p.turnaround}</p>
-  <p><strong>Price:</strong> Contact for quote. <a class="btn primary" href="/contact">Request the {p.name}</a></p>
-</article>)}
-<p><small>Out of scope for all packages unless agreed in writing: fixing the findings, load/DoS testing, social engineering, and any system you are not authorized to test.</small></p>
-</section>
 <nav aria-label="Services"><ul>{services.map(s => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ul></nav>
 {services.map(s => <section id={s.id}>
   <h2>{s.title}</h2><p>{s.intro}</p>
