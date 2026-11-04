@@ -1,4 +1,5 @@
 ---
+categories: [PHP]
 title: "Binary Search in PHP: 3 Templates You’ll Actually Use"
 date: 2026-10-27
 description: "Learn binary search in PHP with 3 ready templates: classic search, first/last position, and binary search on the answer, plus common PHP pitfalls."

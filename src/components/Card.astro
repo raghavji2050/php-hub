@@ -8,7 +8,9 @@ const H = level;
     {item.severity && <span class={`badge sev-${sev}`}>{item.severity}</span>}
     {item.status && <span class="badge status">{item.status}</span>}
   </div>}
+  {item.categories?.length > 0 && <span class="card-cats">{item.categories.join(' · ')}</span>}
   <H class="card-title">{item.title}</H>
   {item.summary && <p>{item.summary}</p>}
   <span class="meta">{item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}{item.dateLabel && ' · '}{item.readingTime} min read</span>
 </a>
+<style>.card-cats{font-size:12px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.04em}</style>

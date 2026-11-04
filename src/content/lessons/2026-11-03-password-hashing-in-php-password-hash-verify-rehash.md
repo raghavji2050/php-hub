@@ -1,4 +1,5 @@
 ---
+categories: [PHP, Laravel, Security]
 title: "Password Hashing in PHP: password_hash, password_verify and Safe Rehashing"
 date: 2026-11-03
 description: "Store PHP passwords safely with password_hash() and password_verify(), upgrade old hashes on login with password_needs_rehash(), and migrate legacy MD5 hashes. Laravel Hash facade notes included."

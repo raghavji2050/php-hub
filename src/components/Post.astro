@@ -24,6 +24,7 @@ const jsonld = { '@context': 'https://schema.org', '@type': 'Article', headline:
   <a class="back" href={`/${item.section}`} data-pagefind-ignore>← {label}</a>
   <div class="post-meta" data-pagefind-ignore>
     {(item.severity || item.status) && <span class="badges">{item.severity && <span class={`badge sev-${item.severity.toLowerCase()}`}>{item.severity}</span>}{item.status && <span class="badge status">{item.status}</span>}</span>}
+    {item.categories.length > 0 && <span class="cats">{item.categories.map(c => <a class="cat" href={`/categories/${slugify(c)}/`}>{c}</a>)}</span>}
     <span class="meta">{item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}{item.dateLabel && ' · '}{item.readingTime} min read</span>
   </div>
   {item.hero && <figure class="post-hero"><HeroImage hero={item.hero} alt={item.heroAlt} eager fallback={false} /></figure>}
@@ -37,8 +38,11 @@ const jsonld = { '@context': 'https://schema.org', '@type': 'Article', headline:
   {older ? <a href={older.url} class="older"><span>Older →</span>{older.title}</a> : <span/>}
 </nav>
 {rel.length > 0 && <section class="related" aria-labelledby="related-title" data-pagefind-ignore><h2 id="related-title">Related posts</h2><div class="grid">{rel.map(r => <Card item={r} />)}</div></section>}
+<script is:inline src="/copy-code.js" defer></script>
 </Base>
 <style>
+.cats{display:flex;gap:6px;flex-wrap:wrap}.cat{padding:2px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:700;text-decoration:none}
+:global(.code-wrap){position:relative}:global(.copy-btn){position:absolute;top:8px;right:8px;padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;opacity:.85}:global(.copy-btn:hover){opacity:1;border-color:var(--brand)}
 .post-hero{margin:20px 0 0}.post-hero :global(img){width:100%;height:auto;border-radius:12px;display:block;aspect-ratio:1200/630;object-fit:cover}
 .post-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0 0}
 .toc{border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:20px 0;font-size:16px;background:var(--surface)}

@@ -1,4 +1,5 @@
 ---
+categories: [PHP, Security]
 tags: [php, php-core, rce]
 severity: Critical
 ---

@@ -1,4 +1,5 @@
 ---
+categories: [PHP, Symfony, Security]
 tags: [php, php-core, symfony, phpspreadsheet, phpunit, weekly]
 severity: Critical
 status: Actively exploited
