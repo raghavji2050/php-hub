@@ -2,6 +2,14 @@
 import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import { allCategories } from '../../lib.js';
 export function getStaticPaths() { return allCategories().map(c => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props;
+const intros = {
+ php: ['PHP Hub PHP category: core PHP lessons, articles and briefs.', 'This is the PHP section of PHP Hub. Here you will find practical lessons on core PHP, from language features to everyday patterns, plus articles and news briefs. Every post is fact-checked and links to its sources.'],
+ laravel: ['PHP Hub Laravel category: Laravel tutorials, security tips and news.', 'This is the Laravel section of PHP Hub. It collects our Laravel tutorials, security tips and release briefs, covering topics like validation, Eloquent and safe defaults. Each post is checked against the official Laravel docs.'],
+ symfony: ['PHP Hub Symfony category: Symfony guides, components and news.', 'This is the Symfony section of PHP Hub. It gathers our posts on the Symfony framework and its components, from practical guides to release news. Every post is fact-checked and cites its sources.'],
+ wordpress: ['PHP Hub WordPress category: WordPress security, plugins and PHP tips.', 'This is the WordPress section of PHP Hub. It covers WordPress from a PHP developer\'s point of view, with security advice, plugin and theme topics, and news briefs. Every post is fact-checked and links to its sources.'],
+ security: ['PHP Hub Security category: PHP, Laravel and WordPress security guides.', 'This is the Security section of PHP Hub. It brings together our guides on securing PHP applications, including password hashing, input validation, vulnerabilities and patching. Every post is fact-checked against sources like OWASP and the official docs.'],
+};
+const [desc, intro] = intros[c.slug] ?? [`PHP Hub ${c.name} briefs, articles and lessons.`, `This is the ${c.name} section of PHP Hub, with fact-checked briefs, articles and lessons.`];
 ---
-<Base title={`${c.name} posts`} description={`PHP Hub ${c.name} briefs, articles and lessons.`}><p><a class="back" href="/categories/">← All categories</a></p><h1>{c.name}</h1>
+<Base title={`${c.name} posts`} description={desc}><p><a class="back" href="/categories/">← All categories</a></p><h1>{c.name}</h1><p class="cat-intro">{intro}</p>
 {c.posts.length ? <div class="grid">{c.posts.map(p => <Card item={p} level="h2" />)}</div> : <p>No {c.name} posts yet.</p>}</Base>
