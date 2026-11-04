@@ -1,4 +1,5 @@
 ---
+categories: [PHP]
 tags: [php, dsa, stack, algorithms]
 ---
 # Stacks in PHP: Brackets, RPN, and the Monotonic Stack

@@ -9,6 +9,7 @@ export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', des
   sameAs: ['https://medium.com/@raghavji2050', 'https://github.com/raghavji2050'],
   // Google Search Console verification code; set here or via PUBLIC_GSC_VERIFICATION. Empty = no meta tag.
   gscVerification: 'rE5wA0YQEuBOKMiP8jOhXePlFCnfh85Fya2Sy-1Gn3E' };
+export const CATEGORIES = ['PHP', 'Laravel', 'Symfony', 'WordPress', 'Security'];
 export const SECTIONS = ['briefs', 'articles', 'lessons'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmtDate(d) { const [y, m, day] = d.split('-'); return m ? `${+day} ${MONTHS[+m - 1]} ${y}` : d; }
@@ -31,7 +32,8 @@ export function list(section) {
     const date = /^\d{4}-\d{2}-\d{2}/.test(slug) ? slug.slice(0, 10) : (fm.date ? String(fm.date).slice(0, 10) : '');
     const words = stripFm(raw[p]).split(/\s+/).filter(Boolean).length;
     const tags = [...(Array.isArray(fm.tags) ? fm.tags : fm.tags ? [fm.tags] : []), ...(fm.category ? [fm.category] : [])].map(String);
-    return { section, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, date, dateLabel: date ? fmtDate(date) : '',
+    const categories = (Array.isArray(fm.categories) ? fm.categories : fm.categories ? [fm.categories] : []).map(String).filter(c => CATEGORIES.includes(c));
+    return { section, categories, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, date, dateLabel: date ? fmtDate(date) : '',
       summary: fm.summary || fm.description || summarize(raw[p]), canonical: fm.canonical || '', hero: fm.hero || '', heroAlt: fm.heroAlt || '', severity: fm.severity || '', status: fm.status || '', tags,
       readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content };
   }).sort((a, b) => b.slug.localeCompare(a.slug));
@@ -46,4 +48,8 @@ export function related(post, n = 3) {
   return allPosts().filter(p => p.url !== post.url)
     .map(p => ({ p, score: p.tags.filter(t => post.tags.includes(t)).length + (p.section === post.section ? 0.5 : 0) }))
     .filter(x => x.score >= 1).sort((a, b) => b.score - a.score).slice(0, n).map(x => x.p);
+}
+export function allCategories() {
+  const posts = allPosts();
+  return CATEGORIES.map(name => ({ name, slug: slugify(name), posts: posts.filter(p => p.categories.includes(name)) }));
 }

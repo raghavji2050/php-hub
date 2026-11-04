@@ -1,4 +1,5 @@
 ---
+categories: [PHP]
 tags: [php, dsa, binary-search, algorithms]
 ---
 # Binary Search in PHP: 3 Templates You'll Actually Use

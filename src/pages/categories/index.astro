@@ -1,0 +1,6 @@
+---
+import Base from '../../layouts/Base.astro'; import { allCategories } from '../../lib.js';
+const cats = allCategories();
+---
+<Base title="Categories" description="Browse PHP Hub posts by category: PHP, Laravel, Symfony, WordPress and Security."><h1>Categories</h1>
+<ul class="tags">{cats.map(c => <li><a class="tag" href={`/categories/${c.slug}/`}>{c.name} ({c.posts.length})</a></li>)}</ul></Base>
