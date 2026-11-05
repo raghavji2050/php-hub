@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { KITS } from '../../kits.js';
+export function getStaticPaths() { return KITS.map(k => ({ params: { slug: k.slug }, props: { k } })); }
+const { k } = Astro.props;
+const jsonld = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: k.faq.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) };
+---
+<Base title={k.title} description={k.description} jsonld={jsonld}>
+<section class="prose">
+<p class="meta"><a href="/kits/">Dev kits</a></p>
+<h1>{k.title}</h1>
+<p>{k.intro}</p>
+<p><strong>{k.name}</strong> · {k.price} on Topmate</p>
+<h2>What you get</h2><ul>{k.items.map(i => <li>{i}</li>)}</ul>
+<p><a class="btn primary" href={k.url} rel="noopener">Get it on Topmate →</a></p>
+<h2>FAQ</h2>{k.faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}
+<p class="meta">Details are taken from the Topmate listing; see it for the full description and terms.</p>
+</section>
+</Base>
