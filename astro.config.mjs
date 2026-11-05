@@ -1,3 +1,4 @@
+// No-op marker for the GitHub to Vercel auto-deploy smoke test.
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 export default defineConfig({
