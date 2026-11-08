@@ -5,6 +5,7 @@ date: 2026-11-06
 description: "How Blade stops XSS by default: {{ }} and e() run htmlspecialchars, when {!! !!} is unsafe for user input, @{{ }} for JS frameworks, and Illuminate\\Support\\Js::from for embedding JSON in script tags."
 summary: "Prefer Blade {{ }} for any user-supplied text, never dump raw input with {!! !!}, use Js::from for JSON in scripts, and leave @{{ }} for frontend frameworks."
 tags: ["php", "laravel", "security", "xss", "blade"]
+level: intermediate
 hero: "posts/laravel-xss-blade-hero.webp"
 heroAlt: "Abstract emerald hexagon filter on a dark background; green safe lines pass through while red lines are stopped with X marks before the shield"
 ---

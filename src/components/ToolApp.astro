@@ -1,0 +1,253 @@
+---
+import { ARTISAN_COMMANDS, ARTISAN_GROUPS } from '../data/artisan.js';
+import { HTTP_CLASSES, HTTP_STATUSES } from '../data/http-status.js';
+import { PHP_MANUAL, PHP_VERSIONS } from '../data/php-features.js';
+import { JWT_EXAMPLE } from '../lib/tool-logic.js';
+const { tool } = Astro.props;
+const phpSample = `<?php\nfunction add($a, $b) {\nreturn $a + $b;\n}\nif ($a):\necho $a;\nendif;\n`;
+const versionSample = `<?php\nenum Role { case Member; }\necho str_contains($name, 'a') ? 'yes' : 'no';\n`;
+const jsonSample = `{
+  "name": "example/app",
+  "tools": ["formatter", "decoder"]
+}`;
+const composerJson = `{
+  "name": "example/app",
+  "require": { "php": ">=8.2", "laravel/framework": "^11.0" },
+  "require-dev": { "phpunit/phpunit": "^11.0" },
+  "scripts": { "post-install-cmd": "echo example-only" },
+  "minimum-stability": "stable"
+}`;
+const composerLock = `{
+  "content-hash": "example",
+  "packages": [{ "name": "laravel/framework", "version": "v11.0.0" }],
+  "packages-dev": [{ "name": "phpunit/phpunit", "version": "11.0.0" }]
+}`;
+const sqlSample = `select id, email from users where active = 1 order by id`;
+---
+{tool.slug === 'php-security-checker' ? (
+  <div class="stack">
+    <h2>Static checks and real verification</h2>
+    <p>A static check reads text you paste: braces, a composer file, or a list of language features. It cannot see your server, your traffic, or whether an attacker can reach a bug.</p>
+    <p>The <a href="https://php-security-checker.vercel.app">free PHP Security Checker</a> is a separate site. It looks up a PHP version against published vulnerability information, support status, and the fixed version. PHP Hub does not run that lookup and does not rebuild that product here.</p>
+    <p>Neither one is an authorized security assessment. For a review of a site you own, see <a href="/services">services</a> or <a href="/contact">request a quote</a>.</p>
+    <div class="tool-actions">
+      <a class="btn primary" href="https://php-security-checker.vercel.app">Open the free PHP Security Checker</a>
+      <a class="btn secondary" href="/tools/php-code-validator">PHP code validator</a>
+      <a class="btn secondary" href="/tools/composer-analyzer">Composer analyzer</a>
+    </div>
+    <p>The practical checklist sold on Gumroad is a separate download: <a href="https://raghavji.gumroad.com/l/tunxu">PHP Security Checklist ($9)</a>.</p>
+  </div>
+) : (
+  <div class="tool-app stack" data-tool={tool.slug}>
+    <p class="tool-error" data-error role="alert" hidden></p>
+    {tool.slug === 'php-formatter' && (
+      <>
+        <label for="php-in">PHP code</label>
+        <textarea id="php-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>{phpSample}</textarea>
+      </>
+    )}
+    {tool.slug === 'php-code-validator' && (
+      <>
+        <label for="php-val">PHP code</label>
+        <textarea id="php-val" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>{phpSample}</textarea>
+      </>
+    )}
+    {tool.slug === 'php-version-compat' && (
+      <>
+        <label for="php-target">Target PHP version</label>
+        <select id="php-target" data-field="target">{PHP_VERSIONS.map((version) => <option value={version} selected={version === '8.2'}>{version}</option>)}</select>
+        <label for="php-ver">PHP code</label>
+        <textarea id="php-ver" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>{versionSample}</textarea>
+        <h2>Where the list comes from</h2>
+        <ul>{PHP_MANUAL.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+      </>
+    )}
+    {tool.slug === 'composer-analyzer' && (
+      <div class="tool-grid cols-2">
+        <div>
+          <label for="composer-json">composer.json</label>
+          <textarea id="composer-json" data-field="json" spellcheck="false" autocomplete="off"></textarea>
+        </div>
+        <div>
+          <label for="composer-lock">composer.lock (optional)</label>
+          <textarea id="composer-lock" data-field="lock" spellcheck="false" autocomplete="off"></textarea>
+        </div>
+        <textarea data-example hidden readonly>{composerJson}</textarea>
+        <textarea data-example-lock hidden readonly>{composerLock}</textarea>
+      </div>
+    )}
+    {tool.slug === 'laravel-artisan-reference' && (
+      <>
+        <label for="artisan-q">Filter commands</label>
+        <input id="artisan-q" data-field="query" type="search" placeholder="migrate, queue, make:model" />
+        <p data-empty hidden>No commands match that filter.</p>
+        {ARTISAN_GROUPS.map((group) => (
+          <section>
+            <h2>{group}</h2>
+            <div class="stack">
+              {ARTISAN_COMMANDS.filter((item) => item.group === group).map((item) => (
+                <article class="card command-card" data-command={item.command.toLowerCase()}>
+                  <h3><code>{item.command}</code></h3>
+                  <p>{item.summary}</p>
+                  <div class="tool-actions">
+                    <button type="button" class="btn secondary" data-copy-command={item.command}>Copy</button>
+                    <a class="btn secondary" href={item.docs}>Laravel docs</a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </>
+    )}
+    {tool.slug === 'php-hash-generator' && (
+      <>
+        <label for="hash-alg">Digest</label>
+        <select id="hash-alg" data-field="algorithm">
+          <option>SHA-256</option>
+          <option>SHA-384</option>
+          <option>SHA-512</option>
+        </select>
+        <label for="hash-in">Text to hash</label>
+        <textarea id="hash-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>php hub</textarea>
+        <h2>What PHP password storage actually uses</h2>
+        <p>The lesson on <a href="/lessons/2026-11-03-password-hashing-in-php-password-hash-verify-rehash">password hashing</a> says to store passwords with <code>password_hash($password, PASSWORD_DEFAULT)</code> and check them with <code>password_verify()</code>. A SHA digest from this page is the fast kind of hash that lesson says not to use for passwords. The snippet below is documentation. This page does not run PHP.</p>
+        <pre class="tool-output">{`<?php
+$hash = password_hash($password, PASSWORD_DEFAULT);
+$ok = password_verify($password, $hash);
+// hash('sha256', $password) is not a substitute.`}</pre>
+      </>
+    )}
+    {(tool.slug === 'json-formatter' || tool.slug === 'json-minifier') && (
+      <>
+        <label for="json-in">JSON</label>
+        <textarea id="json-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>{jsonSample}</textarea>
+      </>
+    )}
+    {tool.slug === 'jwt-decoder' && (
+      <>
+        <p class="notice"><strong>Signature not checked.</strong> Decoding shows the header and payload. It does not prove the token was issued by anyone.</p>
+        <label for="jwt-in">JSON Web Token</label>
+        <textarea id="jwt-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>{JWT_EXAMPLE}</textarea>
+      </>
+    )}
+    {tool.slug === 'sql-formatter' && (
+      <>
+        <label for="sql-in">SQL</label>
+        <textarea id="sql-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>{sqlSample}</textarea>
+      </>
+    )}
+    {tool.slug === 'regex-tester' && (
+      <>
+        <label for="re-pattern">Pattern</label>
+        <input id="re-pattern" data-field="pattern" type="text" value="h(ell)o" spellcheck="false" autocomplete="off" />
+        <label for="re-flags">Flags</label>
+        <input id="re-flags" data-field="flags" type="text" value="g" spellcheck="false" autocomplete="off" />
+        <label for="re-text">Test text</label>
+        <textarea id="re-text" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>hello hello</textarea>
+      </>
+    )}
+    {tool.slug === 'cron-generator' && (
+      <>
+        <label for="cron-preset">Preset</label>
+        <select id="cron-preset" data-field="preset">
+          <option value="custom">Custom fields below</option>
+          <option value="* * * * *">Every minute</option>
+          <option value="0 * * * *">Hourly</option>
+          <option value="0 0 * * *">Daily at midnight</option>
+          <option value="0 0 * * 0">Weekly on Sunday</option>
+          <option value="0 0 1 * *">Monthly</option>
+          <option value="*/15 * * * *">Every 15 minutes</option>
+        </select>
+        <div class="tool-grid cols-2">
+          <div><label for="cron-min">Minute</label><input id="cron-min" data-field="minute" value="0" /></div>
+          <div><label for="cron-hour">Hour</label><input id="cron-hour" data-field="hour" value="0" /></div>
+          <div><label for="cron-dom">Day of month</label><input id="cron-dom" data-field="dom" value="*" /></div>
+          <div><label for="cron-month">Month</label><input id="cron-month" data-field="month" value="*" /></div>
+          <div><label for="cron-dow">Day of week</label><input id="cron-dow" data-field="dow" value="*" /></div>
+        </div>
+        <label for="cron-custom">Or paste an expression</label>
+        <input id="cron-custom" data-field="custom" type="text" spellcheck="false" placeholder="*/15 * * * *" />
+      </>
+    )}
+    {tool.slug === 'base64' && (
+      <>
+        <label for="b64-mode">Action</label>
+        <select id="b64-mode" data-field="mode"><option value="encode">Encode</option><option value="decode">Decode</option></select>
+        <label for="b64-in">Text</label>
+        <textarea id="b64-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>PHP Hub</textarea>
+      </>
+    )}
+    {tool.slug === 'url-encoder' && (
+      <>
+        <label for="url-mode">Action</label>
+        <select id="url-mode" data-field="mode"><option value="encode">Encode</option><option value="decode">Decode</option></select>
+        <label for="url-scope">Scope</label>
+        <select id="url-scope" data-field="scope"><option value="component">Component (encodeURIComponent)</option><option value="full">Full URL (encodeURI)</option></select>
+        <label for="url-in">Text</label>
+        <textarea id="url-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
+        <textarea data-example hidden readonly>a b/c?x=1</textarea>
+      </>
+    )}
+    {tool.slug === 'http-status-codes' && (
+      <>
+        <label for="status-q">Filter codes</label>
+        <input id="status-q" data-field="query" type="search" placeholder="404, gateway, redirect" />
+        <p data-empty hidden>No status codes match that filter.</p>
+        {HTTP_CLASSES.map(([id, label]) => (
+          <section>
+            <h2>{label}</h2>
+            <div class="stack">
+              {HTTP_STATUSES.filter((row) => row[0] === id).map(([, code, name, text]) => (
+                <article class="card" data-status={`${code} ${name} ${label}`.toLowerCase()}>
+                  <h3>{code} {name}</h3>
+                  <p>{text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </>
+    )}
+    {tool.slug === 'curl-builder' && (
+      <>
+        <label for="curl-method">Method</label>
+        <select id="curl-method" data-field="method">{['GET','POST','PUT','PATCH','DELETE','HEAD','OPTIONS'].map((method) => <option>{method}</option>)}</select>
+        <label for="curl-url">URL</label>
+        <input id="curl-url" data-field="url" type="url" placeholder="https://example.com/path" spellcheck="false" autocomplete="off" />
+        <label for="curl-headers">Headers, one per line</label>
+        <textarea id="curl-headers" data-field="headers" spellcheck="false" autocomplete="off" placeholder="Accept: application/json"></textarea>
+        <label for="curl-body">Body</label>
+        <textarea id="curl-body" data-field="body" spellcheck="false" autocomplete="off"></textarea>
+        <label class="check-row"><input data-field="follow" type="checkbox" /> Follow redirects (-L)</label>
+        <label class="check-row"><input data-field="include" type="checkbox" /> Include response headers (-i)</label>
+        <label class="check-row"><input data-field="compressed" type="checkbox" /> Ask for compression (--compressed)</label>
+        <label class="check-row"><input data-field="insecure" type="checkbox" /> Skip TLS verification (--insecure)</label>
+      </>
+    )}
+    {tool.slug !== 'laravel-artisan-reference' && tool.slug !== 'http-status-codes' && tool.slug !== 'php-security-checker' && (
+      <div class="tool-actions">
+        <button type="button" data-action="run">{tool.slug === 'json-minifier' ? 'Minify' : tool.slug === 'composer-analyzer' ? 'Analyze' : tool.slug === 'php-hash-generator' ? 'Hash' : tool.slug === 'jwt-decoder' ? 'Decode' : tool.slug === 'cron-generator' ? 'Generate' : tool.slug === 'curl-builder' ? 'Build command' : tool.slug === 'php-code-validator' || tool.slug === 'php-version-compat' || tool.slug === 'regex-tester' ? 'Check' : 'Format'}</button>
+        {tool.slug !== 'cron-generator' && tool.slug !== 'curl-builder' && tool.slug !== 'php-version-compat' && <button type="button" class="btn secondary" data-action="example">Example</button>}
+        {tool.slug === 'php-version-compat' && <button type="button" class="btn secondary" data-action="example">Example</button>}
+        <button type="button" class="btn secondary" data-action="clear">Clear</button>
+        <button type="button" class="btn secondary" data-action="copy">Copy result</button>
+      </div>
+    )}
+    <div data-structured class="tool-structured"></div>
+    <pre class="tool-output" data-output hidden></pre>
+  </div>
+)}
+<style>
+.stack{display:grid;gap:12px}
+.stack :global(textarea){min-height:160px}
+</style>

@@ -11,6 +11,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
+      - run: npm test
       - run: npm run build
       - name: Lint / type-check (if configured)
         run: npm run --if-present lint && npm run --if-present check

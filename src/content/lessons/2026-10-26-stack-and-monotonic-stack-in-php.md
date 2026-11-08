@@ -1,6 +1,7 @@
 ---
 categories: [PHP]
 tags: [php, dsa, stack, algorithms]
+level: intermediate
 ---
 # Stacks in PHP: Brackets, RPN, and the Monotonic Stack
 

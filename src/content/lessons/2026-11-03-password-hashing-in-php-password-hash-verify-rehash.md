@@ -5,6 +5,7 @@ date: 2026-11-03
 description: "Store PHP passwords safely with password_hash() and password_verify(), upgrade old hashes on login with password_needs_rehash(), and migrate legacy MD5 hashes. Laravel Hash facade notes included."
 summary: "Store PHP passwords safely with password_hash() and password_verify(), upgrade old hashes on login with password_needs_rehash(), and migrate legacy MD5 hashes."
 tags: ["php", "laravel", "security", "passwords", "authentication"]
+level: beginner
 hero: "posts/password-hashing-php-hero.webp"
 heroAlt: "Abstract illustration of a glowing green padlock over a network of connected nodes and hash-like bars on a dark background"
 ---

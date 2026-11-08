@@ -5,6 +5,7 @@ date: 2026-11-05
 description: "How Laravel PreventRequestForgery (CSRF) works today: Sec-Fetch-Site origin checks, session tokens, @csrf, X-CSRF-TOKEN / X-XSRF-TOKEN, careful route exceptions, and Sanctum SPA setup with axios withCredentials and withXSRFToken."
 summary: "Keep Laravel CSRF on for cookie-auth routes, put tokens in forms and AJAX headers, exclude only true third-party webhooks, and initialize Sanctum SPAs with /sanctum/csrf-cookie."
 tags: ["php", "laravel", "security", "csrf", "middleware"]
+level: intermediate
 hero: "posts/laravel-csrf-protection-hero.webp"
 heroAlt: "Abstract emerald shield and hexagon token filtering green request lines on a dark background; red stop marks block forged lines while safe lines pass through"
 ---

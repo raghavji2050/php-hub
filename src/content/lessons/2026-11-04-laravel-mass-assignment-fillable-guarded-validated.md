@@ -5,6 +5,7 @@ date: 2026-11-04
 description: "Stop mass assignment bugs in Laravel: allow-list columns with Fillable/$fillable, avoid unguarding models, pass only validated() or safe()->only() data to create/update, and fail loudly in development with preventSilentlyDiscardingAttributes."
 summary: "Allow-list model columns, pass only validated input to create() and update(), and make Laravel fail loudly in development when a field is silently dropped."
 tags: ["php", "laravel", "security", "eloquent", "validation"]
+level: intermediate
 hero: "posts/laravel-mass-assignment-hero.webp"
 heroAlt: "Abstract illustration of green and grey input lines flowing into a glowing green filter gate on a dark background; the grey lines stop at the gate while the green lines continue through"
 ---

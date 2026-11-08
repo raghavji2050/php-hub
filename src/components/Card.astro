@@ -4,9 +4,10 @@ const sev = (item.severity || '').toLowerCase();
 const H = level;
 ---
 <a class="card" href={`/${section}/${item.slug}`}>
-  {(item.severity || item.status) && <div class="badges">
+  {(item.severity || item.status || item.level) && <div class="badges">
     {item.severity && <span class={`badge sev-${sev}`}>{item.severity}</span>}
     {item.status && <span class="badge status">{item.status}</span>}
+    {item.level && <span class="badge">{item.level}</span>}
   </div>}
   {item.categories?.length > 0 && <span class="card-cats">{item.categories.join(' · ')}</span>}
   <H class="card-title">{item.title}</H>

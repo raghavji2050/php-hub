@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { PATHS } from '../data/paths.js';
+import { breadcrumbLd } from '../lib.js';
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/saved', label: 'Saved reading' }];
+const manifest = PATHS.map((path) => ({
+  slug: path.slug,
+  title: path.title,
+  href: `/learn/${path.slug}`,
+  total: path.modules.filter((mod) => !mod.soon && (mod.href || mod.slug)).length,
+}));
+---
+<Base title="Saved reading" description="Bookmarks, reading history, and learning-path checkmarks stored in this browser only." noindex pagefind={false} jsonld={[breadcrumbLd(crumbs)]} newsletter={false}>
+<Breadcrumbs items={crumbs} />
+<div data-saved-page>
+  <h1>Saved reading</h1>
+  <p>Bookmarks, history, and path progress stay in localStorage on this device. PHP Hub does not receive them. There is no account.</p>
+  <section aria-labelledby="saved-bookmarks">
+    <div class="sec-head"><h2 id="saved-bookmarks">Bookmarks</h2><button type="button" class="btn secondary" data-clear="bookmarks">Clear bookmarks</button></div>
+    <div data-saved-bookmarks><p>Loading bookmarks saved in this browser.</p></div>
+  </section>
+  <section aria-labelledby="saved-history">
+    <div class="sec-head"><h2 id="saved-history">Reading history</h2><button type="button" class="btn secondary" data-clear="history">Clear history</button></div>
+    <div data-saved-history><p>Loading reading history from this browser.</p></div>
+  </section>
+  <section aria-labelledby="saved-progress">
+    <h2 id="saved-progress">Learning paths</h2>
+    <div data-saved-progress><p>Loading path progress from this browser.</p></div>
+  </section>
+  <noscript><p class="notice">Saving and history need JavaScript. You can still browse <a href="/lessons">lessons</a> and <a href="/articles">articles</a>.</p></noscript>
+</div>
+<script type="application/json" id="path-manifest" set:html={JSON.stringify(manifest).replace(/</g, '\\u003c')}></script>
+<script is:inline src="/reading.js" defer></script>
+</Base>
+<style>
+.sec-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+section{margin:28px 0}
+</style>

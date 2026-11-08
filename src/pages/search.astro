@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Search" description="Search PHP Hub briefs, articles and lessons." newsletter={false}>
+<Base title="Search" description="Search PHP Hub briefs, articles, lessons, tools, learning paths, and security pages." newsletter={false}>
 <h1>Search</h1>
+<p>Search runs in your browser. If nothing matches, browse <a href="/briefs">briefs</a>, <a href="/lessons">lessons</a>, <a href="/tools">developer tools</a>, <a href="/learn">learning paths</a>, or <a href="/security">security intelligence</a>.</p>
 <link href="/pagefind/pagefind-ui.css" rel="stylesheet"/>
 <div id="search"><noscript>Search needs JavaScript. You can browse <a href="/briefs">briefs</a> or <a href="/tags">topics</a> instead.</noscript></div>
 <script is:inline src="/pagefind/pagefind-ui.js"></script>

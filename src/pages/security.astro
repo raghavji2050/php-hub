@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { list, breadcrumbLd, SITE } from '../lib.js';
+import { loadExternalAdvisories } from '../lib/advisories.js';
+const briefs = list('briefs');
+const external = await loadExternalAdvisories();
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/security', label: 'Security Intelligence' }];
+const filters = ['all', 'critical', 'high', 'medium', 'low'];
+const when = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toISOString().slice(0, 10);
+};
+const severity = (value) => ['critical', 'high', 'medium', 'low'].includes(String(value || '').toLowerCase()) ? String(value).toLowerCase() : '';
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'PHP Hub security briefs',
+  itemListElement: briefs.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.title,
+    url: new URL(item.url, SITE.url).href,
+  })),
+};
+---
+<Base title="Security Intelligence" description="Published PHP Hub security briefs, plus build-time snapshots from official PHP, Laravel, Symfony, and WordPress advisory sources when the build can reach them. Not a live vulnerability scanner." jsonld={[breadcrumbLd(crumbs), itemList]}>
+<Breadcrumbs items={crumbs} />
+<div data-pagefind-body>
+  <h1>Security Intelligence</h1>
+  <p>This page lists security briefs published on PHP Hub and, when a build can reach them, public advisories from the project sources named below. It is educational information. It is not a live vulnerability scanner and it does not test your server.</p>
+  <p class="meta">Official sources last fetched at build time: <time datetime={external.fetchedAt}>{external.fetchedAt.replace('T', ' ').replace(/\.\d+Z$/, ' UTC')}</time></p>
+  <div class="filters" role="group" aria-label="Filter by severity">
+    {filters.map((name) => <button type="button" class="chip" data-sev-filter={name} aria-pressed={name === 'all' ? 'true' : 'false'}>{name === 'all' ? 'All' : name[0].toUpperCase() + name.slice(1)}</button>)}
+  </div>
+  <p class="meta">Records with no severity in the source stay visible only on All.</p>
+  <p id="sev-empty" hidden>Nothing in this filter. That does not mean the source has no issues. It means this page has no matching record.</p>
+
+  <section aria-labelledby="briefs-title">
+    <h2 id="briefs-title">PHP Hub briefs</h2>
+    {briefs.length ? briefs.map((item) => {
+      const sev = severity(item.severity);
+      return (
+        <article class="card sec-card" data-sev={sev}>
+          <div class="badges">
+            {item.severity && <span class={`badge sev-${sev}`}>{item.severity}</span>}
+            {item.status && <span class="badge status">{item.status}</span>}
+          </div>
+          <h3><a href={item.url}>{item.title}</a></h3>
+          {item.dateLabel && <p class="meta"><time datetime={item.date}>{item.dateLabel}</time></p>}
+          {item.summary && <p>{item.summary}</p>}
+          {item.affected && <section><h4>Affected / fixed versions from this brief</h4><pre class="tool-output">{item.affected}</pre></section>}
+          {item.sources.length > 0 && <p>Sources: {item.sources.map((source, index) => <>{index > 0 && ' · '}<a href={source.href}>{source.label}</a></>)}</p>}
+        </article>
+      );
+    }) : <p>No security briefs are published yet.</p>}
+  </section>
+
+  <section aria-labelledby="external-title">
+    <h2 id="external-title">Official sources, fetched at build time</h2>
+    <p>Each block is whatever that source returned for this build. If a fetch fails, the block says so. Nothing is filled in with an example CVE.</p>
+    {external.sources.map((source) => (
+      <section class="source-block" aria-labelledby={`source-${source.id}`}>
+        <h3 id={`source-${source.id}`}>{source.name}</h3>
+        <p class="meta">Source: <a href={source.page}>{source.page}</a></p>
+        {!source.ok && <p class="notice" role="status">{source.error} No records are shown for this source.</p>}
+        {source.ok && source.items.length === 0 && <p class="notice" role="status">The source responded and returned no advisories for this request. Nothing was added in their place.</p>}
+        {source.items.map((item) => {
+          const sev = severity(item.severity);
+          return (
+            <article class="card sec-card" data-sev={sev}>
+              <div class="badges">{sev && <span class={`badge sev-${sev}`}>{sev}</span>}</div>
+              <h4><a href={item.href}>{item.title}</a></h4>
+              <p class="meta">
+                {item.ghsa && <span>{item.ghsa}</span>}
+                {item.cve && <span> · {item.cve}</span>}
+                {item.published && <span> · <time datetime={when(item.published)}>{when(item.published)}</time></span>}
+              </p>
+              {item.packages?.length > 0 && (
+                <ul>
+                  {item.packages.map((pkg) => <li>{pkg.name}{pkg.range ? `: affected ${pkg.range}` : ''}{pkg.patched ? `; patched ${pkg.patched}` : ''}</li>)}
+                </ul>
+              )}
+            </article>
+          );
+        })}
+      </section>
+    ))}
+  </section>
+</div>
+</Base>
+<script>
+  const buttons = [...document.querySelectorAll('[data-sev-filter]')];
+  const rows = [...document.querySelectorAll('[data-sev]')];
+  const empty = document.getElementById('sev-empty');
+  buttons.forEach((button) => button.addEventListener('click', () => {
+    const filter = button.dataset.sevFilter;
+    buttons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+    let shown = 0;
+    rows.forEach((row) => {
+      const visible = filter === 'all' || row.dataset.sev === filter;
+      row.hidden = !visible;
+      if (visible) shown += 1;
+    });
+    if (empty) empty.hidden = shown !== 0;
+  }));
+</script>
+<style>
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.sec-card{margin:12px 0}
+.source-block{margin:28px 0}
+.sec-card h4{margin:0}
+</style>

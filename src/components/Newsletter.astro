@@ -5,7 +5,7 @@
 const NEWSLETTER_ENABLED = true;
 const ACTION = 'https://buttondown.com/api/emails/embed-subscribe/phphub';
 ---
-<section class="newsletter" aria-labelledby="nl-title" data-pagefind-ignore>
+<section class="newsletter" id="newsletter" aria-labelledby="nl-title" data-pagefind-ignore>
   <h2 id="nl-title">Get new briefs by email {!NEWSLETTER_ENABLED && <span class="badge status">Coming soon</span>}</h2>
   <p>Short alerts when a PHP or WordPress vulnerability needs action.</p>
   {NEWSLETTER_ENABLED ? (

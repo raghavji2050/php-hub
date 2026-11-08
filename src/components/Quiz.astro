@@ -1,0 +1,65 @@
+---
+const { questions = [], lessonUrl = '', heading = 'Check your reading' } = Astro.props;
+const rows = questions.map((question) => ({ ...question, href: question.url || lessonUrl }));
+---
+{rows.length > 0 && (
+<section class="quiz" aria-labelledby="quiz-title" data-pagefind-ignore>
+  <h2 id="quiz-title">{heading}</h2>
+  <p>Questions are taken from published PHP Hub lessons. This does not grade a certification, and the answers are checked in your browser.</p>
+  <form data-quiz>
+    {rows.map((question, index) => (
+      <fieldset>
+        <legend>{index + 1}. {question.prompt}</legend>
+        {question.choices.map((choice, choiceIndex) => (
+          <label>
+            <input type="radio" name={question.id} value={String(choiceIndex)} data-answer={String(question.answer)} required />
+            <span>{choice}</span>
+          </label>
+        ))}
+        <p class="quiz-source" hidden>
+          {question.source}
+          {question.href && <> <a href={question.href}>Review the lesson</a></>}
+        </p>
+      </fieldset>
+    ))}
+    <button type="submit">Check answers</button>
+    <p class="quiz-result" role="status"></p>
+  </form>
+</section>
+)}
+<script>
+  document.querySelectorAll('[data-quiz]').forEach((form) => {
+    if (form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const sets = [...form.querySelectorAll('fieldset')];
+      let correct = 0;
+      for (const set of sets) {
+        const chosen = set.querySelector('input:checked');
+        const answer = set.querySelector('[data-answer]')?.dataset.answer;
+        const source = set.querySelector('.quiz-source');
+        let mark = set.querySelector('.quiz-mark');
+        if (!mark) {
+          mark = document.createElement('p');
+          mark.className = 'quiz-mark';
+          set.appendChild(mark);
+        }
+        const ok = chosen && chosen.value === answer;
+        if (ok) correct += 1;
+        mark.textContent = ok ? 'Correct.' : 'Not quite.';
+        if (source) source.hidden = false;
+      }
+      const result = form.querySelector('.quiz-result');
+      if (result) result.textContent = `${correct} of ${sets.length} matched the lesson.`;
+    });
+  });
+</script>
+<style>
+.quiz{border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:28px 0;background:var(--surface)}
+.quiz h2{margin-top:0}
+.quiz fieldset{border:1px solid var(--border);border-radius:12px;margin:0 0 12px;padding:12px}
+.quiz label{display:flex;gap:8px;align-items:flex-start;margin:6px 0}
+.quiz legend{font-weight:650;padding:0 6px}
+.quiz :global(.quiz-mark){font-weight:700;margin:8px 0 0}
+</style>

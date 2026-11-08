@@ -5,6 +5,7 @@ date: 2026-11-07
 description: "Where SQL injection still sneaks into Laravel apps: string-built DB::select and whereRaw calls, user-chosen column names and ORDER BY. Use ? or named bindings for values and an allow-list for columns."
 summary: "Bind every value (?, named bindings, or the query builder), never interpolate request data into raw SQL, and allow-list column names and sort directions because PDO cannot bind them."
 tags: ["php", "laravel", "security", "sql-injection", "database"]
+level: intermediate
 hero: "posts/laravel-sql-injection-hero.webp"
 heroAlt: "Abstract emerald database cylinder on a dark background; green query blocks slot into marked sockets while a red jagged block is rejected at the gate"
 ---
