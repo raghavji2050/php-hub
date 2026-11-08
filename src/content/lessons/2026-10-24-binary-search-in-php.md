@@ -1,6 +1,7 @@
 ---
 categories: [PHP]
 tags: [php, dsa, binary-search, algorithms]
+level: intermediate
 ---
 # Binary Search in PHP: 3 Templates You'll Actually Use
 

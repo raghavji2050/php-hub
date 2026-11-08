@@ -22,10 +22,8 @@ const nextUrl = `${siteOrigin}/thanks/`;
 </Base>
 <style is:global>
 .hp{position:absolute!important;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
-.notice-ok{border-color:#16a34a;background:#f0fdf4;color:#14532d}
-@media (prefers-color-scheme:dark){.notice-ok{background:#052e16;color:#bbf7d0;border-color:#16a34a}}
-.notice-err{border-color:#dc2626;background:#fef2f2;color:#7f1d1d}
-@media (prefers-color-scheme:dark){.notice-err{background:#450a0a;color:#fecaca;border-color:#dc2626}}
+.notice-ok{border-color:var(--ok-border);background:var(--ok-bg);color:var(--ok-text)}
+.notice-err{border-color:var(--err-border);background:var(--err-bg);color:var(--err-text)}
 </style>
 <script>
   const form = document.getElementById('contact-form');

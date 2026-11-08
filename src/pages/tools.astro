@@ -1,6 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { TOOLS } from '../data/tools.js';
+import { breadcrumbLd } from '../lib.js';
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/tools', label: 'Developer Tools' }];
+const groups = [
+  ['php', 'PHP-specific'],
+  ['general', 'General'],
+];
 ---
-<Base title="Tools" description="Free tools for checking PHP site security."><h1>Tools</h1><ul>
-<li><a href="https://php-security-checker.vercel.app">PHP Security Checker</a>: a free tool to check a PHP site for common security issues.</li>
-</ul></Base>
+<Base title="Developer Tools" description="Browser-side PHP and general developer tools: formatters, a JWT decoder, Composer analysis, cron, and a guide to the free PHP Security Checker. Nothing you paste is executed." jsonld={[breadcrumbLd(crumbs)]}>
+<Breadcrumbs items={crumbs} />
+<div data-pagefind-body>
+  <h1>Developer Tools</h1>
+  <p>These tools run in your browser. They do not execute PHP, do not send pasted input to PHP Hub, and they are not a vulnerability scanner.</p>
+  {groups.map(([id, label]) => (
+    <section aria-labelledby={`tools-${id}`}>
+      <h2 id={`tools-${id}`}>{label}</h2>
+      <div class="grid">
+        {TOOLS.filter((tool) => tool.group === id).map((tool) => (
+          <a class="card" href={`/tools/${tool.slug}`}><h3>{tool.title}</h3><p>{tool.blurb}</p></a>
+        ))}
+      </div>
+    </section>
+  ))}
+</div>
+</Base>

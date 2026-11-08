@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Quiz from '../../components/Quiz.astro';
+import { PATHS } from '../../data/paths.js';
+import { masterclassQuiz } from '../../data/quizzes.js';
+import { allPosts, breadcrumbLd } from '../../lib.js';
+export function getStaticPaths() {
+  return PATHS.map((path) => ({ params: { slug: path.slug }, props: { path } }));
+}
+const { path } = Astro.props;
+const posts = allPosts();
+const modules = path.modules.map((mod) => {
+  if (mod.soon) return mod;
+  if (mod.href) return mod;
+  const post = posts.find((item) => item.section === mod.section && item.slug === mod.slug);
+  if (!post) throw new Error(`Missing learning-path target ${mod.section}/${mod.slug}`);
+  return { ...mod, href: post.url, title: post.title, summary: post.summary, readingTime: post.readingTime };
+});
+const published = modules.filter((mod) => !mod.soon && mod.href);
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learning Paths' }, { href: `/learn/${path.slug}`, label: path.title }];
+---
+<Base title={path.title} description={path.description} jsonld={[breadcrumbLd(crumbs)]}>
+<Breadcrumbs items={crumbs} />
+<article data-pagefind-body>
+  <h1>{path.title}</h1>
+  <p>{path.intro}</p>
+  <p data-path-count={path.slug} class="meta">0 of {published.length} published modules marked complete on this device.</p>
+  <ol class="modules">
+    {modules.map((mod, index) => mod.soon ? (
+      <li>
+        <article class="card coming">
+          <span class="badge status">Coming soon</span>
+          <h2>{index + 1}. {mod.title}</h2>
+          <p>Not published. This row is a placeholder, not a tutorial.</p>
+        </article>
+      </li>
+    ) : (
+      <li>
+        <article class="card">
+          <h2><a href={mod.href}>{index + 1}. {mod.title}</a></h2>
+          {mod.summary && <p>{mod.summary}</p>}
+          {mod.note && <p>{mod.note}</p>}
+          <p class="meta">{mod.readingTime ? `${mod.readingTime} min read` : 'Page'}{mod.kind === 'page' ? '' : ''}</p>
+          <label class="check-row"><input type="checkbox" data-path-check={path.slug} data-module={mod.id} /> Mark complete on this device</label>
+        </article>
+      </li>
+    ))}
+  </ol>
+  {path.quiz && <Quiz questions={masterclassQuiz()} heading="Questions from the published lessons" />}
+  <h2>Practical next steps</h2>
+  <ul>
+    {path.next.map((item) => <li>{item.external ? <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a> : <a href={item.href}>{item.label}</a>}</li>)}
+  </ul>
+</article>
+</Base>
+<script is:inline src="/reading.js" defer></script>
+<style>
+.modules{list-style:none;margin:24px 0;padding:0;display:grid;gap:12px}
+.coming{border-style:dashed}
+.check-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px}
+</style>

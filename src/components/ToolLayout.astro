@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import { breadcrumbLd } from '../lib.js';
+const { tool } = Astro.props;
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/tools', label: 'Developer Tools' },
+  { href: `/tools/${tool.slug}`, label: tool.title },
+];
+---
+<Base title={tool.title} description={tool.description} jsonld={[breadcrumbLd(crumbs)]}>
+  <Breadcrumbs items={crumbs} />
+  <article class="page-prose tool-page" data-pagefind-body>
+    <p class="eyebrow">Developer tool</p>
+    <h1>{tool.title}</h1>
+    <p class="lead">{tool.description}</p>
+    <p class="notice"><strong>Limitations.</strong> {tool.limitation}</p>
+    <h2>How to use it</h2>
+    <p>{tool.instructions}</p>
+    <slot />
+    <noscript><p class="notice">The interactive part needs JavaScript. It runs in your browser and does not send the input to PHP Hub.</p></noscript>
+  </article>
+</Base>
+<script>
+  import { bootTools } from '../lib/tools-ui.js';
+  bootTools();
+</script>
+<style>
+.tool-page{max-width:78ch}
+.lead{color:var(--muted);font-size:18px}
+.eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+</style>

@@ -1,29 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-const packages = [
-  { name: 'Quick Check', for: 'One site, external view only. Good for a fast health check.',
-    deliverables: ['Version and component inventory (PHP, CMS/framework, plugins, themes) visible from outside', 'Match against public advisories (NVD, GitHub Advisory Database, WPScan/Patchstack listings)', 'HTTPS, security headers and exposed-file checks (.env, .git, backups, debug pages)', '2-4 page summary with prioritised fixes'],
-    turnaround: '3 business days' },
-  { name: 'Standard Audit', for: 'One PHP, Laravel or WordPress site with read access to code and config.',
-    deliverables: ['Everything in Quick Check', 'composer.lock / plugin audit against known advisories', 'Config review: debug mode, file permissions, session/cookie flags, admin access, backups', 'Targeted code review of auth, uploads, input handling and SQL queries (OWASP Top 10 lens)', 'Written report ranked by severity with fix steps, plus a 30-minute walkthrough call'],
-    turnaround: '7 business days' },
-  { name: 'Audit + Fix Support', for: 'Standard Audit plus help shipping the fixes.',
-    deliverables: ['Everything in Standard Audit', 'Fixes for agreed high and critical findings, applied on staging first', 'One re-test of fixed findings', 'Short hardening checklist for your team'],
-    turnaround: '10-14 business days, depending on findings' },
-];
-const services = [
-  { id: 'audit', title: 'Security audit', intro: 'A structured review of a PHP, Laravel or WordPress site to find vulnerabilities and risky configuration before attackers do.',
-    included: ['Inventory of PHP version, framework/CMS, plugins, themes and Composer packages', 'Check against known vulnerabilities (CVE and vendor advisories)', 'Review of server and application configuration: file permissions, debug settings, exposed files, admin access', 'Targeted code review of custom code paths such as uploads, authentication and input handling', 'A written report with findings ranked by severity and clear fix steps'],
-    price: 'Contact for quote', process: ['You share the site and confirm you own it or are authorized to manage it', 'We agree the scope and access method in writing', 'Review and testing within the agreed scope', 'Report delivered and walked through with you', 'Optional help applying the fixes'] },
-  { id: 'cleanup', title: 'Malware cleanup', intro: 'Help for a site that has been hacked: removing malicious code, closing the hole that let attackers in, and getting back to a clean state.',
-    included: ['Find and remove injected code, backdoors, web shells and malicious users', 'Identify the likely entry point, such as a vulnerable plugin or a leaked credential', 'Patch or replace the vulnerable components', 'Credential rotation checklist (admin, database, hosting, API keys)', 'Hardening steps and guidance on blocklist or search-warning removal requests'],
-    price: 'Contact for quote', process: ['Authorization confirmed and a backup taken before changes', 'Investigation and cleanup', 'Root-cause fix and hardening', 'Verification scan and a summary of what was found and changed'] },
-  { id: 'upgrades', title: 'PHP, Laravel and WordPress upgrades', intro: 'Moving off unsupported versions so the site keeps receiving security fixes.',
-    included: ['Compatibility check for the target PHP, Laravel or WordPress version', 'Dependency and plugin updates, with replacements for abandoned packages', 'Code changes for deprecated or removed features', 'Testing on a staging copy before going live', 'A rollback plan'],
-    price: 'Contact for quote', process: ['Assessment of current versions and upgrade path', 'Upgrade on staging and test together', 'Scheduled production rollout', 'Post-upgrade monitoring and handover notes'] },
-];
+import ChecklistCta from '../components/ChecklistCta.astro';
+import { PACKAGES as packages, SERVICES as services, OFFERINGS } from '../data/services.js';
 ---
-<Base title="Services" description="Security audits, malware cleanup and PHP/Laravel/WordPress upgrades for sites you own or are authorized to manage.">
+<Base title="Services" description="PHP and Laravel security audits, WordPress malware cleanup, application upgrades, monitoring, and consultation for sites you are authorized to manage. Contact for quote.">
 <div class="page-prose">
 <h1>Services</h1>
 <p>Hands-on help for PHP, Laravel and WordPress sites. All work is done only for sites you own or are authorized to manage (see our <a href="/authorized-work">authorized-work policy</a>).</p>
@@ -48,5 +28,28 @@ const services = [
   <p><strong>Price:</strong> {s.price}</p>
   <p><a class="btn primary" href="/contact">Ask about {s.title.toLowerCase()}</a></p>
 </section>)}
+<section id="focus" aria-labelledby="focus-title">
+<h2 id="focus-title">More specific work</h2>
+<p>These sit alongside the packages and services above. Scope is agreed in writing before any access or change. The price for each one is contact for quote.</p>
+{OFFERINGS.map((item) => <section id={item.id}>
+  <h3>{item.title}</h3>
+  <p>{item.intro}</p>
+  <h4>What's included</h4>
+  <ul>{item.included.map((line) => <li>{line}</li>)}</ul>
+  <p><strong>Price:</strong> {item.price}. <a href="/contact">Request a quote</a>.</p>
+</section>)}
+</section>
+<ChecklistCta />
+<section aria-labelledby="outline-title">
+<h2 id="outline-title">Example report outline</h2>
+<p><strong>This is an example of structure, not a client report.</strong> It does not describe a real site, a real finding, or a completed engagement.</p>
+<ol>
+<li>Scope and who authorized the work</li>
+<li>Versions and components that were actually reviewed</li>
+<li>Findings, each with severity, where it was seen, and a fix step</li>
+<li>What was not tested</li>
+<li>A suggested order for fixes</li>
+</ol>
+</section>
 <section aria-labelledby="next-step"><h2 id="next-step">Next step</h2><p>Tell us about your site and the issue on the <a href="/contact">contact page</a>. We reply by email to agree scope, access and a quote before any work starts.</p><p><a class="btn primary" href="/contact">Request an audit or cleanup</a></p></section>
 </div></Base>

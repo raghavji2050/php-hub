@@ -1,0 +1,47 @@
+export const PACKAGES = [
+  { name: 'Quick Check', for: 'One site, external view only. Good for a fast health check.',
+    deliverables: ['Version and component inventory (PHP, CMS/framework, plugins, themes) visible from outside', 'Match against public advisories (NVD, GitHub Advisory Database, WPScan/Patchstack listings)', 'HTTPS, security headers and exposed-file checks (.env, .git, backups, debug pages)', '2-4 page summary with prioritised fixes'],
+    turnaround: '3 business days' },
+  { name: 'Standard Audit', for: 'One PHP, Laravel or WordPress site with read access to code and config.',
+    deliverables: ['Everything in Quick Check', 'composer.lock / plugin audit against known advisories', 'Config review: debug mode, file permissions, session/cookie flags, admin access, backups', 'Targeted code review of auth, uploads, input handling and SQL queries (OWASP Top 10 lens)', 'Written report ranked by severity with fix steps, plus a 30-minute walkthrough call'],
+    turnaround: '7 business days' },
+  { name: 'Audit + Fix Support', for: 'Standard Audit plus help shipping the fixes.',
+    deliverables: ['Everything in Standard Audit', 'Fixes for agreed high and critical findings, applied on staging first', 'One re-test of fixed findings', 'Short hardening checklist for your team'],
+    turnaround: '10-14 business days, depending on findings' },
+];
+
+export const SERVICES = [
+  { id: 'audit', title: 'Security audit', intro: 'A structured review of a PHP, Laravel or WordPress site to find vulnerabilities and risky configuration before attackers do.',
+    included: ['Inventory of PHP version, framework/CMS, plugins, themes and Composer packages', 'Check against known vulnerabilities (CVE and vendor advisories)', 'Review of server and application configuration: file permissions, debug settings, exposed files, admin access', 'Targeted code review of custom code paths such as uploads, authentication and input handling', 'A written report with findings ranked by severity and clear fix steps'],
+    price: 'Contact for quote', process: ['You share the site and confirm you own it or are authorized to manage it', 'We agree the scope and access method in writing', 'Review and testing within the agreed scope', 'Report delivered and walked through with you', 'Optional help applying the fixes'] },
+  { id: 'cleanup', title: 'Malware cleanup', intro: 'Help for a site that has been hacked: removing malicious code, closing the hole that let attackers in, and getting back to a clean state.',
+    included: ['Find and remove injected code, backdoors, web shells and malicious users', 'Identify the likely entry point, such as a vulnerable plugin or a leaked credential', 'Patch or replace the vulnerable components', 'Credential rotation checklist (admin, database, hosting, API keys)', 'Hardening steps and guidance on blocklist or search-warning removal requests'],
+    price: 'Contact for quote', process: ['Authorization confirmed and a backup taken before changes', 'Investigation and cleanup', 'Root-cause fix and hardening', 'Verification scan and a summary of what was found and changed'] },
+  { id: 'upgrades', title: 'PHP, Laravel and WordPress upgrades', intro: 'Moving off unsupported versions so the site keeps receiving security fixes.',
+    included: ['Compatibility check for the target PHP, Laravel or WordPress version', 'Dependency and plugin updates, with replacements for abandoned packages', 'Code changes for deprecated or removed features', 'Testing on a staging copy before going live', 'A rollback plan'],
+    price: 'Contact for quote', process: ['Assessment of current versions and upgrade path', 'Upgrade on staging and test together', 'Scheduled production rollout', 'Post-upgrade monitoring and handover notes'] },
+];
+
+export const OFFERINGS = [
+  { id: 'php-audit', title: 'PHP Security Audits', intro: 'A scoped review of a custom PHP application: version, configuration, and the code paths you ask us to read.',
+    included: ['PHP version and extension inventory from the access you provide', 'Comparison with public PHP advisories for that version', 'Review of entry points you include in scope, such as uploads, authentication, and SQL', 'A written list of findings and fix steps'],
+    price: 'Contact for quote' },
+  { id: 'laravel-audit', title: 'Laravel Security Audits', intro: 'A scoped review of a Laravel application, using the same authorization rules as the security audit above.',
+    included: ['Framework and package versions from composer.lock when you provide it', 'Review of auth, validation, mass assignment, CSRF exceptions, and raw SQL in the agreed areas', 'Configuration checks you include, such as debug mode, session cookies, and exposed files', 'A written report and a walkthrough of the findings'],
+    price: 'Contact for quote' },
+  { id: 'wp-cleanup', title: 'WordPress Malware Cleanup', intro: 'Cleanup for a WordPress site you own or are authorized to manage, after a backup and a written scope.',
+    included: ['Look for injected PHP, unknown admin users, and suspicious plugins or themes in the files you give us access to', 'Remove the malicious code we can confirm', 'Note the likely entry point when the evidence supports one', 'A short list of what changed and what you should rotate'],
+    price: 'Contact for quote' },
+  { id: 'php-upgrade', title: 'PHP Application Upgrades', intro: 'Move a PHP application onto a supported PHP version, with a staging pass before production.',
+    included: ['A compatibility pass for the target PHP version', 'Dependency updates that the target version requires', 'Code changes for features the target version removed, where those show up in the project', 'A rollback note before the production change'],
+    price: 'Contact for quote' },
+  { id: 'laravel-upgrade', title: 'Laravel Application Upgrades', intro: 'Upgrade a Laravel application along the framework’s upgrade path, tested on staging first.',
+    included: ['Read of the current Laravel and PHP versions', 'Framework and first-party package updates for the agreed target', 'Fixes for upgrade breaks that appear in the staging test', 'A short handover of what changed'],
+    price: 'Contact for quote' },
+  { id: 'monitoring', title: 'Security Monitoring', intro: 'A scheduled look at versions and dependencies you agree to share. This is not a 24/7 monitoring desk and not a live exploit scanner.',
+    included: ['An agreed list of inputs, such as a PHP version, a composer.lock, or a plugin list', 'A recurring check of those inputs against public advisories', 'A short note when something in that list needs a patch', 'No claim that every new issue will be caught'],
+    price: 'Contact for quote' },
+  { id: 'consulting', title: 'Developer Consultation', intro: 'A scoped conversation about a PHP, Laravel, or WordPress problem you describe. Access to the system is a separate, written agreement.',
+    included: ['Time to review the question, code, or error you send', 'Practical next steps you can apply yourself, or a recommendation to move the work into an audit, cleanup, or upgrade', 'No standing access to production unless that is the agreed task'],
+    price: 'Contact for quote' },
+];

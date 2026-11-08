@@ -1,0 +1,113 @@
+export const PATHS = [
+  {
+    slug: 'php-beginner-to-advanced',
+    title: 'PHP Beginner to Advanced',
+    summary: 'A reading order for PHP lessons already on PHP Hub, with later topics marked coming soon.',
+    description: 'PHP learning path: published PHP Hub lessons on password hashing, binary search, and stacks, plus coming-soon modules that are not tutorials yet.',
+    intro: 'This path orders published PHP Hub lessons. Modules marked coming soon are not written yet and are not tutorials.',
+    modules: [
+      { id: 'start-here', title: 'Start here', kind: 'page', href: '/start-here', note: 'How the briefs, lessons, and articles already on the site fit together.' },
+      { id: 'password-hashing', section: 'lessons', slug: '2026-11-03-password-hashing-in-php-password-hash-verify-rehash' },
+      { id: 'binary-search', section: 'lessons', slug: '2026-10-24-binary-search-in-php' },
+      { id: 'binary-search-article', section: 'articles', slug: '2026-10-27-binary-search-in-php-3-templates' },
+      { id: 'stack', section: 'lessons', slug: '2026-10-26-stack-and-monotonic-stack-in-php' },
+      { id: 'syntax', title: 'PHP syntax, types, and functions', soon: true },
+      { id: 'oop', title: 'OOP, Composer, and project structure', soon: true },
+      { id: 'pdo', title: 'Databases and PDO', soon: true },
+    ],
+    next: [
+      { href: '/lessons', label: 'All lessons' },
+      { href: '/tools/php-version-compat', label: 'PHP version compatibility checker' },
+      { href: '/tools/php-formatter', label: 'PHP formatter' },
+    ],
+  },
+  {
+    slug: 'laravel-developer-roadmap',
+    title: 'Laravel Developer Roadmap',
+    summary: 'The published Laravel security lessons, in series order, then topics that are not written yet.',
+    description: 'Laravel roadmap using the published PHP Hub security lessons: mass assignment, CSRF, XSS, and SQL injection. Later framework topics are marked coming soon.',
+    intro: 'Start with the published Laravel security lessons in this order: mass assignment, CSRF, XSS, then SQL injection. Routing, Eloquent, and queues are listed as coming soon until a lesson exists.',
+    modules: [
+      { id: 'mass', section: 'lessons', slug: '2026-11-04-laravel-mass-assignment-fillable-guarded-validated' },
+      { id: 'csrf', section: 'lessons', slug: '2026-11-05-laravel-csrf-protection-tokens-exceptions-spa' },
+      { id: 'xss', section: 'lessons', slug: '2026-11-06-xss-prevention-laravel-blade-echo-js-from' },
+      { id: 'sql', section: 'lessons', slug: '2026-11-07-sql-injection-laravel-raw-queries-bindings-order-by' },
+      { id: 'passwords', section: 'lessons', slug: '2026-11-03-password-hashing-in-php-password-hash-verify-rehash', note: 'Includes the lesson’s notes on Laravel’s Hash facade.' },
+      { id: 'routing', title: 'Routing, controllers, and Blade basics', soon: true },
+      { id: 'eloquent', title: 'Eloquent relationships and migrations', soon: true },
+      { id: 'queues', title: 'Queues, cache, and deployment', soon: true },
+    ],
+    next: [
+      { href: '/lessons', label: 'All lessons' },
+      { href: '/tools/laravel-artisan-reference', label: 'Laravel Artisan command reference' },
+      { href: '/kits/', label: 'Interview kits on Topmate' },
+      { href: '/services', label: 'Laravel audit and upgrade services' },
+    ],
+  },
+  {
+    slug: 'php-security-masterclass',
+    title: 'PHP Security Masterclass',
+    summary: 'Password hashing, the four Laravel security lessons, and the security briefs already published here.',
+    description: 'PHP security reading path: the published password hashing lesson, Laravel mass assignment, CSRF, XSS, and SQL injection lessons, plus existing PHP Hub security briefs.',
+    intro: 'Study material from posts already published on PHP Hub. It is not an assessment of your application and it does not replace an authorized audit.',
+    modules: [
+      { id: 'passwords', section: 'lessons', slug: '2026-11-03-password-hashing-in-php-password-hash-verify-rehash' },
+      { id: 'mass', section: 'lessons', slug: '2026-11-04-laravel-mass-assignment-fillable-guarded-validated' },
+      { id: 'csrf', section: 'lessons', slug: '2026-11-05-laravel-csrf-protection-tokens-exceptions-spa' },
+      { id: 'xss', section: 'lessons', slug: '2026-11-06-xss-prevention-laravel-blade-echo-js-from' },
+      { id: 'sql', section: 'lessons', slug: '2026-11-07-sql-injection-laravel-raw-queries-bindings-order-by' },
+      { id: 'php2shell', section: 'briefs', slug: '2026-10-24-php2shell-php-rce' },
+      { id: 'weekly', section: 'briefs', slug: '2026-11-02-php-security-this-week' },
+      { id: 'own-site', section: 'articles', slug: '2026-11-03-how-we-patched-our-own-site-astro-7', note: 'A case study about this site’s own dependency upgrade.' },
+    ],
+    quiz: true,
+    next: [
+      { href: '/security', label: 'Security intelligence dashboard' },
+      { href: '/tools/php-security-checker', label: 'PHP Security Checker page' },
+      { href: 'https://raghavji.gumroad.com/l/tunxu', label: 'PHP Security Checklist on Gumroad ($9)', external: true },
+      { href: '/contact', label: 'Request an authorized audit' },
+    ],
+  },
+  {
+    slug: 'wordpress-security',
+    title: 'WordPress Security Guide',
+    summary: 'The published Bricksforge brief, the PHP core brief that names WordPress, and coming-soon hardening topics.',
+    description: 'WordPress security path built from published PHP Hub briefs. Plugin hardening and cleanup lessons that do not exist yet are marked coming soon.',
+    intro: 'The only WordPress-specific brief published here today is the Bricksforge file-upload issue. PHP2Shell is included because that brief says WordPress sites are in the affected group. Other WordPress topics are not written yet.',
+    modules: [
+      { id: 'bricksforge', section: 'briefs', slug: '2026-10-24-bricksforge-file-upload-rce' },
+      { id: 'php2shell', section: 'briefs', slug: '2026-10-24-php2shell-php-rce', note: 'Related published brief: the PHP core flaws that the brief says also affect WordPress.' },
+      { id: 'core', title: 'WordPress core hardening', soon: true },
+      { id: 'plugins', title: 'Plugin and theme update routine', soon: true },
+      { id: 'cleanup', title: 'Malware cleanup walkthrough', soon: true },
+    ],
+    next: [
+      { href: '/categories/wordpress/', label: 'WordPress posts' },
+      { href: '/services', label: 'Malware cleanup service' },
+      { href: '/contact', label: 'Contact for a cleanup quote' },
+    ],
+  },
+  {
+    slug: 'rest-api-php',
+    title: 'REST API Development with PHP',
+    summary: 'Coming-soon API modules, plus two published security lessons as related reading only.',
+    description: 'REST API learning path. PHP Hub does not yet publish an API tutorial, so those modules are marked coming soon. Two security lessons are linked as related reading.',
+    intro: 'PHP Hub does not yet have a REST API tutorial. The coming-soon rows are placeholders. The two lessons below are related security reading about request data and cookie authentication. They are not an API course.',
+    modules: [
+      { id: 'http', title: 'HTTP, routes, and JSON responses', soon: true },
+      { id: 'auth', title: 'Request validation and authentication', soon: true },
+      { id: 'errors', title: 'Pagination, errors, and versioning', soon: true },
+      { id: 'sql-related', section: 'lessons', slug: '2026-11-07-sql-injection-laravel-raw-queries-bindings-order-by', note: 'Related published lesson, not an API tutorial. It covers bindings when request data reaches SQL.' },
+      { id: 'csrf-related', section: 'lessons', slug: '2026-11-05-laravel-csrf-protection-tokens-exceptions-spa', note: 'Related published lesson, not an API tutorial. It distinguishes cookie sessions from Bearer tokens.' },
+    ],
+    next: [
+      { href: '/tools/curl-builder', label: 'cURL request builder' },
+      { href: '/tools/json-formatter', label: 'JSON formatter' },
+      { href: '/tools/jwt-decoder', label: 'JWT decoder' },
+    ],
+  },
+];
+
+export function pathBySlug(slug) {
+  return PATHS.find((path) => path.slug === slug) || null;
+}

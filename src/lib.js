@@ -14,6 +14,40 @@ export const SECTIONS = ['briefs', 'articles', 'lessons'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function fmtDate(d) { const [y, m, day] = d.split('-'); return m ? `${+day} ${MONTHS[+m - 1]} ${y}` : d; }
 const stripFm = (s = '') => s.replace(/^---[\s\S]*?---\s*/, '');
+const LEVELS = ['beginner', 'intermediate', 'advanced'];
+function externalLinks(src = '') {
+  const out = [];
+  const seen = new Set();
+  for (const match of stripFm(src).matchAll(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g)) {
+    if (seen.has(match[2])) continue;
+    seen.add(match[2]);
+    out.push({ label: match[1].replace(/\s+/g, ' ').trim(), href: match[2] });
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+function affectedSection(src = '') {
+  const lines = stripFm(src).split('\n');
+  let start = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^##\s+/.test(lines[i]) && /fixed/i.test(lines[i]) && /version/i.test(lines[i])) { start = i + 1; break; }
+  }
+  if (start < 0) return '';
+  const chunk = [];
+  for (let i = start; i < lines.length; i++) {
+    if (/^##\s+/.test(lines[i])) break;
+    chunk.push(lines[i]);
+  }
+  return chunk.join('\n')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[*_`]/g, '')
+    .split('\n')
+    .filter((line) => !/^[\s|:-]+$/.test(line))
+    .map((line) => line.replace(/^\s*\|/, '').replace(/\|\s*$/, '').replace(/\s*\|\s*/g, ' · ').trim())
+    .filter(Boolean)
+    .join('\n')
+    .trim();
+}
 // Summary = frontmatter `summary`, else first plain paragraph of the body (no invented text).
 function summarize(src = '') {
   const body = stripFm(src).replace(/^#.*$/gm, '');
@@ -35,7 +69,8 @@ export function list(section) {
     const categories = (Array.isArray(fm.categories) ? fm.categories : fm.categories ? [fm.categories] : []).map(String).filter(c => CATEGORIES.includes(c));
     return { section, categories, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, date, dateLabel: date ? fmtDate(date) : '',
       summary: fm.summary || fm.description || summarize(raw[p]), canonical: fm.canonical || '', hero: fm.hero || '', heroAlt: fm.heroAlt || '', severity: fm.severity || '', status: fm.status || '', tags,
-      readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content };
+      readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content,
+      level: LEVELS.includes(fm.level) ? fm.level : '', sources: externalLinks(raw[p] || ''), affected: affectedSection(raw[p] || '') };
   }).sort((a, b) => b.slug.localeCompare(a.slug));
 }
 export const allPosts = () => SECTIONS.flatMap(list).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -48,6 +83,18 @@ export function related(post, n = 3) {
   return allPosts().filter(p => p.url !== post.url)
     .map(p => ({ p, score: p.tags.filter(t => post.tags.includes(t)).length + (p.section === post.section ? 0.5 : 0) }))
     .filter(x => x.score >= 1).sort((a, b) => b.score - a.score).slice(0, n).map(x => x.p);
+}
+export function breadcrumbLd(items) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.label,
+      item: new URL(item.href, SITE.url).href,
+    })),
+  };
 }
 export function allCategories() {
   const posts = allPosts();
