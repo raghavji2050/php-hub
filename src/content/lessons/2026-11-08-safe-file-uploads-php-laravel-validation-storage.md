@@ -209,6 +209,8 @@ The 1×1 PNG was detected as `image/png` (90 bytes). The text file named `avatar
 
 Want a review of upload handling, storage layout or validation across a Laravel or PHP app? See [PHP Hub services](/services) (contact for quote) or run a quick pass with the [PHP Security Checker](https://php-security-checker.vercel.app).
 
+For a related real-world case, see the brief on [unauthenticated arbitrary file upload leading to remote code execution in the WordPress Bricksforge plugin](/briefs/2026-10-24-bricksforge-file-upload-rce) (CVE-2026-85097). The brief's Patchstack source reports it as actively exploited.
+
 ## Sources
 
 - [Laravel docs: File Storage](https://laravel.com/docs/filesystem) (current docs, also at the 13.x URL) — local disk root `storage/app/private`, public disk and `storage:link`, `store` / `storeAs` / `putFile` / `putFileAs`, `hashName` / `extension`, unsafe client name methods, `Storage::download`

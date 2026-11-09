@@ -48,6 +48,8 @@ WordPress sites running Bricksforge **≤ 3.1.8.9**. Patchstack puts usage at ro
 ## Service angle
 Owners of Bricks-based sites often don't know their add-ons are vulnerable, and update failures on commercial plugins are common. Paid, authorised work covers updating, log review, malware/backdoor cleanup and uploads hardening on sites the owner controls.
 
+Practical upload-hardening guidance is in [Safe File Uploads in PHP and Laravel: Validation, Storage and Serving](/lessons/2026-11-08-safe-file-uploads-php-laravel-validation-storage): validate the type from file contents, store under a generated filename, and do not let the web server execute uploads as PHP.
+
 ## Sources (dates in IST)
 - Patchstack, *Critical Unauthenticated Arbitrary File Upload Vulnerability Exploited in Bricksforge Plugin* (exploitation first observed 8 Oct 2026, 3:17 AM IST): https://patchstack.com/articles/critical-unauthenticated-arbitrary-file-upload-vulnerability-exploited-in-bricksforge-plugin/
 - Bricksforge official changelog, v4.0.1: 8 Oct 2026. https://bricksforge.io/version-changelog/
