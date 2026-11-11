@@ -1,24 +1,41 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import HeroImage from '../../components/HeroImage.astro';
+import Icons from '../../components/Icons.astro';
 import { PATHS } from '../../data/paths.js';
-import { breadcrumbLd } from '../../lib.js';
+import { allPosts, breadcrumbLd } from '../../lib.js';
 const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learn' }];
+const posts = allPosts();
+const covers = PATHS.map((path) => {
+  for (const mod of path.modules) {
+    if (mod.soon || !mod.slug) continue;
+    const post = posts.find((item) => item.section === mod.section && item.slug === mod.slug && item.hero);
+    if (post) return post;
+  }
+  return null;
+});
 ---
 <Base title="Learning Paths" description="Reading orders for published PHP Hub lessons and briefs. Modules that are not written yet are marked coming soon." jsonld={[breadcrumbLd(crumbs)]} cta={false}>
 <Breadcrumbs items={crumbs} />
 <div data-pagefind-body>
   <h1>Learn</h1>
   <p>Each path links to posts that already exist on PHP Hub. A coming-soon module is a placeholder, not a tutorial. Progress checkmarks stay in this browser.</p>
-  <div class="pub-list">
-    {PATHS.map((path) => (
-      <article class="entry">
-        <div>
-          <h2 class="entry-title"><a href={`/learn/${path.slug}`}>{path.title}</a></h2>
-          <p class="dek">{path.summary}</p>
-        </div>
-      </article>
-    ))}
+  <div class="photo-grid">
+    {PATHS.map((path, index) => {
+      const cover = covers[index];
+      return (
+        <article class="media-card media-photo">
+          <a class="media-shot" href={`/learn/${path.slug}`} aria-label={path.title}>
+            {cover ? <HeroImage hero={cover.hero} alt="" width={640} height={360} fallback={false} sizes="(max-width: 760px) 100vw, 480px" /> : <span class="type-plate"><Icons name="lesson" class="plate-icon" />Reading path</span>}
+          </a>
+          <div class="media-copy">
+            <h2 class="entry-title"><a href={`/learn/${path.slug}`}>{path.title}</a></h2>
+            <p class="dek">{path.summary}</p>
+          </div>
+        </article>
+      );
+    })}
   </div>
 </div>
 </Base>

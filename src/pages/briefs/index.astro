@@ -6,5 +6,5 @@ const items = list('briefs');
 ---
 <Base title="Briefs" description="Security briefs on PHP and WordPress vulnerabilities: who is affected, fixed versions and what to do.">
 <h1>Briefs</h1>
-{items.length ? <div class="pub-list">{items.map(i => <Card item={i} section="briefs" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
+{items.length ? <div class="brief-stack">{items.map(i => <Card item={i} section="briefs" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
 </Base>

@@ -1,10 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import { heroSource, DEFAULT_HERO } from '../hero.js';
-const { hero, alt = '', width = 1200, height = 630, eager = false, fallback = true, class: cls = '' } = Astro.props;
+const { hero, alt = '', width = 1200, height = 630, eager = false, fallback = true, class: cls = '', sizes = '' } = Astro.props;
 const s = heroSource(hero);
 const loading = eager ? 'eager' : 'lazy';
+const sizeAttr = sizes || `(max-width: ${width}px) 100vw, ${width}px`;
+const srcWidths = [width, 480, 800, 1200].filter((w, i, all) => w > 0 && w <= width && all.indexOf(w) === i).sort((a, b) => a - b);
 ---
-{s?.kind === 'asset' ? <Image src={s.src} alt={alt} width={width} height={height} widths={[480, 800, 1200].filter(w => w <= width)} sizes={`(max-width: ${width}px) 100vw, ${width}px`} loading={loading} decoding="async" class={cls} />
+{s?.kind === 'asset' ? <Image src={s.src} alt={alt} width={width} height={height} widths={srcWidths} sizes={sizeAttr} loading={loading} decoding="async" class={cls} />
  : s ? <img src={s.src} alt={alt} width={width} height={height} loading={loading} decoding="async" class={cls} />
  : fallback ? <img src={DEFAULT_HERO} alt="" width={width} height={height} loading={loading} decoding="async" class={cls} /> : null}

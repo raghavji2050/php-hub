@@ -1,0 +1,47 @@
+---
+const { label = 'Example' } = Astro.props;
+---
+<figure class="hero-visual">
+  <svg class="hero-art" viewBox="0 0 480 320" width="480" height="320" role="img" aria-labelledby="hero-art-title">
+    <title id="hero-art-title">Line drawing of a lock, a key, and a small elephant, framed by code braces</title>
+    <g fill="none" stroke="var(--brand)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="var(--border)" stroke-width="1">
+        <path d="M24 40h432M24 80h432M24 120h432M24 160h432M24 200h432M24 240h432M24 280h432"/>
+      </g>
+      <path stroke-width="2.2" d="M78 36c-18 8-26 28-26 54 0 20 8 34 8 54 0 28-8 48-8 70 0 22 14 38 32 46"/>
+      <path stroke-width="2.2" d="M402 36c18 8 26 28 26 54 0 20-8 34-8 54 0 28 8 48 8 70 0 22-14 38-32 46"/>
+      <rect x="196" y="132" width="88" height="86" rx="8" stroke-width="2"/>
+      <path stroke-width="2.2" d="M214 132v-28a26 26 0 0 1 52 0v28"/>
+      <circle cx="240" cy="168" r="8"/>
+      <path d="M240 176v22" stroke-width="2.2"/>
+      <g stroke-width="1.8">
+        <circle cx="318" cy="214" r="16"/>
+        <circle cx="318" cy="214" r="6"/>
+        <path d="M334 214h72"/>
+        <path d="M390 214v14M378 214v10M402 214v18"/>
+      </g>
+      <g stroke-width="1.7" transform="translate(108,92)">
+        <ellipse cx="78" cy="86" rx="38" ry="24"/>
+        <circle cx="40" cy="76" r="16"/>
+        <path d="M36 64c-6-14-20-16-26-6 8 2 12 10 14 18"/>
+        <path d="M26 80c-12 8-20 24-14 34 8-6 14-12 16-22"/>
+        <circle cx="34" cy="72" r="1.8" fill="var(--brand)" stroke="none"/>
+        <path d="M54 108v28M70 108v28M90 106v32M104 104v34"/>
+        <path d="M116 80c10 2 14 12 8 20"/>
+      </g>
+      <g stroke="var(--muted)" stroke-width="1.3">
+        <path d="M150 64l-8 8 8 8M186 64l8 8-8 8"/>
+        <path d="M158 80h20"/>
+      </g>
+    </g>
+  </svg>
+  <div class="terminal" aria-label="Example from the secure random tokens lesson: an insecure token compared with a safer one">
+    <div class="tb"><span>token.php</span><span>{label}</span></div>
+    <pre><span class="bad">// Don’t — not a secret</span>
+$token = <span class="fn">md5</span>(<span class="fn">uniqid</span>());
+
+<span class="good">// Do — secure bytes</span>
+$token = <span class="fn">bin2hex</span>(<span class="fn">random_bytes</span>(32));
+$hash  = <span class="fn">hash</span>(<span class="kw">'sha256'</span>, $token);</pre>
+  </div>
+</figure>

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
+import Card from '../components/Card.astro';
+import HeroImage from '../components/HeroImage.astro';
 import { list } from '../lib.js';
 // Auto-built from existing content: no hand-written claims, updates itself as posts are added.
 const lessons = list('lessons').slice().reverse(); // oldest first = learning order
@@ -12,9 +13,9 @@ const articles = list('articles').slice(0, 3);
   <h1>Start here</h1>
   <p>Pick the path that fits you. Every list below updates automatically as new posts are published.</p>
 </section>
-<section class="path"><h2>1. Stay safe: latest security briefs</h2><p class="meta">Short, sourced write-ups on PHP and WordPress vulnerabilities.</p>{briefs.map(i => <PostCard item={i} />)}<a href="/briefs">All briefs</a></section>
-<section class="path"><h2>2. Learn by building: lessons in order</h2><ol class="steps">{lessons.map(i => <li><a href={i.url}>{i.title}</a>{i.readingTime && <span class="meta"> · {i.readingTime} min</span>}</li>)}</ol><a href="/lessons">All lessons →</a></section>
-<section class="path"><h2>3. Go deeper: practical guides</h2>{articles.map(i => <PostCard item={i} />)}<a href="/articles">All articles</a></section>
+<section class="path"><h2>1. Stay safe: latest security briefs</h2><p class="meta">Short, sourced write-ups on PHP and WordPress vulnerabilities.</p><div class="brief-stack">{briefs.map(i => <Card item={i} level="h3" />)}</div><a href="/briefs">All briefs</a></section>
+<section class="path"><h2>2. Learn by building: lessons in order</h2><ol class="steps thumb-list">{lessons.map(i => <li>{i.hero ? <a class="mini-thumb" href={i.url} tabindex="-1" aria-hidden="true"><HeroImage hero={i.hero} alt="" width={160} height={90} fallback={false} sizes="72px" /></a> : <span class="ph">Lesson</span>}<a href={i.url}>{i.title}</a>{i.readingTime && <span class="meta">{i.readingTime} min</span>}</li>)}</ol><a href="/lessons">All lessons →</a></section>
+<section class="path"><h2>3. Go deeper: practical guides</h2><div class="photo-grid">{articles.map(i => <Card item={i} level="h3" />)}</div><a href="/articles">All articles</a></section>
 <section class="path"><h2>4. Need hands-on help?</h2><p>Try the free <a href="https://php-security-checker.vercel.app">PHP Security Checker</a>, browse <a href="/tags">topics</a>, or <a href="/contact">request an audit</a>.</p></section>
 </Base>
 <style>.path{max-width:1040px;margin:36px auto 0}.steps{font-size:17px;line-height:1.9}</style>

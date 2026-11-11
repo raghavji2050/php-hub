@@ -69,7 +69,11 @@ const jsonld = [{ '@context': 'https://schema.org', '@type': 'Article', headline
 </nav>
 {rel.length > 0 && <section class="related" aria-labelledby="related-title" data-pagefind-ignore>
   <h2 id="related-title">Related posts</h2>
-  <ul class="plain-list">{rel.map(r => <li><a href={r.url}>{r.title}</a>{r.dateLabel && <time datetime={r.date}>{r.dateLabel}</time>}</li>)}</ul>
+  <ul class="thumb-list">{rel.map(r => <li>
+    {r.hero ? <a class="mini-thumb" href={r.url} tabindex="-1" aria-hidden="true"><HeroImage hero={r.hero} alt="" width={160} height={90} fallback={false} sizes="96px" /></a> : <span class="ph">{r.section === 'briefs' ? (r.severity || 'Brief') : 'Note'}</span>}
+    <a href={r.url}>{r.title}</a>
+    {r.dateLabel && <time datetime={r.date}>{r.dateLabel}</time>}
+  </li>)}</ul>
 </section>}
 <script is:inline src="/copy-code.js" defer></script>
 <script is:inline src="/reading.js" defer></script>

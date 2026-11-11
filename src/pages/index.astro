@@ -2,55 +2,111 @@
 import Base from '../layouts/Base.astro';
 import Card from '../components/Card.astro';
 import ChecklistCta from '../components/ChecklistCta.astro';
+import HeroPlate from '../components/HeroPlate.astro';
+import HeroImage from '../components/HeroImage.astro';
+import Icons from '../components/Icons.astro';
+import ToolTile from '../components/ToolTile.astro';
 import { list } from '../lib.js';
 import { TOOLS } from '../data/tools.js';
 const briefs = list('briefs');
-const latest = briefs[0];
-const lessons = list('lessons').slice(0, 5);
+const lessons = list('lessons');
 const articles = list('articles');
+const latestBrief = briefs[0];
+const cover = lessons[0];
+const recentLessons = lessons.slice(1, 5);
 const popularSlugs = ['php-security-checker', 'php-formatter', 'composer-analyzer', 'json-formatter', 'jwt-decoder', 'cron-generator'];
 const popular = popularSlugs.map((slug) => TOOLS.find((tool) => tool.slug === slug)).filter(Boolean);
+const tokenLesson = lessons.find((item) => item.slug.includes('secure-random-tokens'));
+const plateLabel = tokenLesson?.dateLabel ? `${tokenLesson.dateLabel} lesson` : 'Example';
 const description = 'Security briefs and practical lessons for PHP, Laravel and WordPress, written by Raghav and checked against official sources.';
-const sevName = (latest?.severity || '').toLowerCase();
-const sevClass = sevName === 'critical' || sevName === 'high' ? 'is-crit' : (latest?.severity || latest?.status) ? 'is-warn' : '';
-const sevText = latest ? [latest.severity, latest.status].filter(Boolean).join(' · ') : '';
+const sevName = (item) => (item?.severity || '').toLowerCase();
+const sevClass = (item) => {
+  const sev = sevName(item);
+  if (sev === 'critical' || sev === 'high') return 'is-crit';
+  if (sev || item?.status) return 'is-warn';
+  return '';
+};
+const sevText = (item) => [item?.severity, item?.status].filter(Boolean).join(' · ');
+const stats = [
+  [lessons.length, lessons.length === 1 ? 'Lesson' : 'Lessons'],
+  [briefs.length, briefs.length === 1 ? 'Brief' : 'Briefs'],
+  [TOOLS.length, TOOLS.length === 1 ? 'Browser tool' : 'Browser tools'],
+  [articles.length, articles.length === 1 ? 'Article' : 'Articles'],
+];
 ---
 <Base description={description}>
-<header class="masthead">
-  <h1>Security briefs and lessons for PHP, Laravel, and WordPress.</h1>
-  <p class="lead">Written by Raghav. When a vulnerability matters, a brief names the affected versions and the fix. Lessons cover the defenses you should already be using. Claims are checked against the official sources they name.</p>
-  <p class="byline">By <a href="/about/">Raghav</a> · PHP Hub · Mohali</p>
-</header>
+<div class="hero">
+  <header class="masthead">
+    <h1>Security briefs and lessons for PHP, Laravel, and WordPress.</h1>
+    <p class="lead">Written by Raghav. When a vulnerability matters, a brief names the affected versions and the fix. Lessons cover the defenses you should already be using. Claims are checked against the official sources they name.</p>
+    <p class="byline">By <a href="/about/">Raghav</a> · PHP Hub · Mohali</p>
+  </header>
+  <HeroPlate label={plateLabel} />
+</div>
 
-{latest && <section aria-labelledby="brief-title">
+<nav aria-label="Sections">
+  <ul class="section-nav">
+    <li><a href="/briefs"><Icons name="brief" /><span><strong>Briefs</strong><small>Who is affected, and what to do</small></span></a></li>
+    <li><a href="/lessons"><Icons name="lesson" /><span><strong>Lessons</strong><small>The safer way to write the code</small></span></a></li>
+    <li><a href="/tools"><Icons name="tool" /><span><strong>Tools</strong><small>{TOOLS.length} {TOOLS.length === 1 ? 'tool' : 'tools'}, running in your browser</small></span></a></li>
+    <li><a href="/services"><Icons name="service" /><span><strong>Services</strong><small>Authorized audits, contact for quote</small></span></a></li>
+  </ul>
+</nav>
+
+<div class="stats" aria-label="What is on PHP Hub">
+  {stats.map(([count, label]) => <div><b>{count}</b><span>{label}</span></div>)}
+</div>
+
+{cover && <article class="spread" aria-labelledby="cover-title">
+  <figure class="cover">
+    {cover.hero ? <HeroImage hero={cover.hero} alt={cover.heroAlt || ''} width={960} height={540} eager={true} fallback={false} sizes="(max-width: 800px) 100vw, 640px" /> : <p class="media-flag">Lesson</p>}
+  </figure>
+  <div class="cover-copy">
+    <p class="kicker">Latest lesson{cover.dateLabel && <> · <time datetime={cover.date}>{cover.dateLabel}</time></>} · {cover.readingTime} min read</p>
+    <h2 id="cover-title"><a href={cover.url}>{cover.title}</a></h2>
+    {cover.summary && <p class="dek">{cover.summary}</p>}
+    <p><a href={cover.url}>Read the lesson</a></p>
+  </div>
+</article>}
+
+{latestBrief && <section aria-labelledby="brief-title">
   <div class="sec-head"><h2 id="brief-title">Latest brief</h2><a href="/briefs">All briefs</a></div>
-  <article class="featured">
-    <p class="meta-row">
-      {sevText && <span class:list={['sev', sevClass]}>{sevText}</span>}
-      {latest.dateLabel && <time datetime={latest.date}>{latest.dateLabel}</time>}
-      <span>{latest.readingTime} min read</span>
-    </p>
-    <h3><a href={latest.url}>{latest.title}</a></h3>
-    {latest.summary && <p class="dek">{latest.summary}</p>}
+  <article class="media-card media-brief brief-feature">
+    <p class:list={['media-flag', sevClass(latestBrief)]}>{latestBrief.severity || 'Brief'}</p>
+    <div class="media-copy">
+      <p class="meta-row">
+        {latestBrief.status && <span class:list={['sev', sevClass(latestBrief)]}>{latestBrief.status}</span>}
+        {latestBrief.dateLabel && <time datetime={latestBrief.date}>{latestBrief.dateLabel}</time>}
+        <span>{latestBrief.readingTime} min read</span>
+      </p>
+      <h3 class="entry-title"><a href={latestBrief.url}>{latestBrief.title}</a></h3>
+      {latestBrief.summary && <p class="dek">{latestBrief.summary}</p>}
+    </div>
   </article>
 </section>}
 
-<section aria-labelledby="lessons-title">
+{recentLessons.length > 0 && <section aria-labelledby="lessons-title">
   <div class="sec-head"><h2 id="lessons-title">Recent lessons</h2><a href="/lessons">All lessons</a></div>
-  {lessons.map((item) => <Card item={item} section="lessons" level="h3" />)}
-</section>
+  <div class="photo-grid">
+    {recentLessons.map((item) => <Card item={item} section="lessons" level="h3" />)}
+  </div>
+</section>}
 
 <section aria-labelledby="articles-title">
   <div class="sec-head"><h2 id="articles-title">Articles</h2><a href="/articles">All articles</a></div>
-  <ul class="plain-list">
-    {articles.map((item) => <li><a href={item.url}>{item.title}</a>{item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}</li>)}
+  <ul class="thumb-list">
+    {articles.map((item) => <li>
+      {item.hero ? <a class="mini-thumb" href={item.url} tabindex="-1" aria-hidden="true"><HeroImage hero={item.hero} alt="" width={192} height={108} fallback={false} sizes="96px" /></a> : <span class="ph">Article</span>}
+      <a href={item.url}>{item.title}</a>
+      {item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}
+    </li>)}
   </ul>
 </section>
 
-<section aria-labelledby="tools-title">
-  <div class="sec-head"><h2 id="tools-title">Tools</h2><a href="/tools">All tools</a></div>
-  <div class="tools-list">
-    {popular.map((tool) => <div><a href={`/tools/${tool.slug}`}>{tool.title}</a><p>{tool.blurb}</p></div>)}
+<section class="tools-band" aria-labelledby="tools-title">
+  <div class="sec-head"><h2 id="tools-title">Tools</h2><a href="/tools">All {TOOLS.length} tools</a></div>
+  <div class="tiles">
+    {popular.map((tool) => <ToolTile tool={tool} />)}
   </div>
 </section>
 
