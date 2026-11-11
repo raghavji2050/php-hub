@@ -5,14 +5,14 @@ import { breadcrumbLd } from '../lib.js';
 const { tool } = Astro.props;
 const crumbs = [
   { href: '/', label: 'Home' },
-  { href: '/tools', label: 'Developer Tools' },
+  { href: '/tools', label: 'Tools' },
   { href: `/tools/${tool.slug}`, label: tool.title },
 ];
 ---
-<Base title={tool.title} description={tool.description} jsonld={[breadcrumbLd(crumbs)]}>
+<Base title={tool.title} description={tool.description} jsonld={[breadcrumbLd(crumbs)]} cta={false}>
   <Breadcrumbs items={crumbs} />
   <article class="page-prose tool-page" data-pagefind-body>
-    <p class="eyebrow">Developer tool</p>
+    <p class="eyebrow">Tool</p>
     <h1>{tool.title}</h1>
     <p class="lead">{tool.description}</p>
     <p class="notice"><strong>Limitations.</strong> {tool.limitation}</p>

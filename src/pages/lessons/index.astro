@@ -1,5 +1,7 @@
 ---
-import Base from '../../layouts/Base.astro'; import Card from '../../components/Card.astro'; import { list, slugify } from '../../lib.js';
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { list, slugify } from '../../lib.js';
 const tags = [...new Set(list('lessons').flatMap(i => i.tags))].sort();
 const items = list('lessons');
 ---
@@ -8,24 +10,23 @@ const items = list('lessons');
 {tags.length > 0 && <ul class="tags" aria-label="Filter by tag" data-pagefind-ignore>{tags.map(t => <li><a class="tag" href={`/lessons/tags/${slugify(t)}`}>#{t}</a></li>)}</ul>}
 {items.some(i => i.level) && <div class="filters" role="group" aria-label="Filter by level" data-pagefind-ignore>
   <button type="button" class="chip" data-level-filter="all" aria-pressed="true">All</button>
-  {[...new Set(items.map(i => i.level).filter(Boolean))].map(level => <button type="button" class="chip" data-level-filter={level} aria-pressed="false">{level}</button>)}
+  {[...new Set(items.map(i => i.level).filter(Boolean))].map(level => <button type="button" class="chip" data-level-filter={level} aria-pressed="false">{level[0].toUpperCase() + level.slice(1)}</button>)}
 </div>}
 <p class="meta">Level is shown only when the lesson’s scope is clear. It is a reading guide, not a certification.</p>
 <p id="level-empty" hidden>No lessons at this level.</p>
-{items.length ? <div class="grid" id="lesson-grid">{items.map(i => <Card item={i} section="lessons" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
+{items.length ? <div class="pub-list" id="lesson-list">{items.map(i => <Card item={i} section="lessons" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
 </Base>
 <script>
   const buttons = [...document.querySelectorAll('[data-level-filter]')];
-  const cards = [...document.querySelectorAll('#lesson-grid .card')];
+  const rows = [...document.querySelectorAll('#lesson-list .entry')];
   const empty = document.getElementById('level-empty');
   buttons.forEach((button) => button.addEventListener('click', () => {
     const level = button.dataset.levelFilter;
     buttons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
     let shown = 0;
-    cards.forEach((card) => {
-      const badge = [...card.querySelectorAll('.badge')].some((node) => node.textContent.trim().toLowerCase() === level);
-      const visible = level === 'all' || badge;
-      card.hidden = !visible;
+    rows.forEach((row) => {
+      const visible = level === 'all' || row.dataset.level === level;
+      row.hidden = !visible;
       if (visible) shown += 1;
     });
     if (empty) empty.hidden = shown !== 0;

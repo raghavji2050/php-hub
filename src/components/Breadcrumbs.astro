@@ -18,5 +18,5 @@ const { items = [] } = Astro.props;
 .crumbs li:not(:last-child)::after{content:"/";margin:0 8px;color:var(--muted)}
 .crumbs a{color:var(--muted);text-decoration:none}
 .crumbs a:hover{color:var(--text)}
-.crumbs [aria-current="page"]{color:var(--text);font-weight:600}
+.crumbs [aria-current="page"]{color:var(--text);font-weight:600;overflow-wrap:anywhere}
 </style>

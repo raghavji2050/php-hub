@@ -3,19 +3,21 @@ import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { PATHS } from '../../data/paths.js';
 import { breadcrumbLd } from '../../lib.js';
-const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learning Paths' }];
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learn' }];
 ---
-<Base title="Learning Paths" description="Reading orders for published PHP Hub lessons and briefs. Modules that are not written yet are marked coming soon." jsonld={[breadcrumbLd(crumbs)]}>
+<Base title="Learning Paths" description="Reading orders for published PHP Hub lessons and briefs. Modules that are not written yet are marked coming soon." jsonld={[breadcrumbLd(crumbs)]} cta={false}>
 <Breadcrumbs items={crumbs} />
 <div data-pagefind-body>
-  <h1>Learning Paths</h1>
+  <h1>Learn</h1>
   <p>Each path links to posts that already exist on PHP Hub. A coming-soon module is a placeholder, not a tutorial. Progress checkmarks stay in this browser.</p>
-  <div class="grid">
+  <div class="pub-list">
     {PATHS.map((path) => (
-      <a class="card" href={`/learn/${path.slug}`}>
-        <h2 class="card-title">{path.title}</h2>
-        <p>{path.summary}</p>
-      </a>
+      <article class="entry">
+        <div>
+          <h2 class="entry-title"><a href={`/learn/${path.slug}`}>{path.title}</a></h2>
+          <p class="dek">{path.summary}</p>
+        </div>
+      </article>
     ))}
   </div>
 </div>

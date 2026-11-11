@@ -18,9 +18,9 @@ const modules = path.modules.map((mod) => {
   return { ...mod, href: post.url, title: post.title, summary: post.summary, readingTime: post.readingTime };
 });
 const published = modules.filter((mod) => !mod.soon && mod.href);
-const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learning Paths' }, { href: `/learn/${path.slug}`, label: path.title }];
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learn' }, { href: `/learn/${path.slug}`, label: path.title }];
 ---
-<Base title={path.title} description={path.description} jsonld={[breadcrumbLd(crumbs)]}>
+<Base title={path.title} description={path.description} jsonld={[breadcrumbLd(crumbs)]} cta={false}>
 <Breadcrumbs items={crumbs} />
 <article data-pagefind-body>
   <h1>{path.title}</h1>
@@ -28,22 +28,18 @@ const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learning
   <p data-path-count={path.slug} class="meta">0 of {published.length} published modules marked complete on this device.</p>
   <ol class="modules">
     {modules.map((mod, index) => mod.soon ? (
-      <li>
-        <article class="card coming">
-          <span class="badge status">Coming soon</span>
-          <h2>{index + 1}. {mod.title}</h2>
-          <p>Not published. This row is a placeholder, not a tutorial.</p>
-        </article>
+      <li class="module">
+        <p class="level-label">Coming soon</p>
+        <h2>{index + 1}. {mod.title}</h2>
+        <p>Not published. This row is a placeholder, not a tutorial.</p>
       </li>
     ) : (
-      <li>
-        <article class="card">
-          <h2><a href={mod.href}>{index + 1}. {mod.title}</a></h2>
-          {mod.summary && <p>{mod.summary}</p>}
-          {mod.note && <p>{mod.note}</p>}
-          <p class="meta">{mod.readingTime ? `${mod.readingTime} min read` : 'Page'}{mod.kind === 'page' ? '' : ''}</p>
-          <label class="check-row"><input type="checkbox" data-path-check={path.slug} data-module={mod.id} /> Mark complete on this device</label>
-        </article>
+      <li class="module">
+        <h2><a href={mod.href}>{index + 1}. {mod.title}</a></h2>
+        {mod.summary && <p>{mod.summary}</p>}
+        {mod.note && <p>{mod.note}</p>}
+        <p class="meta">{mod.readingTime ? `${mod.readingTime} min read` : 'Page'}</p>
+        <label class="check-row"><input type="checkbox" data-path-check={path.slug} data-module={mod.id} /> Mark complete on this device</label>
       </li>
     ))}
   </ol>
@@ -56,7 +52,11 @@ const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learning
 </Base>
 <script is:inline src="/reading.js" defer></script>
 <style>
-.modules{list-style:none;margin:24px 0;padding:0;display:grid;gap:12px}
-.coming{border-style:dashed}
-.check-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px}
+.modules{list-style:none;margin:8px 0 24px;padding:0}
+.module{border-bottom:1px solid var(--border);padding:16px 0;min-width:0}
+.module h2{font-size:22px;margin:0 0 6px}
+.module h2 a{color:var(--text);text-decoration:none}
+.module h2 a:hover{color:var(--brand)}
+.module p{margin:0 0 8px;color:var(--muted)}
+.check-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px;color:var(--text)}
 </style>

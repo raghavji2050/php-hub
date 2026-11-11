@@ -1,24 +1,12 @@
 ---
-import HeroImage from './HeroImage.astro';
-import { slugify } from '../lib.js';
 const { item } = Astro.props;
 const LABEL = { briefs: 'Brief', articles: 'Article', lessons: 'Lesson' };
 ---
-<a class="post-card" href={item.url}>
-  <HeroImage hero={item.hero} alt={item.heroAlt} width={600} height={315} class="post-card-img" />
-  <div class="post-card-body">
-    <span class="post-card-cat">{LABEL[item.section] || item.section}</span>
-    {item.categories?.length > 0 && <span class="post-card-cats">{item.categories.join(' · ')}</span>}
-    <h3 class="card-title">{item.title}</h3>
-    {item.dateLabel && <time class="meta" datetime={item.date}>{item.dateLabel}</time>}
+<article class="entry">
+  {item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}
+  <div>
+    <p class="row-meta">{LABEL[item.section] || item.section}</p>
+    <h3 class="entry-title"><a href={item.url}>{item.title}</a></h3>
+    {item.summary && <p class="dek">{item.summary}</p>}
   </div>
-</a>
-<style>
-.post-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--text);transition:border-color .15s}
-.post-card:hover{border-color:var(--brand);transform:translateY(-2px)}
-.post-card{transition:border-color .15s,transform .15s}
-.post-card :global(.post-card-img){width:100%;height:auto;aspect-ratio:600/315;object-fit:cover;display:block;background:var(--code)}
-.post-card-body{display:flex;flex-direction:column;gap:6px;padding:18px 20px 20px;flex:1}
-.post-card-cat{align-self:flex-start;padding:2px 10px;border-radius:999px;background:var(--brand-soft);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--brand)}
-.post-card-cats{font-size:12px;font-weight:600;color:var(--muted)}
-</style>
+</article>

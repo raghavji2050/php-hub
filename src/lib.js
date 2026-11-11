@@ -4,8 +4,8 @@ const all = {
   lessons: import.meta.glob('./content/lessons/*.md', { eager: true }),
 };
 const raw = import.meta.glob('./content/*/*.md', { eager: true, query: '?raw', import: 'default' });
-export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', description: 'PHP Hub (PHPHub): practical PHP, Laravel, Symfony and WordPress security briefs, tutorials, lessons and tools.',
-  homeTitle: 'PHP Hub – PHP, Laravel, Symfony & WordPress Security and Tutorials',
+export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', description: 'Security briefs and practical lessons for PHP, Laravel and WordPress, written by Raghav and checked against official sources.',
+  homeTitle: 'PHP Hub — PHP, Laravel and WordPress security briefs and lessons',
   sameAs: ['https://medium.com/@raghavji2050', 'https://github.com/raghavji2050'],
   // Google Search Console verification code; set here or via PUBLIC_GSC_VERIFICATION. Empty = no meta tag.
   gscVerification: 'rE5wA0YQEuBOKMiP8jOhXePlFCnfh85Fya2Sy-1Gn3E' };
@@ -51,7 +51,8 @@ function affectedSection(src = '') {
 // Summary = frontmatter `summary`, else first plain paragraph of the body (no invented text).
 function summarize(src = '') {
   const body = stripFm(src).replace(/^#.*$/gm, '');
-  const para = body.split(/\n\s*\n/).map(s => s.trim()).find(s => s && !/^[#*>\-|`]/.test(s) && !/^\d+\./.test(s));
+  // Skip kickers that are a single italic line. A bold lede (**The short version:**) is real prose.
+  const para = body.split(/\n\s*\n/).map(s => s.trim()).find(s => s && !/^[#>\-|`]/.test(s) && !/^\*[^*]/.test(s) && !/^\d+\./.test(s));
   if (!para) return '';
   const text = para.replace(/\*\*|\*|`/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s+/g, ' ');
   return text.length > 200 ? text.slice(0, 197).replace(/\s+\S*$/, '') + '…' : text;
@@ -69,7 +70,7 @@ export function list(section) {
     const categories = (Array.isArray(fm.categories) ? fm.categories : fm.categories ? [fm.categories] : []).map(String).filter(c => CATEGORIES.includes(c));
     return { section, categories, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, date, dateLabel: date ? fmtDate(date) : '',
       summary: fm.summary || fm.description || summarize(raw[p]), canonical: fm.canonical || '', hero: fm.hero || '', heroAlt: fm.heroAlt || '', severity: fm.severity || '', status: fm.status || '', tags,
-      readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content,
+      readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content, compiledContent: m.compiledContent,
       level: LEVELS.includes(fm.level) ? fm.level : '', sources: externalLinks(raw[p] || ''), affected: affectedSection(raw[p] || '') };
   }).sort((a, b) => b.slug.localeCompare(a.slug));
 }
