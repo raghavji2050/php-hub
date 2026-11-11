@@ -1,17 +1,20 @@
 ---
-const { item, section = item.section, level = 'h3' } = Astro.props;
-const sev = (item.severity || '').toLowerCase();
+const { item, section = item.section, level = 'h2' } = Astro.props;
 const H = level;
+const sevName = (item.severity || '').toLowerCase();
+const sevClass = sevName === 'critical' || sevName === 'high' ? 'is-crit' : (item.severity || item.status) ? 'is-warn' : '';
+const sevText = [item.severity, item.status].filter(Boolean).join(' · ');
+const href = item.url || `/${section}/${item.slug}`;
 ---
-<a class="card" href={`/${section}/${item.slug}`}>
-  {(item.severity || item.status || item.level) && <div class="badges">
-    {item.severity && <span class={`badge sev-${sev}`}>{item.severity}</span>}
-    {item.status && <span class="badge status">{item.status}</span>}
-    {item.level && <span class="badge">{item.level}</span>}
-  </div>}
-  {item.categories?.length > 0 && <span class="card-cats">{item.categories.join(' · ')}</span>}
-  <H class="card-title">{item.title}</H>
-  {item.summary && <p>{item.summary}</p>}
-  <span class="meta">{item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}{item.dateLabel && ' · '}{item.readingTime} min read</span>
-</a>
-<style>.card-cats{font-size:12px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.04em}</style>
+<article class="entry" data-level={item.level || ''} data-sev={sevName}>
+  {item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}
+  <div>
+    {(sevText || item.level) && <p class="meta-row">
+      {sevText && <span class:list={['sev', sevClass]}>{sevText}</span>}
+      {item.level && <span class="level-label">{item.level}</span>}
+    </p>}
+    <H class="entry-title"><a href={href}>{item.title}</a></H>
+    {item.summary && <p class="dek">{item.summary}</p>}
+    {item.readingTime && <p class="row-meta">{item.readingTime} min read</p>}
+  </div>
+</article>

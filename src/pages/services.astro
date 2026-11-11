@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import ChecklistCta from '../components/ChecklistCta.astro';
 import { PACKAGES as packages, SERVICES as services, OFFERINGS } from '../data/services.js';
 ---
-<Base title="Services" description="PHP and Laravel security audits, WordPress malware cleanup, application upgrades, monitoring, and consultation for sites you are authorized to manage. Contact for quote.">
+<Base title="Services" description="PHP and Laravel security audits, WordPress malware cleanup, application upgrades, monitoring, and consultation for sites you are authorized to manage. Contact for quote." cta={true}>
 <div class="page-prose">
 <h1>Services</h1>
 <p>Hands-on help for PHP, Laravel and WordPress sites. All work is done only for sites you own or are authorized to manage (see our <a href="/authorized-work">authorized-work policy</a>).</p>
@@ -12,32 +12,39 @@ import { PACKAGES as packages, SERVICES as services, OFFERINGS } from '../data/s
 <section id="packages" aria-labelledby="pk-title">
 <h2 id="pk-title">Fixed-scope audit packages</h2>
 <p>Clear scope, clear deliverables, agreed in writing before work starts. Turnaround counts business days from when access is confirmed.</p>
-{packages.map(p => <article class="card">
+{packages.map(p => <article class="offer">
   <h3>{p.name}</h3><p>{p.for}</p>
   <h4>Deliverables</h4><ul>{p.deliverables.map(d => <li>{d}</li>)}</ul>
   <p><strong>Turnaround:</strong> {p.turnaround}</p>
-  <p><strong>Price:</strong> Contact for quote. <a class="btn primary" href="/contact">Request the {p.name}</a></p>
+  <p><strong>Price:</strong> Contact for quote. <a href="/contact">Request the {p.name}</a></p>
 </article>)}
 <p><small>Out of scope for all packages unless agreed in writing: fixing the findings, load/DoS testing, social engineering, and any system you are not authorized to test.</small></p>
 </section>
-<nav aria-label="Services"><ul>{services.map(s => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ul></nav>
-{services.map(s => <section id={s.id}>
-  <h2>{s.title}</h2><p>{s.intro}</p>
+<nav aria-label="Services">
+  <h2>On this page</h2>
+  <ul>
+    {services.map(s => <li><a href={`#${s.id}`}>{s.title}</a> — {s.price}</li>)}
+    {OFFERINGS.map(item => <li><a href={`#${item.id}`}>{item.title}</a> — {item.price}</li>)}
+  </ul>
+</nav>
+{services.map(s => <details class="offer-details" id={s.id}>
+  <summary><span>{s.title}</span><span class="offer-price">{s.price}</span></summary>
+  <p>{s.intro}</p>
   <h3>What's included</h3><ul>{s.included.map(x => <li>{x}</li>)}</ul>
   <h3>Process</h3><ol>{s.process.map(x => <li>{x}</li>)}</ol>
   <p><strong>Price:</strong> {s.price}</p>
-  <p><a class="btn primary" href="/contact">Ask about {s.title.toLowerCase()}</a></p>
-</section>)}
+  <p><a href="/contact">Ask about {s.title.toLowerCase()}</a></p>
+</details>)}
 <section id="focus" aria-labelledby="focus-title">
 <h2 id="focus-title">More specific work</h2>
 <p>These sit alongside the packages and services above. Scope is agreed in writing before any access or change. The price for each one is contact for quote.</p>
-{OFFERINGS.map((item) => <section id={item.id}>
-  <h3>{item.title}</h3>
+{OFFERINGS.map((item) => <details class="offer-details" id={item.id}>
+  <summary><span>{item.title}</span><span class="offer-price">{item.price}</span></summary>
   <p>{item.intro}</p>
-  <h4>What's included</h4>
+  <h3>What's included</h3>
   <ul>{item.included.map((line) => <li>{line}</li>)}</ul>
   <p><strong>Price:</strong> {item.price}. <a href="/contact">Request a quote</a>.</p>
-</section>)}
+</details>)}
 </section>
 <ChecklistCta />
 <section aria-labelledby="outline-title">
@@ -53,3 +60,20 @@ import { PACKAGES as packages, SERVICES as services, OFFERINGS } from '../data/s
 </section>
 <section aria-labelledby="next-step"><h2 id="next-step">Next step</h2><p>Tell us about your site and the issue on the <a href="/contact">contact page</a>. We reply by email to agree scope, access and a quote before any work starts.</p><p><a class="btn primary" href="/contact">Request an audit or cleanup</a></p></section>
 </div></Base>
+<script>
+  const openFromHash = () => {
+    const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el instanceof HTMLDetailsElement) el.open = true;
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const id = (link.getAttribute('href') || '').slice(1);
+      const el = document.getElementById(id);
+      if (el instanceof HTMLDetailsElement) el.open = true;
+    });
+  });
+</script>

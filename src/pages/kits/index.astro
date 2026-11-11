@@ -2,8 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { KITS } from '../../kits.js';
 ---
-<Base title="PHP & Laravel Interview Kits and Dev Tools 2026" description="PHP and Laravel interview prep kits, mock interview packs and a Razorpay + GST billing kit for Laravel by Raghav, available on Topmate.">
+<Base title="PHP & Laravel Interview Kits and Dev Tools 2026" description="PHP and Laravel interview prep kits, mock interview packs and a Razorpay + GST billing kit for Laravel by Raghav, available on Topmate." cta={false}>
 <section class="prose"><h1>PHP &amp; Laravel dev kits</h1><p>Practice kits and tools made by Raghav, a PHP/Laravel developer with 6 years of experience. Each is sold on Topmate; prices are as listed there.</p></section>
-<div class="grid kits">{KITS.map(k => <article class="card"><h2><a href={`/kits/${k.slug}/`}>{k.title}</a></h2><p>{k.intro}</p><p><strong>{k.price}</strong></p></article>)}</div>
+<div class="pub-list">{KITS.map(k => <article class="entry"><div><h2 class="entry-title"><a href={`/kits/${k.slug}/`}>{k.title}</a></h2><p class="dek">{k.intro}</p><p class="row-meta">{k.price}</p></div></article>)}</div>
 </Base>
-<style>.kits{max-width:1040px;margin:24px auto}.kits .card{padding:20px}.kits h2{font-size:20px}</style>

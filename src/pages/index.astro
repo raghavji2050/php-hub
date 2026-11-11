@@ -4,86 +4,60 @@ import Card from '../components/Card.astro';
 import ChecklistCta from '../components/ChecklistCta.astro';
 import { list } from '../lib.js';
 import { TOOLS } from '../data/tools.js';
-import { PATHS } from '../data/paths.js';
-import { PACKAGES } from '../data/services.js';
 const briefs = list('briefs');
+const latest = briefs[0];
 const lessons = list('lessons').slice(0, 5);
 const articles = list('articles');
 const popularSlugs = ['php-security-checker', 'php-formatter', 'composer-analyzer', 'json-formatter', 'jwt-decoder', 'cron-generator'];
 const popular = popularSlugs.map((slug) => TOOLS.find((tool) => tool.slug === slug)).filter(Boolean);
-const description = 'Your developer hub for PHP tutorials, security intelligence, practical tools, and modern development resources.';
+const description = 'Security briefs and practical lessons for PHP, Laravel and WordPress, written by Raghav and checked against official sources.';
+const sevName = (latest?.severity || '').toLowerCase();
+const sevClass = sevName === 'critical' || sevName === 'high' ? 'is-crit' : (latest?.severity || latest?.status) ? 'is-warn' : '';
+const sevText = latest ? [latest.severity, latest.status].filter(Boolean).join(' · ') : '';
 ---
-<Base title="Secure Your PHP Applications. Build Better. Stay Updated." description={description}>
-<section class="hero">
-  <div class="hero-copy">
-    <p class="eyebrow">PHP Hub</p>
-    <h1>Secure Your PHP Applications. Build Better. Stay Updated.</h1>
-    <p class="lead">{description}</p>
-    <div class="actions">
-      <a class="btn primary" href="/lessons">Explore Tutorials</a>
-      <a class="btn secondary" href="/tools">PHP Security Tools</a>
-      <a class="btn secondary" href="/security">Latest Vulnerabilities</a>
-    </div>
-  </div>
+<Base description={description}>
+<header class="masthead">
+  <h1>Security briefs and lessons for PHP, Laravel, and WordPress.</h1>
+  <p class="lead">Written by Raghav. When a vulnerability matters, a brief names the affected versions and the fix. Lessons cover the defenses you should already be using. Claims are checked against the official sources they name.</p>
+  <p class="byline">By <a href="/about/">Raghav</a> · PHP Hub · Mohali</p>
+</header>
+
+{latest && <section aria-labelledby="brief-title">
+  <div class="sec-head"><h2 id="brief-title">Latest brief</h2><a href="/briefs">All briefs</a></div>
+  <article class="featured">
+    <p class="meta-row">
+      {sevText && <span class:list={['sev', sevClass]}>{sevText}</span>}
+      {latest.dateLabel && <time datetime={latest.date}>{latest.dateLabel}</time>}
+      <span>{latest.readingTime} min read</span>
+    </p>
+    <h3><a href={latest.url}>{latest.title}</a></h3>
+    {latest.summary && <p class="dek">{latest.summary}</p>}
+  </article>
+</section>}
+
+<section aria-labelledby="lessons-title">
+  <div class="sec-head"><h2 id="lessons-title">Recent lessons</h2><a href="/lessons">All lessons</a></div>
+  {lessons.map((item) => <Card item={item} section="lessons" level="h3" />)}
 </section>
 
-<section aria-labelledby="news-title">
-  <div class="sec-head"><h2 id="news-title">Latest PHP Security News</h2><a href="/briefs">All briefs</a></div>
-  <div class="grid">{briefs.map((item) => <Card item={item} section="briefs" level="h3" />)}</div>
-</section>
-
-<section aria-labelledby="tutorials-title">
-  <div class="sec-head"><h2 id="tutorials-title">Featured Tutorials</h2><a href="/lessons">All lessons</a></div>
-  <div class="grid">{lessons.map((item) => <Card item={item} section="lessons" level="h3" />)}</div>
-  <h3>Latest articles</h3>
-  <ul>{articles.map((item) => <li><a href={item.url}>{item.title}</a></li>)}</ul>
-</section>
-
-<section aria-labelledby="tools-title">
-  <div class="sec-head"><h2 id="tools-title">Popular Developer Tools</h2><a href="/tools">All tools</a></div>
-  <div class="grid">{popular.map((tool) => <a class="card" href={`/tools/${tool.slug}`}><span class="badge">{tool.group === 'php' ? 'PHP' : 'General'}</span><h3>{tool.title}</h3><p>{tool.blurb}</p></a>)}</div>
-</section>
-
-<section aria-labelledby="paths-title">
-  <div class="sec-head"><h2 id="paths-title">PHP Learning Paths</h2><a href="/learn">All paths</a></div>
-  <div class="grid">{PATHS.map((path) => <a class="card" href={`/learn/${path.slug}`}><h3>{path.title}</h3><p>{path.summary}</p></a>)}</div>
-</section>
-
-<section aria-labelledby="vuln-title">
-  <div class="sec-head"><h2 id="vuln-title">Latest Vulnerabilities</h2><a href="/security">Security dashboard</a></div>
-  <p>These rows are published PHP Hub briefs. This is not a scan of your site, and it does not add vulnerabilities that are not already written up here.</p>
-  <ul class="vuln-list">
-    {briefs.map((item) => <li>{item.severity && <span class={`badge sev-${item.severity.toLowerCase()}`}>{item.severity}</span>}<a href={item.url}>{item.title}</a>{item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}</li>)}
+<section aria-labelledby="articles-title">
+  <div class="sec-head"><h2 id="articles-title">Articles</h2><a href="/articles">All articles</a></div>
+  <ul class="plain-list">
+    {articles.map((item) => <li><a href={item.url}>{item.title}</a>{item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}</li>)}
   </ul>
 </section>
 
-<section aria-labelledby="resources-title">
-  <h2 id="resources-title">Recommended Resources</h2>
-  <div class="grid">
-    <a class="card" href="/start-here"><h3>Start here</h3><p>A short guide to the briefs, lessons, and articles already on the site.</p></a>
-    <a class="card" href="/kits/"><h3>Dev kits</h3><p>Interview and billing kits listed on Topmate, with the prices shown there.</p></a>
-    <a class="card" href="https://php-security-checker.vercel.app"><h3>Free PHP Security Checker</h3><p>A separate tool that checks a PHP version against published vulnerability data.</p></a>
+<section aria-labelledby="tools-title">
+  <div class="sec-head"><h2 id="tools-title">Tools</h2><a href="/tools">All tools</a></div>
+  <div class="tools-list">
+    {popular.map((tool) => <div><a href={`/tools/${tool.slug}`}>{tool.title}</a><p>{tool.blurb}</p></div>)}
   </div>
-  <ChecklistCta />
 </section>
 
-<section aria-labelledby="services-title">
-  <div class="sec-head"><h2 id="services-title">Professional PHP Services</h2><a href="/services">Service details</a></div>
-  <p>Fixed-scope audit packages. Every price is contact for quote.</p>
-  <div class="grid">{PACKAGES.map((item) => <article class="card"><h3>{item.name}</h3><p>{item.for}</p><p><strong>Price:</strong> Contact for quote</p><a class="btn primary" href="/contact">Request the {item.name}</a></article>)}</div>
+<section class="services-note" aria-labelledby="services-title">
+  <div class="sec-head"><h2 id="services-title">Services</h2><a href="/services">Service details</a></div>
+  <p>Authorized security audits, malware cleanup, and PHP, Laravel or WordPress upgrades, only for sites you own or are authorized to manage. <strong>Price: Contact for quote.</strong></p>
 </section>
+
+<ChecklistCta />
 </Base>
-<style>
-.hero{border:1px solid var(--glass-border);border-radius:28px;padding:40px 28px;margin:24px 0 40px;overflow:hidden;isolation:isolate;background:var(--glass);position:relative}
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(50% 60% at 10% 10%,color-mix(in srgb,var(--brand) 30%,transparent),transparent 70%),radial-gradient(45% 55% at 95% 90%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 70%)}
-.eyebrow{color:var(--brand);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:0}
-.hero h1{font-size:clamp(32px,6vw,52px);max-width:14em;margin:.2em 0 .3em;color:var(--text)}
-.lead{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:48em;margin:0 0 24px}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:8px}
-.sec-head a{font-weight:600;text-decoration:none}
-section{margin:0 0 36px}
-.vuln-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.vuln-list li{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;border:1px solid var(--glass-border);border-radius:12px;padding:12px 14px;background:var(--glass)}
-.vuln-list time{color:var(--muted);font-size:14px;margin-left:auto}
-@media (min-width:900px){.hero{padding:56px 48px}}
-</style>

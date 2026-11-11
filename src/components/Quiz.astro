@@ -56,9 +56,9 @@ const rows = questions.map((question) => ({ ...question, href: question.url || l
   });
 </script>
 <style>
-.quiz{border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:28px 0;background:var(--surface)}
+.quiz{border-top:1px solid var(--border);padding:18px 0;margin:28px 0;background:transparent}
 .quiz h2{margin-top:0}
-.quiz fieldset{border:1px solid var(--border);border-radius:12px;margin:0 0 12px;padding:12px}
+.quiz fieldset{border:1px solid var(--border);border-radius:4px;margin:0 0 12px;padding:12px}
 .quiz label{display:flex;gap:8px;align-items:flex-start;margin:6px 0}
 .quiz legend{font-weight:650;padding:0 6px}
 .quiz :global(.quiz-mark){font-weight:700;margin:8px 0 0}

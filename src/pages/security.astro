@@ -5,7 +5,7 @@ import { list, breadcrumbLd, SITE } from '../lib.js';
 import { loadExternalAdvisories } from '../lib/advisories.js';
 const briefs = list('briefs');
 const external = await loadExternalAdvisories();
-const crumbs = [{ href: '/', label: 'Home' }, { href: '/security', label: 'Security Intelligence' }];
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/security', label: 'Security' }];
 const filters = ['all', 'critical', 'high', 'medium', 'low'];
 const when = (value) => {
   if (!value) return '';
@@ -13,6 +13,7 @@ const when = (value) => {
   return Number.isNaN(date.getTime()) ? value : date.toISOString().slice(0, 10);
 };
 const severity = (value) => ['critical', 'high', 'medium', 'low'].includes(String(value || '').toLowerCase()) ? String(value).toLowerCase() : '';
+const sevClass = (value) => value === 'critical' || value === 'high' ? 'is-crit' : value ? 'is-warn' : '';
 const itemList = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -25,10 +26,10 @@ const itemList = {
   })),
 };
 ---
-<Base title="Security Intelligence" description="Published PHP Hub security briefs, plus build-time snapshots from official PHP, Laravel, Symfony, and WordPress advisory sources when the build can reach them. Not a live vulnerability scanner." jsonld={[breadcrumbLd(crumbs), itemList]}>
+<Base title="Security Intelligence" description="Published PHP Hub security briefs, plus build-time snapshots from official PHP, Laravel, Symfony, and WordPress advisory sources when the build can reach them. Not a live vulnerability scanner." jsonld={[breadcrumbLd(crumbs), itemList]} cta={false}>
 <Breadcrumbs items={crumbs} />
 <div data-pagefind-body>
-  <h1>Security Intelligence</h1>
+  <h1>Security</h1>
   <p>This page lists security briefs published on PHP Hub and, when a build can reach them, public advisories from the project sources named below. It is educational information. It is not a live vulnerability scanner and it does not test your server.</p>
   <p class="meta">Official sources last fetched at build time: <time datetime={external.fetchedAt}>{external.fetchedAt.replace('T', ' ').replace(/\.\d+Z$/, ' UTC')}</time></p>
   <div class="filters" role="group" aria-label="Filter by severity">
@@ -41,17 +42,17 @@ const itemList = {
     <h2 id="briefs-title">PHP Hub briefs</h2>
     {briefs.length ? briefs.map((item) => {
       const sev = severity(item.severity);
+      const label = [item.severity, item.status].filter(Boolean).join(' · ');
       return (
-        <article class="card sec-card" data-sev={sev}>
-          <div class="badges">
-            {item.severity && <span class={`badge sev-${sev}`}>{item.severity}</span>}
-            {item.status && <span class="badge status">{item.status}</span>}
+        <article class="entry" data-sev={sev}>
+          {item.dateLabel && <time datetime={item.date}>{item.dateLabel}</time>}
+          <div>
+            {label && <p class="meta-row"><span class:list={['sev', sevClass(sev)]}>{label}</span></p>}
+            <h3 class="entry-title"><a href={item.url}>{item.title}</a></h3>
+            {item.summary && <p class="dek">{item.summary}</p>}
+            {item.affected && <details class="affected"><summary>Affected / fixed versions from this brief</summary><div class="pre-scroll"><pre class="tool-output">{item.affected}</pre></div></details>}
+            {item.sources.length > 0 && <p class="sec-sources">Sources: {item.sources.map((source, index) => <>{index > 0 && ' · '}<a href={source.href}>{source.label}</a></>)}</p>}
           </div>
-          <h3><a href={item.url}>{item.title}</a></h3>
-          {item.dateLabel && <p class="meta"><time datetime={item.date}>{item.dateLabel}</time></p>}
-          {item.summary && <p>{item.summary}</p>}
-          {item.affected && <section><h4>Affected / fixed versions from this brief</h4><pre class="tool-output">{item.affected}</pre></section>}
-          {item.sources.length > 0 && <p>Sources: {item.sources.map((source, index) => <>{index > 0 && ' · '}<a href={source.href}>{source.label}</a></>)}</p>}
         </article>
       );
     }) : <p>No security briefs are published yet.</p>}
@@ -63,28 +64,30 @@ const itemList = {
     {external.sources.map((source) => (
       <section class="source-block" aria-labelledby={`source-${source.id}`}>
         <h3 id={`source-${source.id}`}>{source.name}</h3>
-        <p class="meta">Source: <a href={source.page}>{source.page}</a></p>
+        <p class="meta sec-sources">Source: <a href={source.page}>{source.page}</a></p>
         {!source.ok && <p class="notice" role="status">{source.error} No records are shown for this source.</p>}
         {source.ok && source.items.length === 0 && <p class="notice" role="status">The source responded and returned no advisories for this request. Nothing was added in their place.</p>}
-        {source.items.map((item) => {
-          const sev = severity(item.severity);
-          return (
-            <article class="card sec-card" data-sev={sev}>
-              <div class="badges">{sev && <span class={`badge sev-${sev}`}>{sev}</span>}</div>
-              <h4><a href={item.href}>{item.title}</a></h4>
-              <p class="meta">
-                {item.ghsa && <span>{item.ghsa}</span>}
-                {item.cve && <span> · {item.cve}</span>}
-                {item.published && <span> · <time datetime={when(item.published)}>{when(item.published)}</time></span>}
-              </p>
-              {item.packages?.length > 0 && (
-                <ul>
-                  {item.packages.map((pkg) => <li>{pkg.name}{pkg.range ? `: affected ${pkg.range}` : ''}{pkg.patched ? `; patched ${pkg.patched}` : ''}</li>)}
-                </ul>
-              )}
-            </article>
-          );
-        })}
+        {source.items.length > 0 && <ul class="sec-list">
+          {source.items.map((item) => {
+            const sev = severity(item.severity);
+            return (
+              <li data-sev={sev}>
+                <p class="meta-row">
+                  {sev && <span class:list={['sev', sevClass(sev)]}>{sev}</span>}
+                  {item.ghsa && <span>{item.ghsa}</span>}
+                  {item.cve && <span>{item.cve}</span>}
+                  {item.published && <time datetime={when(item.published)}>{when(item.published)}</time>}
+                </p>
+                <a href={item.href}>{item.title}</a>
+                {item.packages?.length > 0 && (
+                  <ul class="pkg-list">
+                    {item.packages.map((pkg) => <li>{pkg.name}{pkg.range ? `: affected ${pkg.range}` : ''}{pkg.patched ? `; patched ${pkg.patched}` : ''}</li>)}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+        </ul>}
       </section>
     ))}
   </section>
@@ -107,8 +110,13 @@ const itemList = {
   }));
 </script>
 <style>
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.sec-card{margin:12px 0}
-.source-block{margin:28px 0}
-.sec-card h4{margin:0}
+.source-block{margin:28px 0;min-width:0}
+.sec-list{list-style:none;margin:0;padding:0}
+.sec-list > li{border-bottom:1px solid var(--border);padding:12px 0;min-width:0}
+.sec-list > li > a{font-weight:600;color:var(--text);text-decoration:none}
+.sec-list > li > a:hover{color:var(--brand)}
+.pkg-list{margin:8px 0 0;padding-left:1.1em;color:var(--muted);font-size:14px}
+.pkg-list li,.sec-sources,.affected{overflow-wrap:anywhere}
+.affected{margin-top:8px}
+.affected summary{cursor:pointer;color:var(--brand);min-height:44px;display:flex;align-items:center}
 </style>
