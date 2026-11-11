@@ -8,4 +8,4 @@ export function getStaticPaths() {
 const { t } = Astro.props;
 ---
 <Base title={`Articles tagged #${t.name}`} description={`PHP Hub articles tagged ${t.name}.`}><p><a class="back" href="/articles">← All articles</a></p><h1>Articles: #{t.name}</h1>
-<div class="pub-list">{t.posts.map(p => <Card item={p} section="articles" level="h2" />)}</div></Base>
+<div class="photo-grid">{t.posts.map(p => <Card item={p} section="articles" level="h2" />)}</div></Base>

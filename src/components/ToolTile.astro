@@ -1,0 +1,28 @@
+---
+const { tool } = Astro.props;
+const slug = tool.slug;
+---
+<a class="tile" href={`/tools/${tool.slug}`}>
+  <div class="tile-screen" aria-hidden="true">
+    {slug === 'php-security-checker' && <p class="mini"><span class="mut">php -v</span><br/><span class="fn">checked locally</span><br/><span class="good">A version lookup, not a scan.</span></p>}
+    {slug === 'php-formatter' && <p class="mini"><span class="fn">&lt;?php</span><br/>echo <span class="good">"Hello"</span>;<br/>$sum = 1 + 2;</p>}
+    {slug === 'composer-analyzer' && <p class="mini"><span class="mut">composer.lock</span><br/>name <span class="good">constraint</span><br/><span class="mut">Scripts are not run.</span></p>}
+    {slug === 'json-formatter' && <p class="mini"><span class="fn">"ok"</span>: true<br/><span class="mut">pretty-print or the error</span></p>}
+    {slug === 'jwt-decoder' && <div class="jwt"><span class="a"></span><span class="b"></span><span class="c"></span></div>}
+    {slug === 'cron-generator' && <div class="cron"><i>*</i><i>*</i><i>*</i><i>*</i><i>*</i></div>}
+    {slug === 'php-version-compat' && <p class="mini"><span class="fn">php</span> <span class="good">8.x</span><br/><span class="mut">documented features only</span></p>}
+    {slug === 'laravel-artisan-reference' && <p class="mini"><span class="fn">php artisan</span><br/><span class="mut">docs, not invented flags</span></p>}
+    {slug === 'php-hash-generator' && <p class="mini"><span class="fn">sha256</span><br/><span class="mut">not password_hash()</span></p>}
+    {slug === 'php-code-validator' && <p class="mini">{'{ } [ ]' }<br/><span class="good">braces, quotes, comments</span><br/><span class="mut">PHP is not executed</span></p>}
+    {slug === 'json-minifier' && <p class="mini">{'{"ok":true}'}</p>}
+    {slug === 'sql-formatter' && <p class="mini"><span class="fn">SELECT</span> *<br/><span class="mut">FROM</span> posts</p>}
+    {slug === 'regex-tester' && <p class="mini"><span class="fn">/pattern/</span><br/><span class="mut">JavaScript, local</span></p>}
+    {slug === 'base64' && <p class="mini"><span class="fn">encode</span> / <span class="fn">decode</span><br/><span class="mut">stays in the browser</span></p>}
+    {slug === 'url-encoder' && <p class="mini"><span class="fn">%20</span><br/><span class="mut">encodeURIComponent</span></p>}
+    {slug === 'http-status-codes' && <p class="mini"><span class="good">200</span> OK<br/><span class="mut">404</span> Not Found</p>}
+    {slug === 'curl-builder' && <p class="mini"><span class="fn">curl</span> <span class="mut">-X</span> GET<br/><span class="mut">request is not sent</span></p>}
+    {!['php-security-checker','php-formatter','composer-analyzer','json-formatter','jwt-decoder','cron-generator','php-version-compat','laravel-artisan-reference','php-hash-generator','php-code-validator','json-minifier','sql-formatter','regex-tester','base64','url-encoder','http-status-codes','curl-builder'].includes(slug) && <p class="mini"><span class="fn">{tool.title}</span><br/><span class="mut">runs in the browser</span></p>}
+  </div>
+  <h3>{tool.title}</h3>
+  <p>{tool.blurb}</p>
+</a>

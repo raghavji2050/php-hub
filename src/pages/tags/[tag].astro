@@ -4,4 +4,4 @@ export function getStaticPaths() { return allTags().map(t => ({ params: { tag: t
 const { t } = Astro.props;
 ---
 <Base title={`#${t.name}`} description={`PHP Hub posts tagged ${t.name}.`}><p><a class="back" href="/tags">← All topics</a></p><h1>#{t.name}</h1>
-<div class="pub-list">{t.posts.map(p => <Card item={p} level="h2" />)}</div></Base>
+<div class="photo-grid">{t.posts.map(p => <Card item={p} level="h2" />)}</div></Base>

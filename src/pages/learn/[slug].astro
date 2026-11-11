@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Quiz from '../../components/Quiz.astro';
+import HeroImage from '../../components/HeroImage.astro';
 import { PATHS } from '../../data/paths.js';
 import { masterclassQuiz } from '../../data/quizzes.js';
 import { allPosts, breadcrumbLd } from '../../lib.js';
@@ -15,7 +16,7 @@ const modules = path.modules.map((mod) => {
   if (mod.href) return mod;
   const post = posts.find((item) => item.section === mod.section && item.slug === mod.slug);
   if (!post) throw new Error(`Missing learning-path target ${mod.section}/${mod.slug}`);
-  return { ...mod, href: post.url, title: post.title, summary: post.summary, readingTime: post.readingTime };
+  return { ...mod, href: post.url, title: post.title, summary: post.summary, readingTime: post.readingTime, hero: post.hero, heroAlt: post.heroAlt, severity: post.severity };
 });
 const published = modules.filter((mod) => !mod.soon && mod.href);
 const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learn' }, { href: `/learn/${path.slug}`, label: path.title }];
@@ -35,11 +36,16 @@ const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learn' }
       </li>
     ) : (
       <li class="module">
-        <h2><a href={mod.href}>{index + 1}. {mod.title}</a></h2>
-        {mod.summary && <p>{mod.summary}</p>}
-        {mod.note && <p>{mod.note}</p>}
-        <p class="meta">{mod.readingTime ? `${mod.readingTime} min read` : 'Page'}</p>
-        <label class="check-row"><input type="checkbox" data-path-check={path.slug} data-module={mod.id} /> Mark complete on this device</label>
+        <div class="module-row">
+          {mod.hero ? <HeroImage hero={mod.hero} alt="" width={160} height={90} fallback={false} sizes="120px" class="module-thumb" /> : <span class="ph">{mod.severity || 'Page'}</span>}
+          <div>
+            <h2><a href={mod.href}>{index + 1}. {mod.title}</a></h2>
+            {mod.summary && <p>{mod.summary}</p>}
+            {mod.note && <p>{mod.note}</p>}
+            <p class="meta">{mod.readingTime ? `${mod.readingTime} min read` : 'Page'}</p>
+            <label class="check-row"><input type="checkbox" data-path-check={path.slug} data-module={mod.id} /> Mark complete on this device</label>
+          </div>
+        </div>
       </li>
     ))}
   </ol>
@@ -57,6 +63,9 @@ const crumbs = [{ href: '/', label: 'Home' }, { href: '/learn', label: 'Learn' }
 .module h2{font-size:22px;margin:0 0 6px}
 .module h2 a{color:var(--text);text-decoration:none}
 .module h2 a:hover{color:var(--brand)}
+.module-row{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start}
+.module-row :global(img){width:120px;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--border)}
+@media (max-width:640px){.module-row{grid-template-columns:72px 1fr}}
 .module p{margin:0 0 8px;color:var(--muted)}
 .check-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px;color:var(--text)}
 </style>

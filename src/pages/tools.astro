@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ToolTile from '../components/ToolTile.astro';
 import { TOOLS } from '../data/tools.js';
 import { breadcrumbLd } from '../lib.js';
 const crumbs = [{ href: '/', label: 'Home' }, { href: '/tools', label: 'Tools' }];
@@ -17,10 +18,8 @@ const groups = [
   {groups.map(([id, label]) => (
     <section aria-labelledby={`tools-${id}`}>
       <h2 id={`tools-${id}`}>{label}</h2>
-      <div class="tools-list">
-        {TOOLS.filter((tool) => tool.group === id).map((tool) => (
-          <div><a href={`/tools/${tool.slug}`}>{tool.title}</a><p>{tool.blurb}</p></div>
-        ))}
+      <div class="tiles">
+        {TOOLS.filter((tool) => tool.group === id).map((tool) => <ToolTile tool={tool} />)}
       </div>
     </section>
   ))}

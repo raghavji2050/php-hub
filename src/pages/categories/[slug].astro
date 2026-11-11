@@ -12,4 +12,4 @@ const intros = {
 const [desc, intro] = intros[c.slug] ?? [`PHP Hub ${c.name} briefs, articles and lessons.`, `This is the ${c.name} section of PHP Hub, with fact-checked briefs, articles and lessons.`];
 ---
 <Base title={`${c.name} posts`} description={desc}><p><a class="back" href="/categories/">← All categories</a></p><h1>{c.name}</h1><p class="cat-intro">{intro}</p>
-{c.posts.length ? <div class="pub-list">{c.posts.map(p => <Card item={p} level="h2" />)}</div> : <p>No {c.name} posts yet.</p>}</Base>
+{c.posts.length ? <div class="photo-grid">{c.posts.map(p => <Card item={p} level="h2" />)}</div> : <p>No {c.name} posts yet.</p>}</Base>

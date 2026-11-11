@@ -14,11 +14,11 @@ const items = list('lessons');
 </div>}
 <p class="meta">Level is shown only when the lesson’s scope is clear. It is a reading guide, not a certification.</p>
 <p id="level-empty" hidden>No lessons at this level.</p>
-{items.length ? <div class="pub-list" id="lesson-list">{items.map(i => <Card item={i} section="lessons" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
+{items.length ? <div class="photo-grid" id="lesson-list">{items.map(i => <Card item={i} section="lessons" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
 </Base>
 <script>
   const buttons = [...document.querySelectorAll('[data-level-filter]')];
-  const rows = [...document.querySelectorAll('#lesson-list .entry')];
+  const rows = [...document.querySelectorAll('#lesson-list [data-level]')];
   const empty = document.getElementById('level-empty');
   buttons.forEach((button) => button.addEventListener('click', () => {
     const level = button.dataset.levelFilter;
