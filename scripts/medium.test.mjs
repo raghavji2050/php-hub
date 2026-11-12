@@ -16,16 +16,15 @@ test('Medium feed parser keeps only real Medium links and strips tracking', () =
   assert.equal(items[0].url, 'https://medium.com/@raghavji2050/dev-1');
 });
 
-test('dev posts are picked first, others top up to the minimum, newest first, India dates', () => {
-  const items = parseMediumFeed(feed);
-  assert.deepEqual(selectMediumPosts(items, { min: 1, max: 6 }).map((p) => p.title), ['Dev post & more']);
-  const posts = selectMediumPosts(items, { min: 2, max: 6 });
-  assert.deepEqual(posts.map((p) => p.title), ['Money post', 'Dev post & more']);
-  assert.equal(posts[1].dateLabel, '12 Nov 2026');
+test('only dev-tagged posts are shown, newest first, with India dates', () => {
+  const posts = selectMediumPosts(parseMediumFeed(feed));
+  assert.deepEqual(posts.map((p) => p.title), ['Dev post & more']);
+  assert.equal(posts[0].dateLabel, '12 Nov 2026');
 });
 
-test('committed fallback snapshot is valid and yields 4 to 6 posts', () => {
+test('committed fallback snapshot holds only dev posts', () => {
   const posts = selectMediumPosts(fallback.items);
-  assert.ok(posts.length >= 4 && posts.length <= 6);
+  assert.ok(posts.length >= 1 && posts.length <= 6);
+  assert.equal(posts.length, fallback.items.length);
   for (const p of posts) assert.match(p.url, /^https:\/\/medium\.com\/@raghavji2050\//);
 });

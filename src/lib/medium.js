@@ -6,8 +6,8 @@ import fallback from '../data/medium-fallback.json' with { type: 'json' };
 
 export const MEDIUM_PROFILE = 'https://medium.com/@raghavji2050';
 const FEED = 'https://medium.com/feed/@raghavji2050';
-// Posts tagged with any of these are picked first, because PHP Hub is a developer site;
-// other posts only top the list up to the minimum. The final list is newest first.
+// Only posts tagged with one of these are shown, because PHP Hub is a developer site.
+// Non-dev posts are never used to pad the list. Newest first.
 const DEV_TAGS = ['php', 'laravel', 'wordpress', 'symfony', 'security', 'cybersecurity', 'web-development', 'programming', 'software-development', 'nodejs', 'javascript', 'devops'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -37,14 +37,13 @@ function istDate(iso) {
   return { date: d.toISOString().slice(0, 10), dateLabel: `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}` };
 }
 
-export function selectMediumPosts(items, { min = 4, max = 6 } = {}) {
-  const byDate = [...items].sort((a, b) => b.published.localeCompare(a.published));
-  const isDev = (item) => item.categories.some((c) => DEV_TAGS.includes(c));
-  const dev = byDate.filter(isDev);
-  const rest = byDate.filter((item) => !isDev(item));
-  const chosen = [...dev.slice(0, max), ...rest.slice(0, Math.max(0, min - dev.length))];
-  return chosen
+export const isDevPost = (item) => item.categories.some((c) => DEV_TAGS.includes(c));
+
+export function selectMediumPosts(items, { max = 6 } = {}) {
+  return [...items]
+    .filter(isDevPost)
     .sort((a, b) => b.published.localeCompare(a.published))
+    .slice(0, max)
     .map((item) => ({ ...item, ...istDate(item.published) }));
 }
 
