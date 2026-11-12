@@ -1,6 +1,7 @@
 ---
 import ToolLayout from '../../components/ToolLayout.astro';
 import ToolApp from '../../components/ToolApp.astro';
+import CookieCheckerNotes from '../../components/CookieCheckerNotes.astro';
 import { TOOLS } from '../../data/tools.js';
 export function getStaticPaths() {
   return TOOLS.map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
@@ -9,4 +10,5 @@ const { tool } = Astro.props;
 ---
 <ToolLayout tool={tool}>
   <ToolApp tool={tool} />
+  {tool.slug === 'session-cookie-checker' && <CookieCheckerNotes />}
 </ToolLayout>

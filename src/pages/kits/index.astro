@@ -1,8 +1,24 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { KITS } from '../../kits.js';
+import { GUMROAD_PRODUCTS } from '../../data/gumroad.js';
+import { breadcrumbLd } from '../../lib.js';
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/kits/', label: 'Dev kits' }];
 ---
-<Base title="PHP & Laravel Interview Kits and Dev Tools 2026" description="PHP and Laravel interview prep kits, mock interview packs and a Razorpay + GST billing kit for Laravel by Raghav, available on Topmate." cta={false}>
-<section class="prose"><h1>PHP &amp; Laravel dev kits</h1><p>Practice kits and tools made by Raghav, a PHP/Laravel developer with 6 years of experience. Each is sold on Topmate; prices are as listed there.</p></section>
-<div class="pub-list">{KITS.map(k => <article class="entry"><div><h2 class="entry-title"><a href={`/kits/${k.slug}/`}>{k.title}</a></h2><p class="dek">{k.intro}</p><p class="row-meta">{k.price}</p></div></article>)}</div>
+<Base title="PHP & Laravel Dev Kits and Checklists" description="PHP and Laravel kits by Raghav: the $9 PHP Security Checklist, a Laravel deployment toolkit, system design and interview kits on Gumroad, plus interview and billing kits on Topmate." jsonld={[breadcrumbLd(crumbs)]} cta={false}>
+<Breadcrumbs items={crumbs} />
+<section class="prose"><h1>PHP &amp; Laravel dev kits</h1><p>Checklists, toolkits and practice kits made by Raghav, a PHP/Laravel developer with 6 years of experience. They are sold on Gumroad and Topmate; the prices below are as listed there.</p></section>
+
+<section aria-labelledby="kits-gumroad">
+  <div class="sec-head"><h2 id="kits-gumroad">On Gumroad</h2><a href="https://raghavji.gumroad.com" rel="noopener" target="_blank">Gumroad store</a></div>
+  <p class="row-meta">Prices in US dollars.</p>
+  <div class="pub-list">{GUMROAD_PRODUCTS.map((p) => <article class="entry"><p class="row-meta">{p.topic}</p><div><h3 class="entry-title"><a href={p.url} rel="noopener" target="_blank">{p.name}</a></h3><p class="row-meta">{p.price} · Gumroad</p></div></article>)}</div>
+</section>
+
+<section aria-labelledby="kits-topmate">
+  <div class="sec-head"><h2 id="kits-topmate">On Topmate</h2><a href="https://topmate.io/raghavji" rel="noopener" target="_blank">Topmate page</a></div>
+  <p class="row-meta">Prices in Indian rupees.</p>
+  <div class="pub-list">{KITS.map(k => <article class="entry"><p class="row-meta">{k.price}</p><div><h3 class="entry-title"><a href={`/kits/${k.slug}/`}>{k.title}</a></h3><p class="dek">{k.intro}</p></div></article>)}</div>
+</section>
 </Base>

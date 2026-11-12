@@ -13,12 +13,12 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = false, newsletter = true, canonical: canonicalOverride = '', pagefind = true } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = canonicalOverride || new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
-const fullTitle = title === 'PHP Hub' ? SITE.homeTitle : `${title} | PHP Hub`;
+const fullTitle = title === 'PHP Hub' ? SITE.homeTitle : /\bPHP Hub\b/.test(title) ? title : `${title} | PHP Hub`;
 const gsc = (import.meta.env.PUBLIC_GSC_VERIFICATION || SITE.gscVerification || '').trim();
 const imageUrl = new URL(image, SITE.url).href;
 const org = { '@context': 'https://schema.org', '@graph': [
-  { '@type': 'Organization', '@id': SITE.url + '/#organization', name: SITE.name, alternateName: ['PHPHub', 'PHP Hub'], url: SITE.url, logo: new URL('/icon-512.png', SITE.url).href, sameAs: SITE.sameAs },
-  { '@type': 'WebSite', '@id': SITE.url + '/#website', name: SITE.name, alternateName: ['PHPHub', 'PHP Hub'], url: SITE.url, publisher: { '@id': SITE.url + '/#organization' }, inLanguage: 'en' } ] };
+  { '@type': 'Organization', '@id': SITE.url + '/#organization', name: SITE.name, alternateName: ['PHPHub'], url: SITE.url + '/', logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', SITE.url).href, width: 512, height: 512 }, description: SITE.homeDescription, founder: { '@type': 'Person', name: 'Raghav', url: SITE.url + '/about' }, sameAs: SITE.sameAs },
+  { '@type': 'WebSite', '@id': SITE.url + '/#website', name: SITE.name, alternateName: ['PHPHub'], url: SITE.url + '/', description: SITE.homeDescription, publisher: { '@id': SITE.url + '/#organization' }, inLanguage: 'en' } ] };
 const primary = [['/briefs','Briefs'],['/lessons','Lessons'],['/tools','Tools'],['/services','Services']];
 const more = [['/articles','Articles'],['/security','Security'],['/learn','Learn'],['/start-here','Start here'],['/about','About'],['/kits/','Dev kits'],['/tags','Topics'],['/saved','Saved'],['/contact','Contact'],['/rss.xml','RSS'],['/responsible-disclosure','Responsible disclosure'],['/authorized-work','Authorized work'],['/privacy','Privacy'],['/terms','Terms']];
 const current = (href) => {
@@ -192,6 +192,23 @@ button.chip[aria-pressed="true"]{background:var(--brand-soft);border-color:var(-
 .tool-structured:empty{display:none}
 .tool-structured h3{font-size:18px;margin:1em 0 .4em}
 .tool-structured pre,.tool-structured .notice{white-space:pre-wrap;overflow-wrap:anywhere}
+.tool-app.stack{grid-template-columns:minmax(0,1fr)}
+.cookie-summary{font-weight:600;margin:.8em 0 .2em}
+.tool-structured h3.cookie-name{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-family:var(--mono);font-size:16px;overflow-wrap:anywhere;border-top:1px solid var(--border);padding-top:14px;margin-top:14px}
+.cookie-note{margin:0 0 8px;color:var(--muted);font-size:14px}
+.cookie-table-wrap{overflow-x:auto;max-width:100%}
+.cookie-table{border-collapse:collapse;width:100%;font-size:14px}
+.cookie-table th,.cookie-table td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--border)}
+.cookie-table thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.cookie-table tbody th{font-weight:600;white-space:nowrap}
+.cookie-tip{margin-top:4px;color:var(--muted);font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere}
+.cookie-badge{display:inline-block;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--border);border-radius:var(--radius);color:var(--muted)}
+.cookie-badge.is-pass{color:var(--ok-text);background:var(--ok-bg);border-color:var(--ok-border)}
+.cookie-badge.is-warn{color:var(--notice-text);background:var(--notice-bg);border-color:var(--notice-border)}
+.cookie-badge.is-fail{color:var(--err-text);background:var(--err-bg);border-color:var(--err-border)}
+.cookie-notes pre{overflow-x:auto}
+@media (max-width:560px){.cookie-table thead{display:none}.cookie-table tr{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 12px;padding:10px 0;border-bottom:1px solid var(--border)}.cookie-table th,.cookie-table td{border:0;padding:0}.cookie-table td:last-child{grid-column:1/-1}}
+.cookie-notes .sources li{margin:.35em 0}
 .tool-grid{display:grid;gap:12px}
 .check-row{display:flex;gap:8px;align-items:flex-start}
 .command-card h3{font-size:16px}

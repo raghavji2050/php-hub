@@ -163,6 +163,7 @@ Without strict mode, PHP happily created a session under the attacker's chosen I
 ## Quick audit checklist
 
 - Plain PHP: confirm `session.use_strict_mode=1`, `session.cookie_httponly=1`, `session.cookie_secure=1` and a `session.cookie_samesite` value in production (`php -i | grep session` or `phpinfo()`).
+- Check the flags your server actually sends: paste `curl -I https://your-site.example` output into the free [Session Cookie Flag Checker](/tools/session-cookie-checker) (runs in your browser).
 - Search for login code that sets `$_SESSION['user_id']` without a `session_regenerate_id(true)` call first.
 - Laravel: set `SESSION_SECURE_COOKIE=true` on HTTPS, and don't set `SESSION_HTTP_ONLY=false` or `SESSION_SAME_SITE=none` without a clear reason.
 - Custom Laravel login controllers: look for `$request->session()->regenerate()` after `Auth::attempt()`, and `invalidate()` plus `regenerateToken()` on logout.

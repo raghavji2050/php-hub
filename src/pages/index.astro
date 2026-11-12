@@ -6,7 +6,8 @@ import HeroPlate from '../components/HeroPlate.astro';
 import HeroImage from '../components/HeroImage.astro';
 import Icons from '../components/Icons.astro';
 import ToolTile from '../components/ToolTile.astro';
-import { list } from '../lib.js';
+import { list, SITE } from '../lib.js';
+import { getMediumPosts, MEDIUM_PROFILE } from '../lib/medium.js';
 import { TOOLS } from '../data/tools.js';
 const briefs = list('briefs');
 const lessons = list('lessons');
@@ -14,11 +15,12 @@ const articles = list('articles');
 const latestBrief = briefs[0];
 const cover = lessons[0];
 const recentLessons = lessons.slice(1, 5);
-const popularSlugs = ['php-security-checker', 'php-formatter', 'composer-analyzer', 'json-formatter', 'jwt-decoder', 'cron-generator'];
+const popularSlugs = ['session-cookie-checker', 'php-security-checker', 'php-formatter', 'composer-analyzer', 'json-formatter', 'jwt-decoder'];
 const popular = popularSlugs.map((slug) => TOOLS.find((tool) => tool.slug === slug)).filter(Boolean);
 const tokenLesson = lessons.find((item) => item.slug.includes('secure-random-tokens'));
 const plateLabel = tokenLesson?.dateLabel ? `${tokenLesson.dateLabel} lesson` : 'Example';
-const description = 'Security briefs and practical lessons for PHP, Laravel and WordPress, written by Raghav and checked against official sources.';
+const description = SITE.homeDescription;
+const { posts: mediumPosts } = await getMediumPosts();
 const sevName = (item) => (item?.severity || '').toLowerCase();
 const sevClass = (item) => {
   const sev = sevName(item);
@@ -102,6 +104,17 @@ const stats = [
     </li>)}
   </ul>
 </section>
+
+{mediumPosts.length > 0 && <section aria-labelledby="medium-title">
+  <div class="sec-head"><h2 id="medium-title">On Medium</h2><a href={MEDIUM_PROFILE} rel="noopener" target="_blank">All posts on Medium</a></div>
+  <ul class="thumb-list medium-list">
+    {mediumPosts.map((post) => <li>
+      <span class="ph" aria-hidden="true">Medium</span>
+      <a href={post.url} rel="noopener" target="_blank">{post.title}<span class="sr-only"> (opens Medium in a new tab)</span></a>
+      <time datetime={post.date}>{post.dateLabel}</time>
+    </li>)}
+  </ul>
+</section>}
 
 <section class="tools-band" aria-labelledby="tools-title">
   <div class="sec-head"><h2 id="tools-title">Tools</h2><a href="/tools">All {TOOLS.length} tools</a></div>
