@@ -1,5 +1,5 @@
 import {
-  analyzeComposer, buildCurl, checkPhpVersion, decodeBase64, decodeJwt, describeCron,
+  analyzeComposer, buildCurl, checkCookies, checkPhpVersion, decodeBase64, decodeJwt, describeCron,
   digestHex, encodeBase64, formatJson, formatPhp, formatSql, nextCronRuns, transformUrl, validatePhp,
 } from './tool-logic.js';
 
@@ -385,6 +385,44 @@ function showStatus(root) {
   });
 }
 
+const COOKIE_STATUS = { pass: 'Pass', warn: 'Warn', fail: 'Fail', info: 'Info' };
+function showCookies(root) {
+  root.addEventListener('tool-run', () => {
+    const result = checkCookies(value(root, 'input'));
+    const box = root.querySelector('[data-structured]');
+    setOutput(root, '');
+    if (!result.ok) { setError(root, result.error); clearStructured(root); return; }
+    setError(root, '');
+    box.replaceChildren();
+    const lines = [];
+    const counts = { pass: 0, warn: 0, fail: 0 };
+    for (const r of result.results) counts[r.status] += 1;
+    add(box, 'p', `${result.results.length} cookie${result.results.length === 1 ? '' : 's'} checked: ${counts.fail} fail, ${counts.warn} warn, ${counts.pass} pass.`, 'cookie-summary');
+    for (const r of result.results) {
+      const head = add(box, 'h3', r.name || '(no name)', 'cookie-name');
+      add(head, 'span', COOKIE_STATUS[r.status], `cookie-badge is-${r.status}`);
+      if (r.kind === 'session') add(box, 'p', 'Likely a session cookie. Treat it like a password.', 'cookie-note');
+      if (r.kind === 'xsrf') add(box, 'p', 'Laravel CSRF cookie. It is meant to be readable by JavaScript.', 'cookie-note');
+      const wrap = add(box, 'div', null, 'cookie-table-wrap');
+      const table = add(wrap, 'table', null, 'cookie-table');
+      const hrow = add(add(table, 'thead'), 'tr');
+      for (const h of ['Check', 'Result', 'What it means and how to fix it']) add(hrow, 'th', h).scope = 'col';
+      const body = add(table, 'tbody');
+      lines.push(`${r.name || '(no name)'}: ${COOKIE_STATUS[r.status]}`);
+      for (const c of r.checks) {
+        const tr = add(body, 'tr');
+        add(tr, 'th', c.label).scope = 'row';
+        add(add(tr, 'td'), 'span', COOKIE_STATUS[c.status], `cookie-badge is-${c.status}`);
+        const td = add(tr, 'td', c.detail);
+        if (c.tip) add(td, 'div', `Fix: ${c.tip}`, 'cookie-tip');
+        lines.push(`  ${c.label}: ${COOKIE_STATUS[c.status]}. ${c.detail}${c.tip ? ` Fix: ${c.tip}` : ''}`);
+      }
+      if (r.unknown.length) add(box, 'p', `Other attributes not checked: ${r.unknown.join(', ')}.`, 'meta');
+    }
+    root.dataset.copyText = lines.join('\n');
+  });
+}
+
 const runners = {
   'php-formatter': showPhpFormat,
   'php-code-validator': showPhpValidate,
@@ -402,6 +440,7 @@ const runners = {
   'curl-builder': showCurl,
   'laravel-artisan-reference': showArtisan,
   'http-status-codes': showStatus,
+  'session-cookie-checker': showCookies,
 };
 
 export function bootTools(root = document) {

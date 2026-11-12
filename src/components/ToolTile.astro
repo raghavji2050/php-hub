@@ -4,6 +4,7 @@ const slug = tool.slug;
 ---
 <a class="tile" href={`/tools/${tool.slug}`}>
   <div class="tile-screen" aria-hidden="true">
+    {slug === 'session-cookie-checker' && <p class="mini"><span class="fn">Set-Cookie</span>: sid=…<br/><span class="good">Secure; HttpOnly</span><br/><span class="mut">SameSite=Lax</span></p>}
     {slug === 'php-security-checker' && <p class="mini"><span class="mut">php -v</span><br/><span class="fn">checked locally</span><br/><span class="good">A version lookup, not a scan.</span></p>}
     {slug === 'php-formatter' && <p class="mini"><span class="fn">&lt;?php</span><br/>echo <span class="good">"Hello"</span>;<br/>$sum = 1 + 2;</p>}
     {slug === 'composer-analyzer' && <p class="mini"><span class="mut">composer.lock</span><br/>name <span class="good">constraint</span><br/><span class="mut">Scripts are not run.</span></p>}
@@ -21,7 +22,7 @@ const slug = tool.slug;
     {slug === 'url-encoder' && <p class="mini"><span class="fn">%20</span><br/><span class="mut">encodeURIComponent</span></p>}
     {slug === 'http-status-codes' && <p class="mini"><span class="good">200</span> OK<br/><span class="mut">404</span> Not Found</p>}
     {slug === 'curl-builder' && <p class="mini"><span class="fn">curl</span> <span class="mut">-X</span> GET<br/><span class="mut">request is not sent</span></p>}
-    {!['php-security-checker','php-formatter','composer-analyzer','json-formatter','jwt-decoder','cron-generator','php-version-compat','laravel-artisan-reference','php-hash-generator','php-code-validator','json-minifier','sql-formatter','regex-tester','base64','url-encoder','http-status-codes','curl-builder'].includes(slug) && <p class="mini"><span class="fn">{tool.title}</span><br/><span class="mut">runs in the browser</span></p>}
+    {!['session-cookie-checker','php-security-checker','php-formatter','composer-analyzer','json-formatter','jwt-decoder','cron-generator','php-version-compat','laravel-artisan-reference','php-hash-generator','php-code-validator','json-minifier','sql-formatter','regex-tester','base64','url-encoder','http-status-codes','curl-builder'].includes(slug) && <p class="mini"><span class="fn">{tool.title}</span><br/><span class="mut">runs in the browser</span></p>}
   </div>
   <h3>{tool.title}</h3>
   <p>{tool.blurb}</p>

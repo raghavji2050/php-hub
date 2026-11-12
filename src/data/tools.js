@@ -1,5 +1,15 @@
 export const TOOLS = [
   {
+    slug: 'session-cookie-checker',
+    group: 'php',
+    title: 'Session Cookie Flag Checker',
+    seoTitle: 'Session Cookie Flag Checker (Secure, HttpOnly, SameSite)',
+    blurb: 'Check Secure, HttpOnly, SameSite and prefixes on Set-Cookie lines. Runs locally.',
+    description: 'Check Set-Cookie headers or curl -I output for Secure, HttpOnly, SameSite, Path, Domain, expiry and __Host- prefixes, with PHP and Laravel fixes. Runs in your browser.',
+    limitation: 'This reads the header text you paste. It does not request your site, cannot see cookies set by JavaScript, and cannot tell how a particular browser will treat them. Cookie values are not decoded or stored. Do not paste live session cookies from production; redact the value first.',
+    instructions: 'Run curl -I https://your-site.example (or copy Set-Cookie lines from your browser’s network panel), paste the output, then choose Check. Example loads sample Laravel and PHP cookies.',
+  },
+  {
     slug: 'php-formatter',
     group: 'php',
     title: 'PHP Formatter',

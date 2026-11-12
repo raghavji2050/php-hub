@@ -5,7 +5,8 @@ const all = {
 };
 const raw = import.meta.glob('./content/*/*.md', { eager: true, query: '?raw', import: 'default' });
 export const SITE = { url: 'https://php-hub-rj.vercel.app', name: 'PHP Hub', description: 'Security briefs and practical lessons for PHP, Laravel and WordPress, written by Raghav and checked against official sources.',
-  homeTitle: 'PHP Hub — PHP, Laravel and WordPress security briefs and lessons',
+  homeTitle: 'PHP Hub: PHP, Laravel & WordPress Security Lessons and Free Tools',
+  homeDescription: 'PHP Hub: security briefs, practical lessons and free browser tools for PHP, Laravel and WordPress, written by Raghav and checked against official sources.',
   sameAs: ['https://medium.com/@raghavji2050', 'https://github.com/raghavji2050'],
   // Google Search Console verification code; set here or via PUBLIC_GSC_VERIFICATION. Empty = no meta tag.
   gscVerification: 'rE5wA0YQEuBOKMiP8jOhXePlFCnfh85Fya2Sy-1Gn3E' };

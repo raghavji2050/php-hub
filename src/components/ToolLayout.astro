@@ -9,7 +9,7 @@ const crumbs = [
   { href: `/tools/${tool.slug}`, label: tool.title },
 ];
 ---
-<Base title={tool.title} description={tool.description} jsonld={[breadcrumbLd(crumbs)]} cta={false}>
+<Base title={tool.seoTitle || tool.title} description={tool.description} jsonld={[breadcrumbLd(crumbs)]} cta={false}>
   <Breadcrumbs items={crumbs} />
   <article class="page-prose tool-page" data-pagefind-body>
     <p class="eyebrow">Tool</p>

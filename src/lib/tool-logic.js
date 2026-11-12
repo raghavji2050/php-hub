@@ -720,3 +720,159 @@ export function buildCurl(input) {
   parts.push(shellQuote(rawUrl));
   return { ok: true, output: parts.join(' '), sent: false };
 }
+
+// ---------------------------------------------------------------------------
+// Session Cookie Flag Checker. Pure text parsing; nothing is fetched or run.
+// Rules follow MDN Set-Cookie and draft-ietf-httpbis-rfc6265bis-22 (storage
+// model steps 19-21, prefixes matched case-insensitively, 400-day age limit).
+// ---------------------------------------------------------------------------
+const COOKIE_AGE_LIMIT = 400 * 24 * 60 * 60;
+
+export function parseSetCookieInput(text) {
+  const lines = String(text || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const headerRe = /^(?:[<>]\s*)?set-cookie\s*:\s*/i;
+  const hasHeaders = lines.some((line) => headerRe.test(line));
+  const cookies = [];
+  for (const line of lines) {
+    if (hasHeaders && !headerRe.test(line)) continue;
+    const raw = line.replace(headerRe, '');
+    if (!hasHeaders && (/^HTTP\/\d/i.test(raw) || /^[A-Za-z0-9-]+\s*:\s/.test(raw))) continue;
+    cookies.push(parseSetCookie(raw));
+  }
+  return cookies;
+}
+
+export function parseSetCookie(raw) {
+  const parts = String(raw).split(';');
+  const pair = parts.shift() || '';
+  const eq = pair.indexOf('=');
+  const name = eq === -1 ? '' : pair.slice(0, eq).trim();
+  const value = eq === -1 ? pair.trim() : pair.slice(eq + 1).trim();
+  const attrs = { secure: false, httponly: false, partitioned: false, samesite: null, path: null, domain: null, maxAge: null, expires: null };
+  const unknown = [];
+  for (const part of parts) {
+    const i = part.indexOf('=');
+    const key = (i === -1 ? part : part.slice(0, i)).trim().toLowerCase();
+    const val = i === -1 ? '' : part.slice(i + 1).trim();
+    if (!key) continue;
+    if (key === 'secure') attrs.secure = true;
+    else if (key === 'httponly') attrs.httponly = true;
+    else if (key === 'partitioned') attrs.partitioned = true;
+    else if (key === 'samesite') attrs.samesite = val;
+    else if (key === 'path') attrs.path = val;
+    else if (key === 'domain') attrs.domain = val;
+    else if (key === 'max-age') attrs.maxAge = val;
+    else if (key === 'expires') attrs.expires = val;
+    else unknown.push(key);
+  }
+  return { raw: String(raw), name, value, hasPair: eq !== -1, attrs, unknown };
+}
+
+export function cookieKind(name) {
+  const n = String(name || '').toLowerCase();
+  if (n === 'xsrf-token') return 'xsrf';
+  if (n === 'phpsessid') return 'session';
+  if (n.startsWith('wordpress_logged_in_')) return 'session';
+  if (/^(?:__host-|__secure-)?[a-z0-9]+(?:[_-][a-z0-9]+)*[_-]session$/.test(n)) return 'session';
+  return 'other';
+}
+
+const TIPS = {
+  secure: 'PHP: session.cookie_secure=1 or session_set_cookie_params([\'secure\' => true]). Laravel: SESSION_SECURE_COOKIE=true (config/session.php \'secure\').',
+  httponly: 'PHP: session.cookie_httponly=1 or session_set_cookie_params([\'httponly\' => true]). Laravel: keep \'http_only\' => true in config/session.php.',
+  samesite: 'PHP 7.3+: session.cookie_samesite="Lax" or session_set_cookie_params([\'samesite\' => \'Lax\']). Laravel: \'same_site\' => \'lax\' (the default) in config/session.php.',
+  path: 'PHP: session.cookie_path="/" (the default). Laravel: \'path\' => \'/\' (SESSION_PATH).',
+  domain: 'PHP: leave session.cookie_domain empty for a host-only cookie. Laravel: leave SESSION_DOMAIN unset unless subdomains must share the session.',
+};
+
+function check(list, label, status, detail, tip = '') {
+  list.push({ label, status, detail, tip });
+}
+
+export function analyzeCookie(cookie, now = Date.now()) {
+  const kind = cookieKind(cookie.name);
+  const a = cookie.attrs;
+  const lower = cookie.name.toLowerCase();
+  const checks = [];
+  if (!cookie.hasPair || !cookie.name) {
+    check(checks, 'Name', 'fail', cookie.hasPair ? 'The cookie name is empty.' : 'No name=value pair was found before the first semicolon.');
+  }
+  const sensitive = kind === 'session';
+  // Secure
+  if (a.secure) check(checks, 'Secure', 'pass', 'Sent only over HTTPS.');
+  else check(checks, 'Secure', sensitive ? 'fail' : 'warn', 'Missing. The browser will also send this cookie over plain HTTP.', TIPS.secure);
+  // HttpOnly
+  if (a.httponly) check(checks, 'HttpOnly', 'pass', 'JavaScript cannot read it through document.cookie.');
+  else if (kind === 'xsrf') check(checks, 'HttpOnly', 'info', 'Not set, and that is intended: Laravel sends XSRF-TOKEN so JavaScript (for example Axios) can copy it into the X-XSRF-TOKEN header.');
+  else check(checks, 'HttpOnly', sensitive ? 'fail' : 'warn', 'Missing. Any script on the page, including injected script, can read this cookie.', TIPS.httponly);
+  // SameSite
+  const ss = a.samesite == null ? null : a.samesite.toLowerCase();
+  if (ss === 'strict' || ss === 'lax') check(checks, 'SameSite', 'pass', `${ss === 'strict' ? 'Strict' : 'Lax'}.`);
+  else if (ss === 'none' && !a.secure) check(checks, 'SameSite', 'fail', 'SameSite=None without Secure. Browsers that follow the current cookie spec reject this cookie.', 'Add Secure, or use Lax if the cookie does not need cross-site requests.');
+  else if (ss === 'none') check(checks, 'SameSite', 'warn', 'None: sent on cross-site requests too. Use it only when you need that (embeds, cross-site APIs).', TIPS.samesite);
+  else if (ss === null) check(checks, 'SameSite', 'warn', 'Not set. Some browsers default to Lax, others do not. Set it explicitly.', TIPS.samesite);
+  else check(checks, 'SameSite', 'warn', `Unrecognised value "${a.samesite}". Use Strict, Lax or None.`, TIPS.samesite);
+  // Path
+  if (a.path === '/') check(checks, 'Path', 'pass', 'Path=/ (the whole site).');
+  else if (a.path == null || a.path === '') check(checks, 'Path', 'info', 'Not set. It defaults to the directory of the URL that set the cookie.', TIPS.path);
+  else check(checks, 'Path', 'info', `Path=${a.path}. Path limits where the cookie is sent; it is not a security boundary.`);
+  // Domain
+  if (a.domain == null || a.domain === '') check(checks, 'Domain', 'pass', 'Not set, so the cookie is host-only (not sent to subdomains).');
+  else check(checks, 'Domain', sensitive ? 'warn' : 'info', `Domain=${a.domain}. The cookie is also sent to every subdomain.`, sensitive ? TIPS.domain : '');
+  // Max-Age / Expires
+  const expiry = [];
+  let expStatus = 'info';
+  let maxAge = null;
+  if (a.maxAge != null) {
+    if (/^-?\d+$/.test(a.maxAge)) {
+      maxAge = Number(a.maxAge);
+      if (maxAge <= 0) expiry.push(`Max-Age=${a.maxAge} deletes the cookie.`);
+      else {
+        expiry.push(`Max-Age=${maxAge} seconds (${formatSpan(maxAge)}).`);
+        if (maxAge > COOKIE_AGE_LIMIT) { expStatus = 'warn'; expiry.push('That is over 400 days; the cookie spec draft tells browsers to cap lifetimes at 400 days.'); }
+      }
+    } else { expStatus = 'warn'; expiry.push(`Max-Age "${a.maxAge}" is not a whole number, so browsers ignore it.`); }
+  }
+  if (a.expires != null) {
+    const t = Date.parse(a.expires);
+    if (Number.isNaN(t)) { expStatus = 'warn'; expiry.push(`Expires "${a.expires}" is not a date this checker can read.`); }
+    else if (maxAge != null) expiry.push('Expires is also set; Max-Age takes precedence.');
+    else if (t <= now) expiry.push('Expires is in the past, so this deletes the cookie.');
+    else {
+      const secs = Math.round((t - now) / 1000);
+      expiry.push(`Expires in about ${formatSpan(secs)}.`);
+      if (secs > COOKIE_AGE_LIMIT) { expStatus = 'warn'; expiry.push('That is over 400 days; the cookie spec draft tells browsers to cap lifetimes at 400 days.'); }
+    }
+  }
+  if (a.maxAge == null && a.expires == null) expiry.push('No Max-Age or Expires: a browser-session cookie, removed when the browser closes (session restore can keep it).');
+  check(checks, 'Max-Age / Expires', expStatus, expiry.join(' '));
+  // Prefixes (matched case-insensitively by browsers)
+  if (lower.startsWith('__host-')) {
+    const problems = [];
+    if (!a.secure) problems.push('Secure is missing');
+    if (a.path !== '/') problems.push('Path must be /');
+    if (a.domain) problems.push('Domain must not be set');
+    if (problems.length) check(checks, '__Host- prefix', 'fail', `Browsers reject this cookie: ${problems.join(', ')}.`, 'A __Host- cookie needs Secure, Path=/ and no Domain.');
+    else check(checks, '__Host- prefix', 'pass', 'Secure, Path=/ and no Domain: locked to this host.');
+  } else if (lower.startsWith('__secure-')) {
+    if (!a.secure) check(checks, '__Secure- prefix', 'fail', 'Browsers reject this cookie because Secure is missing.', 'A __Secure- cookie must be set with Secure from an HTTPS page.');
+    else check(checks, '__Secure- prefix', 'pass', 'Secure is set, as the prefix requires.');
+  }
+  const rank = { fail: 3, warn: 2, pass: 1, info: 0 };
+  const worst = checks.reduce((w, c) => (rank[c.status] > rank[w] ? c.status : w), 'info');
+  return { name: cookie.name, kind, checks, status: worst === 'info' ? 'pass' : worst, unknown: cookie.unknown };
+}
+
+function formatSpan(secs) {
+  if (secs >= 86400) return `${Math.round(secs / 86400)} day${Math.round(secs / 86400) === 1 ? '' : 's'}`;
+  if (secs >= 3600) return `${Math.round(secs / 3600)} hour${Math.round(secs / 3600) === 1 ? '' : 's'}`;
+  if (secs >= 60) return `${Math.round(secs / 60)} minute${Math.round(secs / 60) === 1 ? '' : 's'}`;
+  return `${secs} second${secs === 1 ? '' : 's'}`;
+}
+
+export function checkCookies(text, now = Date.now()) {
+  if (!String(text || '').trim()) return { ok: false, error: 'Paste one or more Set-Cookie lines or the output of curl -I.' };
+  const cookies = parseSetCookieInput(text);
+  if (!cookies.length) return { ok: false, error: 'No Set-Cookie lines were found. Paste header lines that start with Set-Cookie:, or one cookie string per line.' };
+  return { ok: true, results: cookies.map((cookie) => analyzeCookie(cookie, now)) };
+}

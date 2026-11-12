@@ -1,0 +1,30 @@
+{
+  "_note": "Developer posts from https://medium.com/feed/@raghavji2050 (snapshot 12 Nov 2026). Used only when the live feed cannot be fetched at build time.",
+  "fetched": "2026-11-12",
+  "items": [
+    {
+      "title": "Node.js Security Release November 2026: Are You Affected and How to Patch",
+      "url": "https://medium.com/@raghavji2050/node-js-security-release-november-2026-are-you-affected-and-how-to-patch-cb67ffe1a6a9",
+      "published": "2026-11-12T02:35:12.000Z",
+      "categories": [
+        "cybersecurity",
+        "nodejs",
+        "devops",
+        "javascript",
+        "web-development"
+      ]
+    },
+    {
+      "title": "How to Fix Mixed Content Errors for a Laravel App on Railway",
+      "url": "https://medium.com/@raghavji2050/how-to-fix-mixed-content-errors-for-a-laravel-app-on-railway-4805d07b72f0",
+      "published": "2026-11-11T15:29:51.000Z",
+      "categories": [
+        "laravel",
+        "devops",
+        "php",
+        "railways",
+        "web-development"
+      ]
+    }
+  ]
+}

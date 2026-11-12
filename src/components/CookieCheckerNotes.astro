@@ -1,0 +1,53 @@
+---
+// Fix snippets and sources for the Session Cookie Flag Checker. Each claim on
+// the tool page was checked against the sources listed at the bottom (12 Nov 2026).
+const phpIni = `; php.ini (HTTPS sites)
+session.cookie_secure = 1
+session.cookie_httponly = 1
+session.cookie_samesite = "Lax"
+session.use_strict_mode = 1`;
+const phpRuntime = `<?php
+// Before session_start(), on every request (PHP 7.3+ array form)
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+session_start();`;
+const laravelEnv = `# .env (production, HTTPS)
+SESSION_SECURE_COOKIE=true
+# config/session.php defaults you should keep:
+#   'http_only' => env('SESSION_HTTP_ONLY', true),
+#   'same_site' => env('SESSION_SAME_SITE', 'lax'),
+#   'path'      => env('SESSION_PATH', '/'),
+#   'domain'    => env('SESSION_DOMAIN'),`;
+---
+<section class="cookie-notes" aria-labelledby="cookie-fixes">
+  <h2 id="cookie-fixes">Fixes for PHP and Laravel</h2>
+  <p>Plain PHP ships with <code>session.cookie_secure</code> and <code>session.cookie_httponly</code> off and <code>session.cookie_samesite</code> empty. Turn them on in <code>php.ini</code>:</p>
+  <pre><code>{phpIni}</code></pre>
+  <p>Or set them at runtime. <code>session_set_cookie_params()</code> only lasts for the current script, so call it on every request before <code>session_start()</code>:</p>
+  <pre><code>{phpRuntime}</code></pre>
+  <p>In Laravel the session cookie flags live in <code>config/session.php</code>. <code>http_only</code> defaults to true and <code>same_site</code> to <code>lax</code>, but <code>secure</code> comes from <code>SESSION_SECURE_COOKIE</code>, so set it on HTTPS:</p>
+  <pre><code>{laravelEnv}</code></pre>
+  <h2>What the checker treats as a session cookie</h2>
+  <ul>
+    <li><code>PHPSESSID</code>: the default <code>session.name</code> in PHP.</li>
+    <li><code>laravel_session</code> or <code>your-app-session</code>: Laravel names its cookie after <code>APP_NAME</code> unless <code>SESSION_COOKIE</code> is set. Any name ending in <code>_session</code> or <code>-session</code> is flagged.</li>
+    <li><code>wordpress_logged_in_[hash]</code>: WordPress sets it after login to say who you are.</li>
+    <li><code>XSRF-TOKEN</code> is not a session cookie. Laravel sends it without HttpOnly on purpose, so libraries such as Axios can copy it into the <code>X-XSRF-TOKEN</code> header.</li>
+  </ul>
+  <p>For the wider picture (strict mode, regenerating the ID at login), read <a href="/lessons/2026-11-09-php-laravel-session-security-cookies-regeneration">Session Security in PHP and Laravel</a>.</p>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie" rel="noopener">MDN: Set-Cookie header</a>: Secure, HttpOnly, SameSite values, Path and Domain defaults, Max-Age precedence over Expires, and the __Secure- / __Host- prefix rules.</li>
+    <li><a href="https://datatracker.ietf.org/doc/draft-ietf-httpbis-rfc6265bis/" rel="noopener">IETF draft-ietf-httpbis-rfc6265bis-22 (Cookies: HTTP State Management Mechanism)</a>: SameSite=None cookies are ignored unless Secure, prefixes are matched case-insensitively, and the 400-day lifetime limit.</li>
+    <li><a href="https://www.php.net/manual/en/session.configuration.php" rel="noopener">PHP manual: Session runtime configuration</a>: defaults for <code>session.cookie_secure</code>, <code>session.cookie_httponly</code>, <code>session.cookie_samesite</code> (PHP 7.3+) and <code>session.name</code>.</li>
+    <li><a href="https://www.php.net/manual/en/function.session-set-cookie-params.php" rel="noopener">PHP manual: session_set_cookie_params()</a>: the array form (PHP 7.3+) and the per-request rule.</li>
+    <li><a href="https://laravel.com/docs/13.x/session" rel="noopener">Laravel 13.x docs: HTTP Session</a> and <a href="https://github.com/laravel/laravel/blob/13.x/config/session.php" rel="noopener">the default config/session.php</a>: <code>secure</code>, <code>http_only</code>, <code>same_site</code>, <code>path</code>, <code>domain</code> and the cookie name.</li>
+    <li><a href="https://laravel.com/docs/13.x/csrf#csrf-x-xsrf-token" rel="noopener">Laravel 13.x docs: CSRF protection, X-XSRF-TOKEN</a>: why the XSRF-TOKEN cookie is readable by JavaScript.</li>
+    <li><a href="https://developer.wordpress.org/advanced-administration/wordpress/cookies/" rel="noopener">WordPress: Cookies</a>: the <code>wordpress_logged_in_[hash]</code> cookie.</li>
+  </ul>
+</section>

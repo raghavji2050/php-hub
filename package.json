@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "node scripts/gen-vercel-json.mjs && astro build && pagefind --site dist",
     "preview": "astro preview",
-    "test": "node --test scripts/tool-logic.test.mjs"
+    "test": "node --test scripts/tool-logic.test.mjs scripts/medium.test.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

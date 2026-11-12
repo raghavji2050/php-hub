@@ -22,6 +22,13 @@ const composerLock = `{
   "packages": [{ "name": "laravel/framework", "version": "v11.0.0" }],
   "packages-dev": [{ "name": "phpunit/phpunit", "version": "11.0.0" }]
 }`;
+const cookieSample = `HTTP/2 200
+content-type: text/html; charset=UTF-8
+set-cookie: XSRF-TOKEN=REDACTED; expires=Fri, 13 Nov 2026 08:00:00 GMT; Max-Age=7200; path=/; samesite=lax
+set-cookie: laravel_session=REDACTED; expires=Fri, 13 Nov 2026 08:00:00 GMT; Max-Age=7200; path=/; httponly; samesite=lax
+set-cookie: PHPSESSID=REDACTED; path=/
+set-cookie: __Host-prefs=dark; Secure; Path=/; Domain=example.com
+set-cookie: widget=1; SameSite=None`;
 const sqlSample = `select id, email from users where active = 1 order by id`;
 ---
 {tool.slug === 'php-security-checker' ? (
@@ -45,6 +52,13 @@ const sqlSample = `select id, email from users where active = 1 order by id`;
         <label for="php-in">PHP code</label>
         <textarea id="php-in" data-field="input" spellcheck="false" autocomplete="off"></textarea>
         <textarea data-example hidden readonly>{phpSample}</textarea>
+      </>
+    )}
+    {tool.slug === 'session-cookie-checker' && (
+      <>
+        <label for="cookie-in">Set-Cookie headers or curl -I output</label>
+        <textarea id="cookie-in" data-field="input" spellcheck="false" autocomplete="off" placeholder="set-cookie: laravel_session=…; path=/; secure; httponly; samesite=lax"></textarea>
+        <textarea data-example hidden readonly>{cookieSample}</textarea>
       </>
     )}
     {tool.slug === 'php-code-validator' && (
@@ -236,7 +250,7 @@ $ok = password_verify($password, $hash);
     )}
     {tool.slug !== 'laravel-artisan-reference' && tool.slug !== 'http-status-codes' && tool.slug !== 'php-security-checker' && (
       <div class="tool-actions">
-        <button type="button" data-action="run">{tool.slug === 'json-minifier' ? 'Minify' : tool.slug === 'composer-analyzer' ? 'Analyze' : tool.slug === 'php-hash-generator' ? 'Hash' : tool.slug === 'jwt-decoder' ? 'Decode' : tool.slug === 'cron-generator' ? 'Generate' : tool.slug === 'curl-builder' ? 'Build command' : tool.slug === 'php-code-validator' || tool.slug === 'php-version-compat' || tool.slug === 'regex-tester' ? 'Check' : 'Format'}</button>
+        <button type="button" data-action="run">{tool.slug === 'json-minifier' ? 'Minify' : tool.slug === 'composer-analyzer' ? 'Analyze' : tool.slug === 'php-hash-generator' ? 'Hash' : tool.slug === 'jwt-decoder' ? 'Decode' : tool.slug === 'cron-generator' ? 'Generate' : tool.slug === 'curl-builder' ? 'Build command' : tool.slug === 'php-code-validator' || tool.slug === 'session-cookie-checker' || tool.slug === 'php-version-compat' || tool.slug === 'regex-tester' ? 'Check' : 'Format'}</button>
         {tool.slug !== 'cron-generator' && tool.slug !== 'curl-builder' && tool.slug !== 'php-version-compat' && <button type="button" class="btn secondary" data-action="example">Example</button>}
         {tool.slug === 'php-version-compat' && <button type="button" class="btn secondary" data-action="example">Example</button>}
         <button type="button" class="btn secondary" data-action="clear">Clear</button>
