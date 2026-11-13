@@ -1,4 +1,5 @@
 ---
+title: "Binary Search in PHP Lesson: Classic, Boundary and Answer-Space Patterns"
 categories: [PHP]
 tags: [php, dsa, binary-search, algorithms]
 level: intermediate
