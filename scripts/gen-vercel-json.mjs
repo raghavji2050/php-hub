@@ -48,6 +48,7 @@ const csp = [
   "upgrade-insecure-requests",
 ].join('; ');
 const config = {
+  trailingSlash: false,
   redirects: [{ source: '/sitemap.xml', destination: '/sitemap-index.xml', permanent: true }],
   headers: [{ source: '/(.*)', headers: [
     { key: 'Content-Security-Policy', value: csp },
