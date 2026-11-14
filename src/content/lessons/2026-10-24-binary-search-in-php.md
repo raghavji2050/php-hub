@@ -4,8 +4,6 @@ categories: [PHP]
 tags: [php, dsa, binary-search, algorithms]
 level: intermediate
 ---
-# Binary Search in PHP: 3 Templates You'll Actually Use
-
 Binary search cuts the search space in half on every step, so it finds an answer in **O(log n)** time. It isn't only for finding a value in a sorted array. Here are the three forms that show up in real code and in interviews.
 
 ## 1. Classic search: find a value in a sorted array
