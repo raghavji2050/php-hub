@@ -6,5 +6,5 @@ export default defineConfig({
   trailingSlash: 'ignore',
   // Emit scripts as external files so CSP script-src 'self' (no unsafe-inline) allows them
   vite: { build: { assetsInlineLimit: 0 } },
-  integrations: [sitemap({ filter: (p) => !p.includes('/404') && !p.includes('/thanks') && !p.includes('/saved') })],
+  integrations: [sitemap({ filter: (p) => !p.includes('/404') && !p.includes('/thanks') && !p.includes('/saved'), serialize: (item) => { const u = new URL(item.url); if (u.pathname !== '/') u.pathname = u.pathname.replace(/\/+$/, ''); item.url = u.href; return item; } })],
 });
