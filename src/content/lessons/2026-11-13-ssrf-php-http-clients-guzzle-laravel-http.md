@@ -7,6 +7,7 @@ summary: "SSRF happens when your server fetches a URL an attacker chose. Don't p
 tags: ["php", "laravel", "security", "ssrf", "http-client"]
 hero: "posts/php-ssrf-http-clients-hero.webp"
 heroAlt: "Dark lantern on a wooden table sending a gold beam into a glowing emerald shield, with a circular vault door in the mist behind it"
+codeReviewCta: true
 ---
 
 *This lesson was drafted with AI assistance and reviewed for accuracy against the PHP manual pages for `parse_url` and `filter_var`, the Laravel 13.x HTTP client documentation, and the OWASP and MITRE pages linked below. Helper behaviour was checked on PHP 8.4.23.*
