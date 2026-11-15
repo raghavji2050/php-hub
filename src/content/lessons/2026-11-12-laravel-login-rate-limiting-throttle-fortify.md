@@ -7,6 +7,7 @@ summary: "Define named Laravel rate limiters with RateLimiter::for() and Limit::
 tags: ["php", "laravel", "security", "rate-limiting", "authentication"]
 hero: "posts/laravel-login-rate-limiting-hero.webp"
 heroAlt: "Bronze hourglass on cobblestones beside a vine-covered iron gate with a glowing emerald keyhole, faint footprints approaching the gate"
+codeReviewCta: true
 ---
 
 *This lesson was drafted with AI assistance and reviewed for accuracy against the Laravel 13.x routing and rate limiting documentation, the Laravel 13.x authentication and Fortify documentation, and Fortify 1.x `LoginRateLimiter` source, all linked below.*

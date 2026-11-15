@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ChecklistCta from './ChecklistCta.astro';
+import CodeReviewCta from './CodeReviewCta.astro';
 import HeroImage from './HeroImage.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import Quiz from './Quiz.astro';
@@ -56,6 +57,7 @@ const jsonld = [{ '@context': 'https://schema.org', '@type': 'Article', headline
   <div class="post-body" set:html={bodyHtml} />
   {item.tags.length > 0 && <ul class="tags" aria-label="Tags" data-pagefind-ignore>{item.tags.map(t => <li><a class="tag" href={`/tags/${slugify(t)}`}>#{t}</a></li>)}</ul>}
 </article>
+{item.codeReviewCta && <CodeReviewCta />}
 <ChecklistCta />
 {quiz && <Quiz questions={quiz.questions} lessonUrl={item.url} />}
 {series && <p class="series-note">Part {series.index + 1} of {series.total} in the {series.title}. {series.order}</p>}
