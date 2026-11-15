@@ -33,7 +33,7 @@ $request->file('photo')->storeAs(
 );
 ```
 
-Even `basename()` only strips directory components. PHP's own `move_uploaded_file` example uses `basename()` and notes that further validation of the filename may still be appropriate. A name like `../../public/uploads/user photo.png` becomes `user photo.png` — the path is gone, but you are still keeping a client-chosen name.
+Even `basename()` only strips directory components. PHP's own `move_uploaded_file` example uses `basename()` and notes that further validation of the filename may still be appropriate. A name like `../../public/uploads/user photo.png` becomes `user photo.png` — the path is gone, but you are still keeping a client-chosen name. If a later download, preview or delete action joins that name (or any other request parameter) onto a filesystem path, that is a separate bug: [path traversal](/lessons/2026-11-14-path-traversal-php-laravel-realpath). Keep the resolved path inside one directory you choose.
 
 ## PHP primitives: confirm the upload, then move it
 
@@ -210,6 +210,8 @@ The 1×1 PNG was detected as `image/png` (90 bytes). The text file named `avatar
 Want a review of upload handling, storage layout or validation across a Laravel or PHP app? See [PHP Hub services](/services) (contact for quote) or run a quick pass with the [PHP Security Checker](https://php-security-checker.vercel.app).
 
 For a related real-world case, see the brief on [unauthenticated arbitrary file upload leading to remote code execution in the WordPress Bricksforge plugin](/briefs/2026-10-24-bricksforge-file-upload-rce) (CVE-2026-85097). The brief's Patchstack source reports it as actively exploited.
+
+Related lessons: [Path Traversal in PHP and Laravel](/lessons/2026-11-14-path-traversal-php-laravel-realpath).
 
 ## Sources
 
