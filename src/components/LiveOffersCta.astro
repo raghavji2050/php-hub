@@ -1,0 +1,39 @@
+---
+import { OFFERS } from '../data/offers.js';
+const { ids = [], heading = 'Live offers', kicker = 'PHP Hub' } = Astro.props;
+const items = ids.map((id) => OFFERS[id]).filter(Boolean);
+---
+{items.length > 0 && (
+<aside class="live-offers-cta" aria-label={heading} data-pagefind-ignore>
+  <p class="ck-kicker">{kicker}</p>
+  <h2>{heading}</h2>
+  <ul class="offer-list">
+    {items.map((offer) => (
+      <li>
+        <p class="offer-title">{offer.title}</p>
+        <p>{offer.blurb}</p>
+        {offer.links ? (
+          <p class="actions">
+            {offer.links.map((link) => (
+              <a class="btn secondary" href={link.href} target="_blank" rel="noopener">{link.label}</a>
+            ))}
+          </p>
+        ) : (
+          <a class="btn primary" href={offer.href} target="_blank" rel="noopener">{offer.cta}</a>
+        )}
+      </li>
+    ))}
+  </ul>
+</aside>
+)}
+<style>
+.live-offers-cta{max-width:46em;margin:8px 0 36px;padding:20px 24px;border:1px solid var(--border);border-left:3px solid var(--brand-strong);border-radius:var(--radius);background:transparent}
+.ck-kicker{margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.live-offers-cta h2{font-family:var(--serif);font-size:22px;margin:0 0 12px}
+.offer-list{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.offer-list li{margin:0;padding:0}
+.offer-title{margin:0 0 4px;font-weight:600;color:var(--text);font-size:17px}
+.live-offers-cta p{color:var(--muted);margin:0 0 12px;font-size:16px}
+.live-offers-cta .offer-title{color:var(--text)}
+.live-offers-cta .actions{margin:0;display:flex;flex-wrap:wrap;gap:8px 12px}
+</style>
