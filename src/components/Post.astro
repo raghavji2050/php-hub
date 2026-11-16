@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ChecklistCta from './ChecklistCta.astro';
 import CodeReviewCta from './CodeReviewCta.astro';
+import LiveOffersCta from './LiveOffersCta.astro';
 import HeroImage from './HeroImage.astro';
 import Breadcrumbs from './Breadcrumbs.astro';
 import Quiz from './Quiz.astro';
@@ -58,6 +59,13 @@ const jsonld = [{ '@context': 'https://schema.org', '@type': 'Article', headline
   {item.tags.length > 0 && <ul class="tags" aria-label="Tags" data-pagefind-ignore>{item.tags.map(t => <li><a class="tag" href={`/tags/${slugify(t)}`}>#{t}</a></li>)}</ul>}
 </article>
 {item.codeReviewCta && <CodeReviewCta />}
+{item.auditCta && (
+  <LiveOffersCta
+    kicker="PHP Hub service"
+    heading="Need a Laravel security audit?"
+    ids={['audit']}
+  />
+)}
 <ChecklistCta />
 {quiz && <Quiz questions={quiz.questions} lessonUrl={item.url} />}
 {series && <p class="series-note">Part {series.index + 1} of {series.total} in the {series.title}. {series.order}</p>}
