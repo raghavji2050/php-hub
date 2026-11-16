@@ -7,6 +7,7 @@ summary: "Run composer audit (and composer audit --locked in CI) against the Pac
 tags: ["php", "composer", "security", "dependencies", "supply-chain"]
 hero: "posts/composer-audit-dependency-security-hero.webp"
 heroAlt: "Wooden crate of brown paper parcels with green wax seals, a glowing emerald magnifying glass above the crate, and one parcel set aside on the workbench"
+auditCta: true
 ---
 
 *This lesson was drafted with AI assistance and reviewed for accuracy against the Composer 2 CLI documentation for `audit`, `install` and `update`, the Composer environment-variable list, and Packagist's description of its security advisory API. Composer 2.11.1 was present on the machine used to check the command's help text.*

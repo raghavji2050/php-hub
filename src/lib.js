@@ -73,6 +73,7 @@ export function list(section) {
       summary: fm.summary || fm.description || summarize(raw[p]), canonical: fm.canonical || '', hero: fm.hero || '', heroAlt: fm.heroAlt || '', severity: fm.severity || '', status: fm.status || '', tags,
       readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content, compiledContent: m.compiledContent,
       codeReviewCta: Boolean(fm.codeReviewCta),
+      auditCta: Boolean(fm.auditCta),
       level: LEVELS.includes(fm.level) ? fm.level : '', sources: externalLinks(raw[p] || ''), affected: affectedSection(raw[p] || '') };
   }).sort((a, b) => b.slug.localeCompare(a.slug));
 }
