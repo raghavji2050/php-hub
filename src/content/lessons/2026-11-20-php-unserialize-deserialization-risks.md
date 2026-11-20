@@ -49,12 +49,12 @@ An array payload still decodes when `allowed_classes` is `false`. An object payl
 
 Two other options are worth knowing about from the changelog on the same manual page: `max_depth` (since PHP 7.4, default 4096) limits nesting so a deep payload is less likely to exhaust the stack, and since PHP 8.3 a string that is not unserializable emits `E_WARNING` (it used to be `E_NOTICE`).
 
-Laravel's `Crypt::encryptString()` / `decryptString()`, covered in the [encryption lesson](/lessons/2026-11-17-encryption-laravel-crypt-app-key-sodium/), is the documented way to protect a string without treating it as a serialized PHP value. If you use Laravel cache or queues, prefer array or JSON payloads over `serialize()` of objects you do not control.
+Laravel's `Crypt::encryptString()` / `decryptString()`, covered in the [encryption lesson](/lessons/2026-11-16-encryption-laravel-crypt-app-key-sodium/), is the documented way to protect a string without treating it as a serialized PHP value. If you use Laravel cache or queues, prefer array or JSON payloads over `serialize()` of objects you do not control.
 
 PHP sessions historically store serialized data, but that storage is a server-side file or store you control, not a good reason to accept a serialized blob from the browser. If you ever put session-like data in a cookie, use a signed or encrypted token (Laravel already encrypts cookies) and keep the contents as simple values, not arbitrary objects.
 
 
-Also be careful with file paths that come from the request. Some PHP stream wrappers can have unexpected behaviour when a path is passed to filesystem functions. Do not let user input choose a wrapper or a path; the [path traversal lesson](/lessons/2026-11-15-path-traversal-php-laravel-realpath/) covers containment, and `allowed_classes` does not help there.
+Also be careful with file paths that come from the request. Some PHP stream wrappers can have unexpected behaviour when a path is passed to filesystem functions. Do not let user input choose a wrapper or a path; the [path traversal lesson](/lessons/2026-11-14-path-traversal-php-laravel-realpath/) covers containment, and `allowed_classes` does not help there.
 
 WordPress has `maybe_unserialize()` for options and metadata that may be stored serialized. That is fine for values WordPress itself wrote. It is not a reason to take a raw POST body or a cookie and run it through `maybe_unserialize()` or `unserialize()`. If you need to accept structured input from a user, parse JSON or a form array and then build your own objects in code.
 
@@ -67,7 +67,7 @@ WordPress has `maybe_unserialize()` for options and metadata that may be stored 
 - Do not hide objects in cookies "because they are serialized".
 - Add a test that an unexpected object does not come back as a live class instance.
 
-Related lessons: [Encryption in Laravel and PHP](/lessons/2026-11-17-encryption-laravel-crypt-app-key-sodium/) and [Path Traversal in PHP and Laravel](/lessons/2026-11-15-path-traversal-php-laravel-realpath/).
+Related lessons: [Encryption in Laravel and PHP](/lessons/2026-11-16-encryption-laravel-crypt-app-key-sodium/) and [Path Traversal in PHP and Laravel](/lessons/2026-11-14-path-traversal-php-laravel-realpath/).
 
 ## Sources
 
