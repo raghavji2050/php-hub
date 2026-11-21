@@ -5,6 +5,7 @@ date: 2026-11-21
 description: "Keep Laravel secrets out of source control. Do not commit .env, generate APP_KEY locally, and leave APP_DEBUG off in production. Use env:encrypt if you must store an environment file in git."
 summary: "Laravel's documentation says the .env file should not be committed to source control. Keep APP_KEY and database credentials in the environment, set APP_DEBUG to false in production, and after config:cache only call env() from config files. If you need a file in git, use php artisan env:encrypt and store the decryption key in a password manager."
 tags: ["php", "laravel", "security", "secrets", "environment"]
+auditCta: true
 hero: "posts/laravel-secrets-env-debug-hero.webp"
 heroAlt: "Open blank leather notebook beside a riveted iron strongbox with a glowing emerald key resting on the lid"
 ---
