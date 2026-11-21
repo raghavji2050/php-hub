@@ -32,7 +32,7 @@ const jsonldBlocks = jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [];
 <script is:inline src="/theme-init.js"></script>
 <meta name="color-scheme" content="light dark"/><meta name="description" content={description}/>
 <title>{fullTitle}</title>{gsc && <meta name="google-site-verification" content={gsc}/>}
-<link rel="canonical" href={canonical}/>{noindex && <meta name="robots" content="noindex"/>}
+<link rel="canonical" href={canonical}/>{noindex && <meta name="robots" content="noindex,follow"/>}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="manifest" href="/site.webmanifest"/>
 <meta name="theme-color" content="#141416"/><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ec"/>
 <link rel="alternate" type="application/rss+xml" title="PHP Hub" href="/rss.xml"/>

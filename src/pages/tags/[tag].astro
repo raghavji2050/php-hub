@@ -3,5 +3,5 @@ import Base from '../../layouts/Base.astro'; import Card from '../../components/
 export function getStaticPaths() { return allTags().map(t => ({ params: { tag: t.slug }, props: { t } })); }
 const { t } = Astro.props;
 ---
-<Base title={`#${t.name}`} description={`PHP Hub posts tagged ${t.name}.`}><p><a class="back" href="/tags">← All topics</a></p><h1>#{t.name}</h1>
+<Base title={`#${t.name}`} description={`PHP Hub posts tagged ${t.name}.`} noindex={true}><p><a class="back" href="/tags">← All topics</a></p><h1>#{t.name}</h1>
 <div class="photo-grid">{t.posts.map(p => <Card item={p} level="h2" />)}</div></Base>
