@@ -33,11 +33,11 @@ const sevName = (item.severity || '').toLowerCase();
 const sevClass = sevName === 'critical' || sevName === 'high' ? 'is-crit' : (item.severity || item.status) ? 'is-warn' : '';
 const sevText = [item.severity, item.status].filter(Boolean).join(' · ');
 const jsonld = [{ '@context': 'https://schema.org', '@type': 'Article', headline: item.title.slice(0, 110), description: item.summary,
-  datePublished: item.date || undefined, mainEntityOfPage: item.canonical || new URL(item.url, SITE.url).href, image: new URL(og, SITE.url).href,
+  datePublished: item.date || undefined, dateModified: item.updated || item.date || undefined, mainEntityOfPage: item.canonical || new URL(item.url, SITE.url).href, image: new URL(og, SITE.url).href,
   author: { '@type': 'Person', name: 'Raghav', url: `${SITE.url}/about` }, publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', SITE.url).href } },
   keywords: item.tags.join(', ') || undefined }, breadcrumbLd(crumbs)];
 ---
-<Base title={item.title} description={item.summary} type="article" image={og} jsonld={jsonld} canonical={item.canonical || undefined} cta={true}>
+<Base title={item.seoTitle || item.title} description={item.summary} type="article" image={og} jsonld={jsonld} canonical={item.canonical || undefined} cta={true}>
 <Breadcrumbs items={crumbs} />
 <article class="prose" data-pagefind-body>
   <p class="kicker" data-pagefind-ignore>

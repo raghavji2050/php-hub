@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "Open Redirects in PHP and Laravel: Validating ?next= and Return URLs"
+seoTitle: "Open Redirects in PHP and Laravel: Safe ?next= URLs"
 date: 2026-11-11
 description: "Stop ?next=, ?return_to= and back() from sending your users to a phishing site. See why redirect($input) is an open redirect in Laravel, and add a small safe-path helper for PHP and Laravel."
 summary: "Laravel's redirect()->to() returns full URLs like https://evil.example or //evil.example unchanged, so redirect($request->input('next')) is an open redirect. Accept only single-slash local paths (or an explicit host allowlist), reject backslashes and control characters, and fall back to a safe default."

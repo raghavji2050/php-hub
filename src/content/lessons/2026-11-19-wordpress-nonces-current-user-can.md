@@ -1,6 +1,7 @@
 ---
 categories: [PHP, WordPress, Security]
 title: "WordPress Nonces and Capability Checks: CSRF Is Not Authorization"
+seoTitle: "WordPress Nonces and Capability Checks Explained"
 date: 2026-11-19
 description: "Use WordPress nonces to block CSRF and current_user_can() to decide who may act. Nonces are not one-time tokens and are never access control."
 summary: "WordPress nonces help prevent CSRF, but they are not one-time tokens and they are not authorization. Verify a nonce with check_admin_referer() or wp_verify_nonce(), and separately call current_user_can() in the request handler. Official documentation says you should always assume a nonce can be compromised."

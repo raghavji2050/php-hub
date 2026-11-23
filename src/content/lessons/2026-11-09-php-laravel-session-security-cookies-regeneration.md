@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "Session Security in PHP and Laravel: Cookie Flags, Strict Mode and ID Regeneration"
+seoTitle: "PHP and Laravel Session Security: Cookies, Regeneration"
 date: 2026-11-09
 description: "Stop session fixation and cookie theft: set HttpOnly, Secure and SameSite on the session cookie, turn on PHP's strict mode, and regenerate the session ID at login and logout in PHP and Laravel."
 summary: "Plain PHP ships with session.use_strict_mode, cookie_httponly and cookie_secure all off. Turn them on, regenerate the ID after login, and in Laravel set SESSION_SECURE_COOKIE and keep the regenerate/invalidate calls in your auth flow."

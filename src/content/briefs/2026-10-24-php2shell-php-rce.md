@@ -1,4 +1,5 @@
 ---
+seoTitle: "PHP2Shell: Two Critical PHP Core RCE Flaws Fixed"
 categories: [PHP, Security]
 tags: [php, php-core, rce]
 severity: Critical

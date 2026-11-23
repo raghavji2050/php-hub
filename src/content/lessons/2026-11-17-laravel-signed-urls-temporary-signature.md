@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "Signed URLs in Laravel: signedRoute, Expiry and the signed Middleware"
+seoTitle: "Signed URLs in Laravel: signedRoute and Expiry"
 date: 2026-11-17
 description: "Create and validate Laravel signed URLs for unsubscribe links and other public actions. Use temporarySignedRoute, the signed middleware, and always read signed values with query()."
 summary: "Laravel signed URLs append an HMAC to the query string so the path and query cannot be altered unnoticed. Prefer URL::temporarySignedRoute() with an expiry, protect the route with the signed middleware, and read parameters with $request->query() because the request body is not signed."

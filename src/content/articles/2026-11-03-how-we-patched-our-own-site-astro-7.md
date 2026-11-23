@@ -1,6 +1,7 @@
 ---
 categories: [Security]
 title: "How We Patched Our Own Site: Clearing 5 npm Advisories with an Astro 7 Upgrade"
+seoTitle: "How We Cleared 5 npm Advisories with an Astro 7 Upgrade"
 date: 2026-11-03
 description: "A real case study: npm audit flagged 5 advisories (1 critical) on PHP Hub. Here is how we upgraded Astro 5.18.2 to 7.4.5, moved CI to Node 22 and verified nothing broke."
 summary: "npm audit flagged 5 advisories (1 critical) on PHP Hub. How we upgraded Astro 5.18.2 to 7.4.5, moved to Node 22 and proved nothing broke."

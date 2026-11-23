@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "Rate Limiting Login in Laravel: throttle, RateLimiter and Fortify"
+seoTitle: "Laravel Login Rate Limiting: throttle and Fortify"
 date: 2026-11-12
 description: "Slow brute-force and credential-stuffing attempts on Laravel login and other sensitive routes. Define named limiters, attach throttle middleware, and know what Fortify already does for starter kits."
 summary: "Define named Laravel rate limiters with RateLimiter::for() and Limit::perMinute()->by(), attach them with the throttle middleware (HTTP 429 when exceeded), and keep Fortify's default login throttle: 5 attempts per 60 seconds, keyed by username and IP."
