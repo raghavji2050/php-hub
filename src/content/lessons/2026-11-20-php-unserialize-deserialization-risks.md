@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "PHP Deserialization Risks: Why unserialize Is Unsafe for User Input"
+seoTitle: "PHP unserialize Risks: Never Use It on User Input"
 date: 2026-11-20
 description: "Do not pass untrusted input to PHP's unserialize(), even with allowed_classes. Prefer JSON, and HMAC any serialized payload you must store yourself."
 summary: "The PHP manual warns: do not pass untrusted input to unserialize(), regardless of allowed_classes. Unserialization can instantiate objects and run code during autoloading. Prefer json_encode() / json_decode() for data you accept from users, and treat allowed_classes as a hardening step for trusted payloads only."

@@ -1,6 +1,7 @@
 ---
 categories: [Security]
 title: "Is Railway Safe Now? What the October 2026 Breach Means, Plus a Hosting Security Checklist"
+seoTitle: "Is Railway Safe Now? Oct 2026 Breach + Hosting Checklist"
 date: 2026-10-24
 description: "Is Railway safe after the October 2026 breach? What Railway confirmed, what’s still unknown, and a 12-step security checklist for any host."
 summary: "Is Railway safe after the October 2026 breach? What Railway confirmed, what’s still unknown, and a 12-step security checklist for any host."

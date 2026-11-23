@@ -69,7 +69,7 @@ export function list(section) {
     const words = stripFm(raw[p]).split(/\s+/).filter(Boolean).length;
     const tags = [...(Array.isArray(fm.tags) ? fm.tags : fm.tags ? [fm.tags] : []), ...(fm.category ? [fm.category] : [])].map(String);
     const categories = (Array.isArray(fm.categories) ? fm.categories : fm.categories ? [fm.categories] : []).map(String).filter(c => CATEGORIES.includes(c));
-    return { section, categories, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, date, dateLabel: date ? fmtDate(date) : '',
+    return { section, categories, slug, url: `/${section}/${slug}`, title: fm.title || h1?.text || slug, seoTitle: fm.seoTitle ? String(fm.seoTitle) : '', date, updated: fm.updated || fm.updatedDate ? String(fm.updated || fm.updatedDate).slice(0, 10) : '', dateLabel: date ? fmtDate(date) : '',
       summary: fm.summary || fm.description || summarize(raw[p]), canonical: fm.canonical || '', hero: fm.hero || '', heroAlt: fm.heroAlt || '', severity: fm.severity || '', status: fm.status || '', tags,
       readingTime: Math.max(1, Math.round(words / 220)), headings: headings.filter(h => h.depth === 2 || h.depth === 3), Content: m.Content, compiledContent: m.compiledContent,
       codeReviewCta: Boolean(fm.codeReviewCta),

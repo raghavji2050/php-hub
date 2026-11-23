@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "Safe File Uploads in PHP and Laravel: Validation, Storage and Serving"
+seoTitle: "Safe File Uploads in PHP and Laravel"
 date: 2026-11-08
 description: "Don't trust the client filename, extension or Content-Type. Validate uploads from file contents, store them under a generated name outside the web root, and serve private files through your app."
 summary: "Treat the client filename, extension and Content-Type as untrusted, detect the type from file contents, store under a generated name on a non-public disk, and never let the web server execute an upload as PHP."

@@ -13,7 +13,7 @@ import '@fontsource/ibm-plex-mono/latin-500.css';
 const { title = 'PHP Hub', description = SITE.description, type = 'website', image = '/og.png', jsonld = null, noindex = false, cta = false, newsletter = true, canonical: canonicalOverride = '', pagefind = true } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = canonicalOverride || new URL(path.replace(/\/$/, '') || '/', SITE.url).href;
-const fullTitle = title === 'PHP Hub' ? SITE.homeTitle : /\bPHP Hub\b/.test(title) ? title : `${title} | PHP Hub`;
+const fullTitle = title === 'PHP Hub' ? SITE.homeTitle : /\bPHP Hub\b/.test(title) ? title : (`${title} | PHP Hub`.length <= 60 ? `${title} | PHP Hub` : title);
 const gsc = (import.meta.env.PUBLIC_GSC_VERIFICATION || SITE.gscVerification || '').trim();
 const imageUrl = new URL(image, SITE.url).href;
 const org = { '@context': 'https://schema.org', '@graph': [

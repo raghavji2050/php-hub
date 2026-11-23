@@ -1,4 +1,5 @@
 ---
+seoTitle: "Bricksforge WordPress File Upload RCE (CVE-2026-85097)"
 categories: [WordPress, Security]
 tags: [wordpress, plugins, file-upload, rce]
 severity: Critical

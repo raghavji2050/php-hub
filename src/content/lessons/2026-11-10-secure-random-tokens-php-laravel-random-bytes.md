@@ -1,6 +1,7 @@
 ---
 categories: [PHP, Laravel, Security]
 title: "Secure Random Tokens in PHP and Laravel: random_bytes, random_int and Str::random"
+seoTitle: "Secure Random Tokens in PHP and Laravel"
 date: 2026-11-10
 description: "Generate unguessable reset links, API keys and OTP codes in PHP and Laravel with random_bytes, random_int, Random\\Randomizer and Str::random, store only a hash, and compare with hash_equals."
 summary: "uniqid(), mt_rand() and rand() are not for secrets. Use random_bytes() or random_int() (or Laravel's Str::random, which uses random_bytes), store a hash of the token instead of the token, and compare with hash_equals()."
