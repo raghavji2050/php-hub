@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import HeroImage from '../components/HeroImage.astro';
+import Icons from '../components/Icons.astro';
+import LiveOffersCta from '../components/LiveOffersCta.astro';
+import { allPosts, breadcrumbLd, SITE } from '../lib.js';
+const crumbs = [{ href: '/', label: 'Home' }, { href: '/laravel-security', label: 'Laravel security' }];
+// Every lesson, brief and article tagged Laravel appears automatically.
+const posts = allPosts().filter((p) => p.categories.includes('Laravel') || p.tags.includes('Laravel'));
+// First matching rule wins; anything unmatched lands in the last group so new posts never vanish.
+const GROUPS = [
+  { id: 'auth', title: 'Auth & sessions', re: /password|session|rate-limit|random-token|open-redirect|login|auth/ },
+  { id: 'input', title: 'Input, validation & mass assignment', re: /mass-assignment|sql-injection|validation|ssrf/ },
+  { id: 'xss-csrf', title: 'XSS & CSRF', re: /xss|csrf/ },
+  { id: 'secrets', title: 'Secrets, encryption & signed URLs', re: /encryption|signed-url|secrets|app-key|env/ },
+  { id: 'files', title: 'Files & uploads', re: /upload|path-traversal|file/ },
+  { id: 'leaks', title: 'Logging & data leaks', re: /logging|pii|unserialize|deserial/ },
+  { id: 'deps', title: 'Dependencies & advisories', re: /composer|audit|security-this-week|advisor/ },
+];
+const sections = GROUPS.map((g) => ({ ...g, items: [] }));
+const other = { id: 'more', title: 'More Laravel security', items: [] };
+for (const p of posts) (sections.find((g) => g.re.test(p.slug)) || other).items.push(p);
+const groups = [...sections, other].filter((g) => g.items.length);
+const lessonCount = posts.filter((p) => p.section === 'lessons').length;
+const url = new URL('/laravel-security', SITE.url).href;
+const ld = [
+  breadcrumbLd(crumbs),
+  {
+    '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Laravel security guide: lessons and briefs', url,
+    description: 'Laravel security lessons and weekly briefs from PHP Hub, grouped by topic.',
+    isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.url },
+    mainEntity: { '@type': 'ItemList', numberOfItems: posts.length,
+      itemListElement: posts.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(p.url, SITE.url).href, name: p.title })) },
+  },
+];
+---
+<Base title="Laravel Security Guide | PHP Hub" description={`Laravel security guide: ${lessonCount} PHP Hub lessons plus weekly briefs on auth, sessions, XSS, CSRF, secrets, uploads, logging and dependencies.`} jsonld={ld} cta={false} newsletter={false}>
+<Breadcrumbs items={crumbs} />
+<div data-pagefind-body>
+  <h1>Laravel security</h1>
+  <p class="dek">Laravel security is mostly a set of small habits applied consistently: validate what comes in, escape what goes out, keep secrets out of Git and logs, and keep dependencies current. This page collects every PHP Hub lesson and weekly brief that touches Laravel, grouped by the part of the app you are trying to protect.</p>
+  <p>The lessons are practical and short. Each one explains the risk, shows the safe pattern in Laravel or plain PHP, and links to official documentation so you can check the details yourself. The weekly briefs track advisories for PHP projects and are fact-checked against the advisory records. New Laravel posts show up here automatically.</p>
+  <p>Not sure where to begin? Start with <a href="#auth">auth and sessions</a>, then <a href="#input">input handling</a>, then <a href="#secrets">secrets</a>. Pair it with the free <a href="/tools/php-security-checker">PHP Security Checker</a> for a quick outside look at a site you own.</p>
+
+  {groups.map((g) => (
+    <section aria-labelledby={`h-${g.id}`} id={g.id}>
+      <h2 id={`h-${g.id}`}>{g.title}</h2>
+      <div class="photo-grid">
+        {g.items.map((p) => (
+          <article class="media-card media-photo">
+            <a class="media-shot" href={p.url} aria-label={p.title}>
+              {p.hero ? <HeroImage hero={p.hero} alt="" width={640} height={360} fallback={false} sizes="(max-width: 760px) 100vw, 480px" /> : <span class="type-plate"><Icons name="lesson" class="plate-icon" />{p.section === 'briefs' ? 'Brief' : 'Lesson'}</span>}
+            </a>
+            <div class="media-copy">
+              <p class="row-meta">{p.section === 'briefs' ? 'Brief' : p.section === 'lessons' ? 'Lesson' : 'Article'}{p.dateLabel ? ` · ${p.dateLabel}` : ''}</p>
+              <h3 class="entry-title"><a href={p.url}>{p.title}</a></h3>
+              {p.summary && <p class="dek">{p.summary}</p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <aside class="tool-cta" aria-label="PHP Security Checker">
+    <p class="ck-kicker">Free tool</p>
+    <h2>PHP Security Checker</h2>
+    <p>See what the free checker does, and what a static look at a site cannot prove. It does not replace a real review of your code.</p>
+    <a class="btn primary" href="/tools/php-security-checker">Open the PHP Security Checker</a>
+  </aside>
+
+  <LiveOffersCta kicker="PHP Hub service" heading="Need a Laravel security audit?" ids={['audit']} />
+
+  <section aria-labelledby="h-faq">
+    <h2 id="h-faq">Questions</h2>
+    <h3>Where should I start?</h3>
+    <p>Begin with the lessons on <a href="#auth">sessions and login</a>, then <a href="#xss-csrf">XSS and CSRF</a>. They cover the routes most Laravel apps expose first.</p>
+    <h3>Are the lessons only about Laravel?</h3>
+    <p>Many also show the plain PHP version of the pattern, so you can see what the framework helper is doing.</p>
+    <h3>How do I keep up with new advisories?</h3>
+    <p>Read the weekly <a href="/briefs">security briefs</a> listed under dependencies and advisories, and run <a href="/lessons/2026-11-15-composer-audit-php-dependency-security">composer audit</a> as the lesson shows.</p>
+  </section>
+</div>
+</Base>
+<style>
+.tool-cta{max-width:46em;margin:32px 0;padding:20px 24px;border:1px solid var(--border);border-left:3px solid var(--brand-strong);border-radius:var(--radius)}
+.tool-cta h2{margin:0 0 8px}.tool-cta p{color:var(--muted)}
+section>h2{margin-top:36px}
+</style>
