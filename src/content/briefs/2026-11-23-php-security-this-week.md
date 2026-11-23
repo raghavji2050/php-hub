@@ -29,7 +29,7 @@ heroAlt: "Open ledger on a dark desk with a glowing emerald glass shield, a bras
 ## 2. Silverstripe Framework — RCE via i18nTextCollectorTask (CVE-2026-91115 / GHSA-c94f-87xg-65wf)
 
 - **What it is:** The `writer` parameter of the i18n text collector task can lead to remote code execution. Published together with five medium-severity Silverstripe Framework advisories (privilege escalation, auth bypass, two XSS, ClassName change).
-- **Affected:** `silverstripe/framework` >= 6.0.0 < 6.2.13 . **Fixed:** 6.2.13.
+- **Affected:** `silverstripe/framework` >= 6.0.0, < 6.2.13. **Fixed:** 6.2.13.
 - **Severity:** High; CVSS v3.1 8.8 (as listed by GitHub).
 - **Exploited in the wild:** Not reported.
 - **What to do:** `composer update silverstripe/framework` to 6.2.13. Make sure dev tasks aren't reachable on production.
