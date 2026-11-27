@@ -6,5 +6,11 @@ const items = list('briefs');
 ---
 <Base title="Briefs" description="Security briefs on PHP and WordPress vulnerabilities: who is affected, fixed versions and what to do.">
 <h1>Briefs</h1>
+<div id="brief-stack-status" data-pagefind-ignore></div>
 {items.length ? <div class="brief-stack">{items.map(i => <Card item={i} section="briefs" level="h2" />)}</div> : <p>Nothing here yet. Check back soon.</p>}
 </Base>
+
+<script>
+  import { initBriefStatusBanner } from "../../lib/affected-ui.js";
+  initBriefStatusBanner();
+</script>

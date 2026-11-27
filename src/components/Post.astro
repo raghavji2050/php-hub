@@ -53,6 +53,7 @@ const jsonld = [{ '@context': 'https://schema.org', '@type': 'Article', headline
     {item.level && <span class="level-label">{item.level}</span>}
     <span class="reading-bar" data-reading data-url={item.url} data-title={item.title} data-section={item.section}><button type="button" data-bookmark aria-pressed="false">Save</button> <a href="/saved">Saved items</a></span>
   </p>
+  {item.section === "briefs" && <div id="brief-stack-status" data-brief-slug={item.slug} data-pagefind-ignore></div>}
   {item.hero && <figure class="post-hero"><HeroImage hero={item.hero} alt={item.heroAlt} eager fallback={false} /></figure>}
   {showToc && <details class="toc" open data-pagefind-ignore><summary>On this page</summary><ol>{toc.map(h => <li><a href={`#${h.slug}`}>{h.text}</a>{h.children.length > 0 && <ol>{h.children.map(c => <li><a href={`#${c.slug}`}>{c.text}</a></li>)}</ol>}</li>)}</ol></details>}
   <div class="post-body" set:html={bodyHtml} />
@@ -105,3 +106,8 @@ const jsonld = [{ '@context': 'https://schema.org', '@type': 'Article', headline
 .series-note{max-width:70ch;margin:28px 0 0;color:var(--muted)}
 @media (max-width:640px){.prevnext{grid-template-columns:1fr}}
 </style>
+
+<script>
+  import { initBriefStatusBanner } from "../lib/affected-ui.js";
+  initBriefStatusBanner();
+</script>
