@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { breadcrumbLd } from '../lib.js';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/briefs', label: 'Briefs' },
+  { href: '/am-i-affected', label: 'Am I affected?' },
+];
+const ACTION = 'https://buttondown.com/api/emails/embed-subscribe/phphub';
+---
+<Base
+  title="Am I affected? — composer.lock advisory matcher"
+  description="Paste your composer.lock to see which PHP Hub security briefs affect your exact installed PHP and Laravel package versions. Parsed 100% in your browser."
+  jsonld={[breadcrumbLd(crumbs)]}
+  cta={false}
+  newsletter={false}
+>
+  <Breadcrumbs items={crumbs} />
+  <div class="aff-wrap" data-pagefind-body>
+    <h1>Am I affected?</h1>
+    <p class="lead">Paste your <code>composer.lock</code> (or choose the file) to check every PHP Hub security brief against your installed versions.</p>
+    <p class="aff-privacy"><strong>Privacy:</strong> parsed 100% in your browser. Your <code>composer.lock</code> is never uploaded or sent to PHP Hub. We save only your package names and versions in your browser's <code>localStorage</code> so every brief page can show an Affected or Safe badge, and you can clear it in one click.</p>
+
+    <div class="tool-app aff-form">
+      <div class="aff-inputs-row">
+        <label class="aff-field">
+          <span>Choose local <code>composer.lock</code></span>
+          <input type="file" id="lockfile-file" accept=".lock,.json,application/json" />
+        </label>
+        <label class="aff-field">
+          <span>PHP runtime version (optional, from <code>php -v</code>)</span>
+          <input type="text" id="php-version-input" placeholder="e.g. 8.4.26" autocomplete="off" />
+        </label>
+      </div>
+
+      <label class="aff-field">
+        <span>Or paste <code>composer.lock</code> JSON</span>
+        <textarea id="lockfile-input" rows="8" placeholder='{"packages":[{"name":"laravel/framework","version":"v12.70.0"}]}'></textarea>
+      </label>
+
+      <div class="tool-actions">
+        <button type="button" id="check-stack-btn" class="btn">Check my stack</button>
+        <button type="button" id="sample-stack-btn" class="btn secondary">Try sample Laravel lockfile (example data)</button>
+        <button type="button" id="clear-stack-btn" class="btn secondary" hidden>Clear saved stack</button>
+      </div>
+
+      <p id="lockfile-error" class="notice" role="alert" hidden></p>
+    </div>
+
+    <section id="affected-results" class="aff-results" aria-live="polite"></section>
+
+    <section class="newsletter aff-nl" aria-labelledby="stack-nl-title" data-pagefind-ignore>
+      <h2 id="stack-nl-title">Get weekly alerts for your stack</h2>
+      <p id="stack-nl-tag-preview">Paste your composer.lock above to attach your stack tags (e.g. Laravel, Symfony) to your weekly brief subscription.</p>
+      <form class="nl-form" action={ACTION} method="post">
+        <label class="sr-only" for="stack-nl-email">Email address</label>
+        <input id="stack-nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+        <input type="hidden" name="embed" value="1" />
+        <span id="stack-nl-tags"></span>
+        <button type="submit">Subscribe to stack alerts</button>
+      </form>
+      <p class="nl-note"><small>Double opt-in via Buttondown; unsubscribe any time. Only your email and broad ecosystem tags (like Laravel or Symfony) are sent — never your <code>composer.lock</code>. See our <a href="/privacy">privacy policy</a>.</small></p>
+    </section>
+  </div>
+</Base>
+
+<style is:global>
+.aff-wrap { max-width: 78ch; }
+.aff-privacy { font-size: 14px; color: var(--muted); border-left: 3px solid var(--brand); padding: 4px 0 4px 14px; margin: 0 0 24px; }
+.aff-inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.aff-field { display: grid; gap: 6px; font-size: 14px; font-weight: 500; }
+.aff-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; padding: 16px; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); }
+.aff-summary b { display: block; font-size: 26px; font-family: var(--serif); line-height: 1.1; }
+.aff-summary span { font-size: 13px; color: var(--muted); }
+.aff-group { margin: 28px 0; }
+.aff-list { display: grid; gap: 12px; }
+.aff-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; background: var(--surface); }
+.aff-card.is-affected { border-left: 4px solid var(--crit); }
+.aff-card.is-safe { border-left: 4px solid var(--ok-text, var(--brand)); }
+.aff-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-bottom: 6px; }
+.aff-ver { font-size: 14px; color: var(--muted); }
+.aff-sev { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--crit); }
+.aff-desc { margin: 4px 0 10px; font-size: 15px; color: var(--muted); }
+.aff-fix { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.aff-fix code { background: var(--code); border: 1px solid var(--border); padding: 4px 8px; border-radius: var(--radius); font-size: 13.5px; }
+.aff-copy { padding: 4px 10px; font-size: 13px; }
+.aff-link { font-size: 14px; font-weight: 600; margin-left: auto; }
+.aff-pill { display: inline-block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding: 2px 8px; border-radius: var(--radius); border: 1px solid var(--border); }
+.aff-pill.is-affected { color: var(--crit); border-color: var(--crit); }
+.aff-pill.is-safe { color: var(--ok-text, var(--brand)); border-color: var(--ok-text, var(--brand)); }
+.aff-pill.is-none { color: var(--muted); }
+.aff-feed { list-style: none; padding: 0; margin: 0; }
+.aff-feed li { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.aff-feed time { margin-left: auto; font-size: 13px; color: var(--muted); }
+.stack-bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; padding: 12px 16px; margin: 0 0 22px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 15px; }
+.stack-bar.is-affected { border-left: 4px solid var(--crit); }
+.stack-bar.is-safe { border-left: 4px solid var(--ok-text, var(--brand)); }
+@media (max-width: 700px) {
+  .aff-inputs-row, .aff-summary { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .aff-inputs-row { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+  import { initAffectedPage } from '../lib/affected-ui.js';
+  initAffectedPage();
+</script>
