@@ -1,0 +1,15 @@
+<aside class="stack-bar lock-cta" aria-labelledby="lock-cta-title" data-pagefind-ignore>
+  <div class="lock-cta-text">
+    <h2 id="lock-cta-title">Check your composer.lock</h2>
+    <p>Paste it into <a href="/am-i-affected">Am I affected?</a> to see if any package from our weekly security briefs hits your app. Runs in your browser, nothing uploaded.</p>
+  </div>
+  <a class="btn" href="/am-i-affected">Check my composer.lock</a>
+</aside>
+<style>
+.lock-cta{max-width:70ch;margin:28px 0 20px;padding:16px 20px;border-left:3px solid var(--brand-strong);gap:12px 20px}
+.lock-cta-text{flex:1 1 280px;min-width:0}
+.lock-cta h2{font-family:var(--serif);font-size:20px;margin:0 0 4px}
+.lock-cta p{margin:0;color:var(--muted);font-size:16px}
+.lock-cta .btn:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+@media (max-width:640px){.lock-cta{padding:14px 16px}.lock-cta .btn{display:block;width:100%;text-align:center;padding:12px 16px}}
+</style>
